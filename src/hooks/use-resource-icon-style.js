@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { useSelector } from "react-redux"
 
 
@@ -6,39 +6,40 @@ export function useResourceIconStyle(){
     const scale = useSelector((state) => state.zoom.scale)
     const minusculeBushScaleBoundary = useSelector((state) => state.zoom.minusculeBushScaleBoundary)
 
-    const [borderRadius, setBorderRadius] = useState(0)
-    const [color, setColor] = useState('black')
-
-    useEffect(()=>{
-        
-        if (scale < minusculeBushScaleBoundary){
-            setBorderRadius((prevBorderRadius)=>{
-                if (prevBorderRadius=='50%'){
-                    return prevBorderRadius
-                }
-                return '50%'
-            })
-            setColor((prevColor)=>{
-                if (prevColor=='transparent'){
-                    return prevColor
-                }
-                return 'transparent'
-            })
-        } else { //change state only when style values change (take borderRadius as sample)
-            setBorderRadius((prevBorderRadius)=>{
-                if (prevBorderRadius==0){
-                    return prevBorderRadius
-                }
-                return 0
-            })
-            setColor((prevColor)=>{
-                if (prevColor=='black'){
-                    return prevColor
-                }
-                return 'black'
-            })
+    const styleReducer = (state, action) => {
+        if (action.scale < minusculeBushScaleBoundary){
+            if (state.visionScale!='minusculeBushScale'){ //do not update state of visionscale has not changed
+                return {
+                    borderRadius: '50%', 
+                    color:'transparent', 
+                    visionScale: 'minusculeBushScale'}
+            }
+            return state  //return previous styles
+                
+        } else {
+            if (state.visionScale!='bushScale'){ //do not update state of visionscale has not changed
+                return {
+                    borderRadius: 0, 
+                    color:'black', 
+                    visionScale: 'bushScale'}
+            } 
+            return state  //return previous styles
+                
         }
+    }
+
+
+    const [styleState, dispatchStyle] = useReducer(styleReducer, {
+        borderRadius: '50%', 
+        color:'transparent', 
+        visionScale: 'minusculeBushScale'})
+
+
+    useEffect(()=>{ //update styles when scale changes
+
+        dispatchStyle({scale: scale})
+
     }, [scale])
 
-    return [borderRadius, color]
+    return [styleState.borderRadius, styleState.color]
 }
