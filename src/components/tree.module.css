@@ -1,0 +1,17 @@
+
+.mainLink{
+    fill: none;
+    stroke: rgb(158, 82, 82);
+    stroke-width: 25px;
+}
+
+.subBushLink{
+    fill: none;
+    stroke: rgb(158, 82, 82);
+    stroke-width: 7px;
+    /* background-color: rgb(190, 146, 146); */
+    
+}
+
+
+
