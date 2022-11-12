@@ -11,38 +11,35 @@ export function useResourceIconsDataManager(resource) {
     })
 
     const [state, setState] = useState({ //triggers re-render when updated
-        isConnectionsVisible: false,
+        isConnected: false,
+        isConnectionLinesVisible: false
     })
-
-    const resourceDatum = {
-        variables,
-        state,
-        setState
-    }
-
-    if (resourceData[resource.id] == undefined){ //prevent reset (data loss) after rerender
-        resourceData[resource.id] = resourceDatum
-    }
-    resourceData[resource.id].state = state
-    resourceData[resource.id].setState = setState
 
 
     const actions = {
-        setIsConnectionsVisible: (isConnectionsVisible) => {
-            state.isConnectionsVisible = isConnectionsVisible
-            setState(state) //set state to modified copy to trigger rerender
+        commitState: () => { //commit changes and trigger rerender
+            const temp = {...state}
+            setState(temp) //set state to modified copy to trigger rerender
+        },
+        setIsConnected: (isConnected) => {
+            // const temp = {...state}
+            // temp.isConnected = isConnected
+            // state.isConnected = isConnected
+            // setState(temp) 
+            state.isConnected = isConnected
 
             for (let connectedResource of resource.connections){  // update connection visibility of connected resources
                 const connectedResourceDatum = resourceData[connectedResource.id]
 
                 setTimeout(() => { //set delay to ensure resourceIcon rerenders go over connection lines
-                    const temp = {...connectedResourceDatum.state.isConnectionsVisible}
-                    temp.isConnectionsVisible = isConnectionsVisible //change state object to trigger rerender
-                    connectedResourceDatum.state.isConnectionsVisible = isConnectionsVisible
-                    connectedResourceDatum.setState(temp)
+                    connectedResourceDatum.state.isConnected = isConnected
+                    connectedResourceDatum.actions.commitState()
                 }, 1)
                 
             }
+        },
+        setIsConnectionLinesVisible: (isConnectionLinesVisible) => {
+            state.isConnectionLinesVisible = isConnectionLinesVisible
         },
         setAbsoluteCenterPosition: position => {
             variables.current.absoluteCenterPosition = position
@@ -51,6 +48,21 @@ export function useResourceIconsDataManager(resource) {
             variables.current.absolutePosition = position
         }
     }
+
+    const resourceDatum = {
+        variables,
+        actions,
+        state,
+        setState
+    }
+
+    resourceData[resource.id] = resourceDatum
+
+    // if (resourceData[resource.id] == undefined){ //prevent reset (data loss) after rerender
+    //     resourceData[resource.id] = resourceDatum
+    // }
+    // resourceData[resource.id].state = state //but state must be updated after rerender
+    // resourceData[resource.id].setState = setState
 
 
     return [resourceDatum, actions]

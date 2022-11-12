@@ -37,7 +37,8 @@ function ResourceIcon(props){
     console.log('rendering ResourceIcon')
 
     const [resourceDatum, datumActions] = useResourceIconsDataManager(props.resource)
-    const isConnectionVisible = resourceDatum.state.isConnectionsVisible
+    const isConnected = resourceDatum.state.isConnected
+    const isConnectionLinesVisible = resourceDatum.state.isConnectionLinesVisible
     // console.log(isConnectionVisible)
 
     const [width, height, scale] = 
@@ -51,7 +52,7 @@ function ResourceIcon(props){
     const [borderRadius, color] = useResourceIconStyle()
     // const borderRadius = '50%'
     // const color = 'red'
-    const backgroundColor = isConnectionVisible ? 'crimson' : 'rgb(235, 75, 75)'
+    const backgroundColor = isConnected ? 'crimson' : 'rgb(235, 75, 75)'
 
     const [resourceConnectionLinesContainerId, treeContainerGId] = useSelector((state) => 
         [state.importantElementIds.resourceConnectionLinesContainerId, state.importantElementIds.treeContainerG], shallowEqual)
@@ -85,13 +86,16 @@ function ResourceIcon(props){
     })
 
 
-    const [showConnections, setShowConnections] = useState(false)
+    // const [showConnections, setShowConnections] = useState(false)
     // const showConnections = false;
 
     const onClick = () => {
+
         console.log('clicked')
-        datumActions.setIsConnectionsVisible(!isConnectionVisible)
-        setShowConnections(!showConnections)
+        datumActions.setIsConnected(!isConnected)
+        datumActions.setIsConnectionLinesVisible(!isConnectionLinesVisible)
+        datumActions.commitState()
+        // setShowConnections(!showConnections)
     }
 
     const resourceIcon = 
@@ -114,18 +118,18 @@ function ResourceIcon(props){
         
         <>
             {/* show connection lines if connected and is the source (showconnected = true)*/}
-            {(isConnectionVisible && showConnections) && props.resource.connections.map((connectedResource)=>{
+            {(isConnected && isConnectionLinesVisible) && props.resource.connections.map((connectedResource)=>{
                 return <ResourceConnectionLine
                     resource1={props.resource}
                     resource2={connectedResource}/> //draw line between this resource and connected resource
             })}
 
             {/* show resourceIcon in original place if not connected */}
-            {!isConnectionVisible && resourceIcon}
+            {!isConnected && resourceIcon}
 
             {/* show resourceIcon in resourceConnectionLinesContainer 
             and leave dummy if connected */}
-            {isConnectionVisible && ReactDOM.createPortal( 
+            {isConnected && ReactDOM.createPortal( 
                 <foreignObject 
                 width={width} 
                 height={height} 
@@ -138,7 +142,7 @@ function ResourceIcon(props){
 
                 resourceConnectionLinesContainer
             )}
-            {isConnectionVisible && <div style={{width:width, height:height, backgroundColor: 'transparent'}}/>}
+            {isConnected && <div style={{width:width, height:height, backgroundColor: 'transparent'}}/>}
 
         </>
         
