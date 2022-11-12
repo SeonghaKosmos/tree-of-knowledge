@@ -5,6 +5,7 @@ import D3Tree from "../tree/D3Tree";
 import ResourceIcon from "../resource-related/ResourceIcon";
 import SubBushNode from "./SubBushNode";
 import styles from '../tree.module.css'
+import ResourceConnectionLine from "../resource-related/ResourceConnectionLine";
 
 
 
@@ -44,6 +45,8 @@ const BushNodeRoot = styled.div`
 
 
 function BushNode(props){
+
+    // console.log('rendering bushNode')
 
     Array.prototype.getResourcesOfLevel = function(level){
         return this.filter((resource) => resource.level == level)
@@ -92,7 +95,6 @@ function BushNode(props){
     const linksGId = `Links${bushId}`
     const containerGId = `containerG${bushId}`
 
-
     return(
         <foreignObject width={containerWidth} height={containerHeight}>
             <BushNodeRoot width={containerWidth} height={containerHeight} padding={padding}>
@@ -105,7 +107,9 @@ function BushNode(props){
                 {(visionScale==='bushScale') &&
                     <div className="resourceIconContainer">
                         {props.data.resources.map((resource) => 
-                            <ResourceIcon name={resource.name} scale={resourceIconScale}/>
+                            <ResourceIcon 
+                                resource={resource} 
+                                scale={resourceIconScale}/>
                         )}
                     </div>
                 }

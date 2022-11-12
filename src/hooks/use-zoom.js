@@ -25,9 +25,13 @@ const useZoom = (inputSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
       const handleZoom = (e) => {
         //update scale
         dispatch(zoomSliceActions.setScale(e.transform.k))
+
         broadCastScale(e)
+        // document.getElementById(inputSourceId).style.transform = 
+        // `translate(${e.transform.x}px, ${e.transform.x}px) scale(${e.transform.k})`
+
         d3.select(inputSourceId)
-          .attr('transform', e.transform);
+          .attr('transform', e.transform)
       }
       
 

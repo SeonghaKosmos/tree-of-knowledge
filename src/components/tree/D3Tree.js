@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom'
+import styles from '../tree.module.css'
 
 
 
@@ -131,6 +132,16 @@ function D3Tree(props){
                 <g id={props.containerGId}>
                     <g id={props.linksGId}/>
                     <g id={props.nodesGId}/>
+                    {/* add connection lines container if id available */}
+                    {props.resourceConnectionLinesContainerId &&  
+                        <foreignObject width={1287} height={930} className={styles.resourceConnectionLinesContainerContainerForeignObject}>
+                            <div className={styles.resourceConnectionLinesContainerContainerDiv}>
+                                <svg width={901} height={651} id={props.resourceConnectionLinesContainerId} 
+                                     className={styles.resourceConnectionLinesContainer}>
+                                </svg>
+                            </div>
+                        </foreignObject>
+                    }
                 </g>
             </svg>
             {/* fill tree */}

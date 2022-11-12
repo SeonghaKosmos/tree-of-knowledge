@@ -16,15 +16,20 @@ const TreeOfKnowledgeContainerRoot = styled.div`
     
     scale: ${props => (props.scale)};
 
-    z-index: -2;
+    /* z-index: -1; */
 
     & #treeContainerG{
-      z-index: -1;
       position:relative;
     }
 
     & #treeContainerSvg{
       overflow: visible;
+    }
+
+    & #${props => (props.zoomActionTargetDivId)}{
+      width: ${props => (`${props.width}px`)};
+      height: ${props => (`${props.height}px`)};
+      position:relative;
     }
 
 `
@@ -33,7 +38,9 @@ const TreeOfKnowledgeContainerRoot = styled.div`
 function TreeOfKnowledgeContainer(props){
 
     console.log('rendering tree container')
-    const data = useSelector((state) => state.treeData, shallowEqual)
+    const [data, resourceConnectionLinesContainerId] = useSelector((state) => [
+      state.treeData.structure, 
+      state.importantElementIds.resourceConnectionLinesContainerId], shallowEqual)
     const visionScale = useSelector((state) => state.zoom.visionScale, shallowEqual)
     const scale = useSelector((state) => state.scale.treeScale, shallowEqual)
 
@@ -53,7 +60,11 @@ function TreeOfKnowledgeContainer(props){
 
     const nodesGId = "mainNodes"
     const linksGId = "mainLinks"
-    const containerGId = "treeContainerG"
+    const containerGId = useSelector((state) => 
+      state.importantElementIds.treeContainerGId, shallowEqual)
+
+    const zoomActionTargetDivId = 'zoomActionTargetDiv'
+
     const treeContainerG = document.getElementById('treeContainerG')
     
     const computeRenderedTreeDimensions = () => 
@@ -78,23 +89,26 @@ function TreeOfKnowledgeContainer(props){
     return(
         <TreeOfKnowledgeContainerRoot 
               id='treeOfKnowledgeContainerRoot' 
+              zoomActionTargetDivId={zoomActionTargetDivId}
               width={renderedTreeWidth} 
               height={renderedTreeHeight} 
-              scale={scale}>   
-  
+              scale={scale}>  
+
             <D3Tree 
-                data={data} 
-                nodesGId={nodesGId} 
-                linksGId={linksGId}
-                containerGId={containerGId}
-                containerSvgId='treeContainerSvg'
-                treeWidth={treeWidth}
-                treeHeight={treeHeight}
-                nodeWidth={bushWidth}
-                nodeHeight={bushHeight}
-                nodePadding={bushPadding}
-                linkClass={styles.mainLink}
-                nodeComponentFunc={BushNode}/>  
+              data={data} 
+              nodesGId={nodesGId} 
+              linksGId={linksGId}
+              containerGId={containerGId}
+              resourceConnectionLinesContainerId={resourceConnectionLinesContainerId}
+              containerSvgId='treeContainerSvg'
+              treeWidth={treeWidth}
+              treeHeight={treeHeight}
+              nodeWidth={bushWidth}
+              nodeHeight={bushHeight}
+              nodePadding={bushPadding}
+              linkClass={styles.mainLink}
+              nodeComponentFunc={BushNode}/> 
+             
         </TreeOfKnowledgeContainerRoot>
 
     )

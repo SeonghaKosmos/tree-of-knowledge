@@ -8,9 +8,10 @@ const NavBarRoot = styled.div`
         color:black;
     }
     .navbar{
-        z-index: 9999;
+        /* z-index: 9999; */
         position:relative;
     }
+
 `
 let navLinks = [
 

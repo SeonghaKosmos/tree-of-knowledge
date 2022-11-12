@@ -13,5 +13,20 @@
     
 }
 
+.resourceConnectionLinesContainerContainerDiv{
+    /* background-color: rgb(26, 204, 204); */
+    position: relative;
+    width: 1287px;
+    height: 930px;
+    pointer-events: none;
+}
+
+.resourceConnectionLinesContainer{
+    pointer-events: none;
+}
+
+.resourceConnectionLinesContainerContainerForeignObject{
+    pointer-events: none;
+}
 
 

@@ -48,7 +48,7 @@ function SubBushNode(props){
                 <div className="subBushNameTag">{props.data.name}</div>
                 <div className="resourceContainer">
                     {props.data.resources.map((resource) =>  
-                        <ResourceIcon name={resource.name} scale={resourceIconScale}/> )}
+                        <ResourceIcon resource={resource} scale={resourceIconScale}/> )}
                 </div>
             </SubBushNodeRoot>
         </foreignObject>

@@ -9,16 +9,18 @@ import './global.css'
 
 
 const AppRoot = styled.div`
+
+  position:relative;
   & #zoomWindow{
-    position:relative;
-    z-index: 9;
-    top:0;
-    left:0;
+    position:absolute;
+    top: ${props => (`${props.navBarHeight}px`)};
+    /* left:0 ; */
     width: ${props => (`${props.availableTreeWidth}px`)};
     height: ${props => (`${props.availableTreeHeight}px`)};
   }
 
   & #mainContainer{
+
     width: ${props => (`${props.availableTreeWidth}px`)};
     height: ${props => (`${props.availableTreeHeight}px`)};
     position: absolute;
@@ -28,7 +30,6 @@ const AppRoot = styled.div`
     align-items: center;
     justify-content: center;
   }
-  position:relative;
   
 `
 
@@ -36,6 +37,8 @@ function App() {
 
   const appDiv = useRef()
   const navBar = useRef()
+
+  const navBarHeight = navBar.current==undefined ? 0 : navBar.current.offsetHeight
 
   //zoomwindow
 
@@ -68,16 +71,17 @@ function App() {
   return (
     <AppRoot 
         availableTreeWidth={availableTreeWidth}
-        availableTreeHeight={availableTreeHeight}>
+        availableTreeHeight={availableTreeHeight}
+        navBarHeight={navBarHeight}>
       <div className="App" ref={appDiv}>
-        <BootStrapNavBar ref={navBar}/>
-        <div id='mainContainer'>
-          <TreeOfKnowledgeContainer 
-            availableTreeWidth={availableTreeWidth}
-            availableTreeHeight={availableTreeHeight}/>
+        <div id='zoomWindow'>
+          <div id='mainContainer'>
+            <TreeOfKnowledgeContainer 
+              availableTreeWidth={availableTreeWidth}
+              availableTreeHeight={availableTreeHeight}/>
+          </div>
         </div>
-        <div id='zoomWindow'/>
-
+        <BootStrapNavBar ref={navBar}/>
       </div>
     </AppRoot>
   );
