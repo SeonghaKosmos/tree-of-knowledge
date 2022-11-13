@@ -19,6 +19,7 @@ const ResourceIconRoot = styled.div`
     text-align:center;
     filter: brightness(${props => (props.brightness)});
     background-color: ${props => (props.backgroundColor)};
+    /* background-color: rgb(235, 75, 75); */
     color: black;
 
     border-radius: ${props => (props.borderRadius)};
@@ -27,6 +28,7 @@ const ResourceIconRoot = styled.div`
     pointer-events: auto;
 
 `
+
 
 
 
@@ -52,7 +54,7 @@ function ResourceIcon(props){
     const [borderRadius, color] = useResourceIconStyle()
 
     const brightness = isConnected ? '167%' : 'inherit'
-    const backgroundColor = isConnected ? 'red' : 'rgb(235, 75, 75)'
+    const backgroundColor = isConnected ? 'red' : '#f07655'
 
     const resourceConnectionLinesContainerId = useSelector((state) => 
         state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
@@ -95,6 +97,8 @@ function ResourceIcon(props){
         event.stopPropagation()
     }
 
+
+    
     const resourceIcon = 
     <ResourceIconRoot
         id={props.resource.id}

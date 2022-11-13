@@ -11,7 +11,7 @@ import ResourceConnectionLine from "../resource-related/ResourceConnectionLine";
 
 
 const BushNodeRoot = styled.div`
-    background-color: rgb(120, 252, 44);
+    background-color: #a6ca84;
     width: ${props => (`${props.width}px`)};
     height: ${props => (`${props.height}px`)};
     padding: ${props => (`${props.padding}px`)};
