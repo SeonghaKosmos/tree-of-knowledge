@@ -35,37 +35,35 @@ const ResourceIconRoot = styled.div`
 
 
 function ResourceIcon(props){
-    console.log('rendering ResourceIcon')
+
 
     const [resourceGraphicsDatum, graphicsDatumActions] = useResourceIconGraphicsManager(props.resource)
     const isConnected = resourceGraphicsDatum.state.isConnected
     const isConnectionLinesVisible = resourceGraphicsDatum.state.isConnectionLinesVisible
-    // console.log(isConnectionVisible)
+
 
     const [width, height, scale] = 
         useSelector((state) => 
             [state.dimensions.resourceWidth, 
             state.dimensions.resourceHeight,
             state.scale.treeScale], shallowEqual)
-    // const width = 24
-    // const height = 30
+
     
     const [borderRadius, color] = useResourceIconStyle()
-    // const borderRadius = '50%'
-    // const color = 'red'
-    const brightness = isConnected ? '125%' : 'inherit'
-    const backgroundColor = isConnected ? 'crimson' : 'rgb(235, 75, 75)'
+
+    const brightness = isConnected ? '167%' : 'inherit'
+    const backgroundColor = isConnected ? 'red' : 'rgb(235, 75, 75)'
 
     const resourceConnectionLinesContainerId = useSelector((state) => 
         state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
-
     const resourceConnectionLinesContainer = document.getElementById(resourceConnectionLinesContainerId)
 
-    // const resourceConnectionLinesContainerId = 'resourceConnectionLinesContainer'
     
+    const reevaluateResourceIconPositionsTrigger = useSelector((state) => state.positions.reevaluateResourceIconPositionsTrigger)
     useEffect(()=>{
 
         //report the position of resource
+        console.log('reporting icon position')
         const relativePosition = getRelativePositionOfElementInContainer(
             resourceConnectionLinesContainer,
             document.getElementById(props.resource.id)
@@ -83,7 +81,7 @@ function ResourceIcon(props){
 
         graphicsDatumActions.setAbsolutePosition(position)
         graphicsDatumActions.setAbsoluteCenterPosition(centerPosition)
-    }, [])
+    }, [reevaluateResourceIconPositionsTrigger])
 
 
     // const [showConnections, setShowConnections] = useState(false)
@@ -92,7 +90,7 @@ function ResourceIcon(props){
     const onClick = (event) => {
 
 
-        console.log('clicked')
+        // console.log('clicked')
         graphicsDatumActions.setIsConnected(!isConnected)
         event.stopPropagation()
     }

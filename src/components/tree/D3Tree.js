@@ -130,8 +130,10 @@ function D3Tree(props){
             {/* tree template */}
             <svg  id={props.containerSvgId}> 
                 <g id={props.containerGId}>
-                    <g id={props.linksGId}/>
-                    <g id={props.nodesGId}/>
+                    <g id='opacityControlG'>
+                        <g id={props.linksGId}/>
+                        <g id={props.nodesGId}/>
+                    </g>
                     {/* add connection lines container if id available */}
                     {props.resourceConnectionLinesContainerId &&  
                         <foreignObject width={1287} height={930} className={styles.resourceConnectionLinesContainerContainerForeignObject}>

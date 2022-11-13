@@ -1,7 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    treeContainerGId: 'treeContainerG',
+    treeContainerGId: 'treeContainerG', 
+    opacityControlGId: 'opacityControlG',
     resourceConnectionLinesContainerId: 'resourceConnectionLinesContainer'
 }
 

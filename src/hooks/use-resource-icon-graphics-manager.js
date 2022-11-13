@@ -6,8 +6,7 @@ const resourceGraphicsData = {}
 
 export function useResourceIconGraphicsManager(thisResource) {
 
-    const treeContainerGId = useSelector((state) => 
-    state.importantElementIds.treeContainerGId, shallowEqual)
+    // const [opacityControlGId] = useSelector((state) => state.importantElementIds.opacityControlGId)
 
     const variables = useRef({ //does not trigger re-render when updated
         absoluteCenterPosition: {x:0, y:0},
@@ -40,13 +39,13 @@ export function useResourceIconGraphicsManager(thisResource) {
             })
         },
         handleTreeContainer(isConnected){
-    
-            const treeContainerG = document.getElementById(treeContainerGId)
+            
+            const opacityControlG = document.getElementById('opacityControlG')
             if (isConnected){
-                treeContainerG.style.filter = 'brightness(80%)'
+                opacityControlG.style.filter = 'brightness(60%)'
 
             } else{
-                treeContainerG.style.filter = 'brightness(100%)'
+                opacityControlG.style.filter = 'brightness(100%)'
 
             }
         },
