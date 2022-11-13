@@ -6,7 +6,7 @@ import { getRelativePositionOfElementInContainer } from "../../util/relativePosi
 import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
-import {useResourceIconsDataManager} from "../../hooks/use-resource-icons-data-manager";
+import {useResourceIconGraphicsManager} from "../../hooks/use-resource-icon-graphics-manager";
 
 
 const ResourceIconRoot = styled.div`
@@ -36,9 +36,9 @@ const ResourceIconRoot = styled.div`
 function ResourceIcon(props){
     console.log('rendering ResourceIcon')
 
-    const [resourceDatum, datumActions] = useResourceIconsDataManager(props.resource)
-    const isConnected = resourceDatum.state.isConnected
-    const isConnectionLinesVisible = resourceDatum.state.isConnectionLinesVisible
+    const [resourceGraphicsDatum, graphicsDatumActions] = useResourceIconGraphicsManager(props.resource)
+    const isConnected = resourceGraphicsDatum.state.isConnected
+    const isConnectionLinesVisible = resourceGraphicsDatum.state.isConnectionLinesVisible
     // console.log(isConnectionVisible)
 
     const [width, height, scale] = 
@@ -54,12 +54,10 @@ function ResourceIcon(props){
     // const color = 'red'
     const backgroundColor = isConnected ? 'crimson' : 'rgb(235, 75, 75)'
 
-    const [resourceConnectionLinesContainerId, treeContainerGId] = useSelector((state) => 
-        [state.importantElementIds.resourceConnectionLinesContainerId, state.importantElementIds.treeContainerG], shallowEqual)
-
+    const resourceConnectionLinesContainerId = useSelector((state) => 
+        state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
 
     const resourceConnectionLinesContainer = document.getElementById(resourceConnectionLinesContainerId)
-    const treeContainerG = document.getElementById(treeContainerGId)
 
     // const resourceConnectionLinesContainerId = 'resourceConnectionLinesContainer'
     
@@ -81,21 +79,20 @@ function ResourceIcon(props){
             y: (relativePosition.y + height*scale/2) /scale
         }
 
-        datumActions.setAbsolutePosition(position)
-        datumActions.setAbsoluteCenterPosition(centerPosition)
+        graphicsDatumActions.setAbsolutePosition(position)
+        graphicsDatumActions.setAbsoluteCenterPosition(centerPosition)
     })
 
 
     // const [showConnections, setShowConnections] = useState(false)
     // const showConnections = false;
 
-    const onClick = () => {
+    const onClick = (event) => {
+
 
         console.log('clicked')
-        datumActions.setIsConnected(!isConnected)
-        datumActions.setIsConnectionLinesVisible(!isConnectionLinesVisible)
-        datumActions.commitState()
-        // setShowConnections(!showConnections)
+        graphicsDatumActions.setIsConnected(!isConnected)
+        event.stopPropagation()
     }
 
     const resourceIcon = 
@@ -133,8 +130,8 @@ function ResourceIcon(props){
                 <foreignObject 
                 width={width} 
                 height={height} 
-                x={resourceDatum.variables.current.absolutePosition.x}
-                y={resourceDatum.variables.current.absolutePosition.y}>
+                x={resourceGraphicsDatum.variables.current.absolutePosition.x}
+                y={resourceGraphicsDatum.variables.current.absolutePosition.y}>
 
                     {resourceIcon}
 

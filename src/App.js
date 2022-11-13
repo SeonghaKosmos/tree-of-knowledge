@@ -6,6 +6,7 @@ import { useRef } from 'react';
 import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import useDimensions from './hooks/use-dimensions';
 import './global.css'
+import { useResourceIconGraphicsManager } from './hooks/use-resource-icon-graphics-manager';
 
 
 const AppRoot = styled.div`
@@ -59,20 +60,21 @@ function App() {
   const [availableTreeWidth, availableTreeHeight] = 
     useDimensions(computeRenderedTreeDimensions)
 
-  // useEffect(()=>{
-  //   if (!availableTreeDimensionsComputationComplete.current){
-  //     setAvailableTreeWidth(appDiv.current.offsetWidth)
-  //     setAvailableTreeHeight(appDiv.current.offsetHeight - navBar.current.offsetHeight)
-  //     availableTreeDimensionsComputationComplete.current = true
-  //   }
-    
-  // })
+
+  const resourceIconsDataManagerActions = useResourceIconGraphicsManager()
+
+  const onClick = () => {
+    resourceIconsDataManagerActions.resetAllResourceIcons()
+    resourceIconsDataManagerActions.handleTreeContainer(false)
+  }
 
   return (
     <AppRoot 
-        availableTreeWidth={availableTreeWidth}
-        availableTreeHeight={availableTreeHeight}
-        navBarHeight={navBarHeight}>
+    availableTreeWidth={availableTreeWidth}
+    availableTreeHeight={availableTreeHeight}
+    navBarHeight={navBarHeight}
+    onClick={onClick}>
+
       <div className="App" ref={appDiv}>
         <div id='zoomWindow'>
           <div id='mainContainer'>
@@ -83,6 +85,7 @@ function App() {
         </div>
         <BootStrapNavBar ref={navBar}/>
       </div>
+
     </AppRoot>
   );
 }

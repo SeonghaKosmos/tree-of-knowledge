@@ -2,21 +2,22 @@ import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import ReactDOM from 'react-dom'
 import React from "react";
-import { useResourceDatumSelector } from "../../hooks/use-resource-icons-data-manager";
+import { useresourceGraphicsDatumSelector } from "../../hooks/use-resource-icon-graphics-manager";
 
 const ResourceConnectionLineRoot = styled.polyline`
 
     fill-rule: evenodd;
     fill: red;
-    stroke: rgb(26, 204, 204);
+    stroke: rgb(31, 170, 170);
     stroke-width: 3px;
+    opacity:1;
     
 `
 
 function ResourceConnectionLine(props){
     // console.log('rendering ResourceConnectionLine')
-    const resourceDatum1 = useResourceDatumSelector(props.resource1.id)
-    const resourceDatum2 = useResourceDatumSelector(props.resource2.id)
+    const resourceGraphicsDatum1 = useresourceGraphicsDatumSelector(props.resource1.id)
+    const resourceGraphicsDatum2 = useresourceGraphicsDatumSelector(props.resource2.id)
 
     const scale = useSelector((state) => 
     state.scale.treeScale, shallowEqual)
@@ -24,10 +25,10 @@ function ResourceConnectionLine(props){
     const resourceConnectionLinesContainerId = useSelector((state) => 
         state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
     
-    const x1 = resourceDatum1.variables.current.absoluteCenterPosition.x
-    const y1 = resourceDatum1.variables.current.absoluteCenterPosition.y
-    const x2 = resourceDatum2.variables.current.absoluteCenterPosition.x
-    const y2 = resourceDatum2.variables.current.absoluteCenterPosition.y
+    const x1 = resourceGraphicsDatum1.variables.current.absoluteCenterPosition.x
+    const y1 = resourceGraphicsDatum1.variables.current.absoluteCenterPosition.y
+    const x2 = resourceGraphicsDatum2.variables.current.absoluteCenterPosition.x
+    const y2 = resourceGraphicsDatum2.variables.current.absoluteCenterPosition.y
 
 
     return(
