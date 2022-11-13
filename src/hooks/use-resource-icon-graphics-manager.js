@@ -43,9 +43,11 @@ export function useResourceIconGraphicsManager(thisResource) {
     
             const treeContainerG = document.getElementById(treeContainerGId)
             if (isConnected){
-                treeContainerG.style.opacity = 0.8
+                treeContainerG.style.filter = 'brightness(80%)'
+
             } else{
-                treeContainerG.style.opacity = 1
+                treeContainerG.style.filter = 'brightness(100%)'
+
             }
         },
         setIsConnected (isConnected) { //master function that handles all connection related events

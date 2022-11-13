@@ -17,6 +17,7 @@ const ResourceIconRoot = styled.div`
     font-size: 6px;
     padding-top: 0.2em;
     text-align:center;
+    filter: brightness(${props => (props.brightness)});
     background-color: ${props => (props.backgroundColor)};
     color: black;
 
@@ -52,6 +53,7 @@ function ResourceIcon(props){
     const [borderRadius, color] = useResourceIconStyle()
     // const borderRadius = '50%'
     // const color = 'red'
+    const brightness = isConnected ? '125%' : 'inherit'
     const backgroundColor = isConnected ? 'crimson' : 'rgb(235, 75, 75)'
 
     const resourceConnectionLinesContainerId = useSelector((state) => 
@@ -81,7 +83,7 @@ function ResourceIcon(props){
 
         graphicsDatumActions.setAbsolutePosition(position)
         graphicsDatumActions.setAbsoluteCenterPosition(centerPosition)
-    })
+    }, [])
 
 
     // const [showConnections, setShowConnections] = useState(false)
@@ -103,7 +105,8 @@ function ResourceIcon(props){
         scale={props.scale}
         borderRadius={borderRadius}
         color={color}
-        backgroundColor = {backgroundColor}
+        backgroundColor={backgroundColor}
+        brightness = {brightness}
         onClick={onClick}
         >
 

@@ -8,9 +8,9 @@ const ResourceConnectionLineRoot = styled.polyline`
 
     fill-rule: evenodd;
     fill: red;
-    stroke: rgb(31, 170, 170);
+    stroke: rgb(64, 153, 255);
     stroke-width: 3px;
-    opacity:1;
+    filter: brightness(125%);
     
 `
 
