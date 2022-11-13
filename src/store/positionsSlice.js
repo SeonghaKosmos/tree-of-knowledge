@@ -1,16 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
-    reevaluateResourceIconPositionsTrigger: {}
+    reevaluationTrigger: {}
 }
 
 const positionsSlice = createSlice({
     name:'positions',
     initialState,
     reducers: {
-        triggerIconPositionEvaluation(state, action) {
-            state.reevaluateResourceIconPositionsTrigger = {}
-        },
+        triggerReevaluation(state, action) {
+            state = {reevaluationTrigger:{}}
+        }
     }
 })
 

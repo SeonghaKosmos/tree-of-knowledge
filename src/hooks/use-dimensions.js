@@ -1,11 +1,16 @@
 import { useEffect, useRef } from "react"
 import { useState } from "react"
+import { useDispatch, useSelector } from "react-redux"
+import { positionsActions } from "../store/store"
+import { setReevaluationPossible } from "../util/relativePositionManager"
 
 
 const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
     let [renderedWidth, setRenderedWidth] = useState(initWidth)
     let [renderedHeight, setRenderedHeight] = useState(initHeight)
     const doUpdate = useRef(true)
+
+    const dispatch = useDispatch()
     
     function update() {
         setTimeout(() => {
@@ -18,7 +23,15 @@ const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
                 console.log(err.message)
                 if (err.message.includes('Cannot read properties of null')){
                     console.log('reference element is not set: skipping update')
-                    doUpdate.current = true; //try update when reference element not set
+
+                    //try update when reference element not set
+                    console.log('trying to update dimensions again')
+                    doUpdate.current = true; 
+                    //also reevaluate resource icon positions
+                    
+                    console.log('enabling icon positions update')
+                    // setReevaluationPossible(true)
+                    
                 }
             }
             

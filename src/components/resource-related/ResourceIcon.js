@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useResourceIconStyle } from "../../hooks/use-resource-icon-style";
-import { getRelativePositionOfElementInContainer } from "../../util/relativePositionManager";
+import { getRelativePositionOfElementInContainer, isReevaluationPossible } from "../../util/relativePositionManager";
 import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
 import {useResourceIconGraphicsManager} from "../../hooks/use-resource-icon-graphics-manager";
+import { positionsActions } from "../../store/store";
 
 
 const ResourceIconRoot = styled.div`
@@ -38,12 +39,13 @@ const ResourceIconRoot = styled.div`
 
 function ResourceIcon(props){
 
-
+    //<graphics datum>
     const [resourceGraphicsDatum, graphicsDatumActions] = useResourceIconGraphicsManager(props.resource)
     const isConnected = resourceGraphicsDatum.state.isConnected
     const isConnectionLinesVisible = resourceGraphicsDatum.state.isConnectionLinesVisible
+    //<graphics datum>
 
-
+    //<styles>
     const [width, height, scale] = 
         useSelector((state) => 
             [state.dimensions.resourceWidth, 
@@ -55,35 +57,46 @@ function ResourceIcon(props){
 
     const brightness = isConnected ? '167%' : 'inherit'
     const backgroundColor = isConnected ? 'red' : '#f07655'
+    //</styles>
 
+    //<element ids>
     const resourceConnectionLinesContainerId = useSelector((state) => 
         state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
     const resourceConnectionLinesContainer = document.getElementById(resourceConnectionLinesContainerId)
+    //</element ids>
 
+    //reevaluation
+    // const reevaluationTrigger = useSelector(state => state.positions.reevaluationTrigger)
     
-    const reevaluateResourceIconPositionsTrigger = useSelector((state) => state.positions.reevaluateResourceIconPositionsTrigger)
     useEffect(()=>{
 
-        //report the position of resource
-        console.log('reporting icon position')
-        const relativePosition = getRelativePositionOfElementInContainer(
-            resourceConnectionLinesContainer,
-            document.getElementById(props.resource.id)
-        )
+          //report the position of resource
 
-        const position = {
-            x: relativePosition.x / scale,
-            y: relativePosition.y / scale
+        if (isReevaluationPossible()){
+            console.log('reporting icon position')
+            const relativePosition = getRelativePositionOfElementInContainer(
+                resourceConnectionLinesContainer,
+                document.getElementById(props.resource.id)
+            )
+
+            const position = {
+                x: relativePosition.x / scale,
+                y: relativePosition.y / scale
+            }
+
+            const centerPosition = {
+                x: (relativePosition.x + width*scale/2) / scale,
+                y: (relativePosition.y + height*scale/2) /scale
+            }
+
+            // console.log(position.x)
+            // console.log(position.y)
+            graphicsDatumActions.setAbsolutePosition(position, centerPosition)
         }
 
-        const centerPosition = {
-            x: (relativePosition.x + width*scale/2) / scale,
-            y: (relativePosition.y + height*scale/2) /scale
-        }
+      
 
-        graphicsDatumActions.setAbsolutePosition(position)
-        graphicsDatumActions.setAbsoluteCenterPosition(centerPosition)
-    }, [reevaluateResourceIconPositionsTrigger])
+    })
 
 
     // const [showConnections, setShowConnections] = useState(false)
@@ -135,8 +148,8 @@ function ResourceIcon(props){
                 <foreignObject 
                 width={width} 
                 height={height} 
-                x={resourceGraphicsDatum.variables.current.absolutePosition.x}
-                y={resourceGraphicsDatum.variables.current.absolutePosition.y}>
+                x={resourceGraphicsDatum.variables.current.position.standard.x}
+                y={resourceGraphicsDatum.variables.current.position.standard.y}>
 
                     {resourceIcon}
 

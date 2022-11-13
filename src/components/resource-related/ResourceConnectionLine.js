@@ -24,10 +24,10 @@ function ResourceConnectionLine(props){
     const resourceConnectionLinesContainerId = useSelector((state) => 
         state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
     
-    const x1 = resourceGraphicsDatum1.variables.current.absoluteCenterPosition.x
-    const y1 = resourceGraphicsDatum1.variables.current.absoluteCenterPosition.y
-    const x2 = resourceGraphicsDatum2.variables.current.absoluteCenterPosition.x
-    const y2 = resourceGraphicsDatum2.variables.current.absoluteCenterPosition.y
+    const x1 = resourceGraphicsDatum1.variables.current.position.center.x
+    const y1 = resourceGraphicsDatum1.variables.current.position.center.y
+    const x2 = resourceGraphicsDatum2.variables.current.position.center.x
+    const y2 = resourceGraphicsDatum2.variables.current.position.center.y
 
 
     return(

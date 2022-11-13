@@ -1,17 +1,39 @@
 import { useRef, useState } from "react";
-import { useSelector, shallowEqual } from "react-redux";
+import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { positionsActions } from "../store/store";
+import { setReevaluationPossible } from "../util/relativePositionManager";
 
 
 const resourceGraphicsData = {}
+let resourceIconPositionUpdateCount = 0
 
 export function useResourceIconGraphicsManager(thisResource) {
 
     // const [opacityControlGId] = useSelector((state) => state.importantElementIds.opacityControlGId)
-
-    const variables = useRef({ //does not trigger re-render when updated
-        absoluteCenterPosition: {x:0, y:0},
-        absolutePosition: {x:0, y:0}
+    let prevDatumState = undefined;
+    if (thisResource){
+        prevDatumState = resourceGraphicsData[thisResource.id]
+    }
+    
+    let variables = undefined;
+    const potentialVariables = useRef({ //does not trigger re-render when updated
+        position: {
+            center: {x:0, y:0},
+            standard: {x:0, y:0}
+        }
     })
+
+    //leave variables reference unchanged if there is a reference
+    if (prevDatumState){
+        variables = prevDatumState.variables
+    } else {
+        //define new reference if there is no previous reference
+        variables = potentialVariables
+    }
+
+
+
+            
 
     const [state, setState] = useState({ //triggers re-render when updated
         isConnected: false,
@@ -51,8 +73,6 @@ export function useResourceIconGraphicsManager(thisResource) {
         },
         setIsConnected (isConnected) { //master function that handles all connection related events
 
-
-
             if (isConnected){
                 this.resetAllResourceIcons()
             }
@@ -76,17 +96,27 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 
         },
-        setAbsoluteCenterPosition(position){
-            variables.current.absoluteCenterPosition = position
-        },
-        setAbsolutePosition(position){
-            variables.current.absolutePosition = position
+        setAbsolutePosition(position, centerPosition){
+            variables.current.position.standard = position
+            variables.current.position.center = centerPosition
+
+            resourceIconPositionUpdateCount ++
+            
+
+            // stop position reports when all resource icons have reported
+            if (resourceIconPositionUpdateCount === Object.keys(resourceGraphicsData).length){
+                //reset update count
+                resourceIconPositionUpdateCount = 0
+                setReevaluationPossible(false)
+            }
         }
     }
 
 
     //store datum in resource data if this resource parameter given
     if (thisResource){
+
+
         const resourceGraphicsDatum = {
             variables,
             actions,

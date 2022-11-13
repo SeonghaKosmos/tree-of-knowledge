@@ -1,4 +1,4 @@
-
+let reevaluationPossible = true
 
 export function getRelativePositionOfElementInContainer(container, element){
 
@@ -15,4 +15,13 @@ export function getRelativePositionOfElementInContainer(container, element){
         x: x,
         y: y
     }
+}
+
+
+export function isReevaluationPossible(){
+    return reevaluationPossible
+}
+
+export function setReevaluationPossible(val){
+    reevaluationPossible = val
 }
