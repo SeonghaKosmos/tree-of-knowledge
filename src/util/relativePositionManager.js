@@ -1,4 +1,4 @@
-let reevaluationPossible = true
+let reevaluationPossible = true //automatically evaluate position on first tree render
 
 export function getRelativePositionOfElementInContainer(container, element){
 
