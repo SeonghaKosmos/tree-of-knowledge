@@ -20,16 +20,16 @@ const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
                 setRenderedHeight(computedHeight)
                 doUpdate.current = false //no more updates after reference element set
             } catch (err){
-                console.log(err.message)
+                console.log(`%c${err.message}`, 'color: orange')
                 if (err.message.includes('Cannot read properties of null')){
-                    console.log('reference element is not set: skipping update')
+                    console.log('%creference element is not set: skipping update', 'color: orange')
 
                     //try update when reference element not set
-                    console.log('trying to update dimensions again')
+                    console.log('%ctrying to update dimensions again', 'color: orange')
                     doUpdate.current = true; 
                     //also reevaluate resource icon positions
                     
-                    console.log('enabling icon positions update')
+                    console.log('%cenabling icon positions update', 'color: orange')
                     // setReevaluationPossible(true)
                     
                 }

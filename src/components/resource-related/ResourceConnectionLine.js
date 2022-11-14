@@ -9,7 +9,7 @@ const ResourceConnectionLineRoot = styled.polyline`
     fill-rule: evenodd;
     fill: red;
     stroke: rgb(115, 213, 240);
-    stroke-width: 3px;
+    stroke-width: ${props => `${props.strokeWidth}px`};
     
 `
 
@@ -18,16 +18,18 @@ function ResourceConnectionLine(props){
     const resourceGraphicsDatum1 = useresourceGraphicsDatumSelector(props.resource1.id)
     const resourceGraphicsDatum2 = useresourceGraphicsDatumSelector(props.resource2.id)
 
-    const scale = useSelector((state) => 
-    state.scale.treeScale, shallowEqual)
+    
+    const visionScale = useSelector(state => state.zoom.visionScale, shallowEqual)
+    const zoomScale = useSelector(state => state.zoom.scale, shallowEqual)
+    const strokeWidth = 3 / zoomScale
 
     const resourceConnectionLinesContainerId = useSelector((state) => 
         state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
     
-    const x1 = resourceGraphicsDatum1.variables.current.position.center.x
-    const y1 = resourceGraphicsDatum1.variables.current.position.center.y
-    const x2 = resourceGraphicsDatum2.variables.current.position.center.x
-    const y2 = resourceGraphicsDatum2.variables.current.position.center.y
+    const x1 = resourceGraphicsDatum1.variables.current.position[visionScale].center.x
+    const y1 = resourceGraphicsDatum1.variables.current.position[visionScale].center.y
+    const x2 = resourceGraphicsDatum2.variables.current.position[visionScale].center.x
+    const y2 = resourceGraphicsDatum2.variables.current.position[visionScale].center.y
 
 
     return(
@@ -36,6 +38,7 @@ function ResourceConnectionLine(props){
                 <ResourceConnectionLineRoot 
                     className="resourceConnectionLine" 
                     points={`${x1},${y1} ${x2},${y2}`}
+                    strokeWidth={strokeWidth}
                 />
                 , document.getElementById(resourceConnectionLinesContainerId)
             )}

@@ -8,6 +8,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import {useResourceIconGraphicsManager} from "../../hooks/use-resource-icon-graphics-manager";
 import { positionsActions } from "../../store/store";
+import { usePositionsReevaluationTrigger } from "../../hooks/use-positions-reevaluation-trigger";
 
 
 const ResourceIconRoot = styled.div`
@@ -39,8 +40,10 @@ const ResourceIconRoot = styled.div`
 
 function ResourceIcon(props){
 
+    console.log('rendering ResourceIcon')
+
     //<graphics datum>
-    const [resourceGraphicsDatum, graphicsDatumActions] = useResourceIconGraphicsManager(props.resource)
+    const [resourceGraphicsDatum, graphicsDatumActions, visionScale] = useResourceIconGraphicsManager(props.resource)
     const isConnected = resourceGraphicsDatum.state.isConnected
     const isConnectionLinesVisible = resourceGraphicsDatum.state.isConnectionLinesVisible
     //<graphics datum>
@@ -51,12 +54,14 @@ function ResourceIcon(props){
             [state.dimensions.resourceWidth, 
             state.dimensions.resourceHeight,
             state.scale.treeScale], shallowEqual)
+    
 
+    const resourceIconScale = props.scale
     
     const [borderRadius, color] = useResourceIconStyle()
 
-    const brightness = isConnected ? '167%' : 'inherit'
-    const backgroundColor = isConnected ? 'red' : '#f07655'
+    const brightness = isConnected ? '130%' : 'inherit'
+    const backgroundColor = isConnected ? '#f15125' : '#f07655'
     //</styles>
 
     //<element ids>
@@ -66,12 +71,11 @@ function ResourceIcon(props){
     //</element ids>
 
     //reevaluation
-    // const reevaluationTrigger = useSelector(state => state.positions.reevaluationTrigger)
     
     useEffect(()=>{
 
           //report the position of resource
-
+        // console.log('report position triggered')
         if (isReevaluationPossible()){
             console.log('reporting icon position')
             const relativePosition = getRelativePositionOfElementInContainer(
@@ -79,24 +83,35 @@ function ResourceIcon(props){
                 document.getElementById(props.resource.id)
             )
 
-            const position = {
-                x: relativePosition.x / scale,
-                y: relativePosition.y / scale
+            let topLeftPosition
+            if (resourceIconScale < 1){
+                topLeftPosition = {
+                    //icon scale places shrunk icon at the center of original icon
+                    //global scale shrinks x, y by itself
+                    x: (relativePosition.x - scale*(width - resourceIconScale*width)/2) / scale,
+                    y: (relativePosition.y - scale*(height - resourceIconScale*height)/2) / scale
+    
+                }
+            } else{
+                topLeftPosition = {
+                    x: relativePosition.x / scale,
+                    y: relativePosition.y / scale
+                }
             }
 
             const centerPosition = {
-                x: (relativePosition.x + width*scale/2) / scale,
-                y: (relativePosition.y + height*scale/2) /scale
+                x: (relativePosition.x + width*scale*resourceIconScale/2) / scale,
+                y: (relativePosition.y + height*scale*resourceIconScale/2) /scale
             }
 
             // console.log(position.x)
             // console.log(position.y)
-            graphicsDatumActions.setAbsolutePosition(position, centerPosition)
+            graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
         }
 
       
-
     })
+    // [reevaluationTrigger.current]
 
 
     // const [showConnections, setShowConnections] = useState(false)
@@ -148,8 +163,8 @@ function ResourceIcon(props){
                 <foreignObject 
                 width={width} 
                 height={height} 
-                x={resourceGraphicsDatum.variables.current.position.standard.x}
-                y={resourceGraphicsDatum.variables.current.position.standard.y}>
+                x={resourceGraphicsDatum.variables.current.position[visionScale].topLeft.x}
+                y={resourceGraphicsDatum.variables.current.position[visionScale].topLeft.y}>
 
                     {resourceIcon}
 

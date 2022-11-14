@@ -1,6 +1,7 @@
 import * as d3 from 'd3'
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom'
+import { useResourceIconGraphicsManager } from '../../hooks/use-resource-icon-graphics-manager';
 import styles from '../tree.module.css'
 
 
@@ -11,6 +12,9 @@ import styles from '../tree.module.css'
 
 function D3Tree(props){
 
+    //clear resource Icon state
+    const resourceIconsActions = useResourceIconGraphicsManager()
+    resourceIconsActions.resetAllResourceIcons() 
 
     // console.log('rendering D3Tree')
     const nodeHeight = props.nodeHeight + 2*props.nodePadding

@@ -5,11 +5,17 @@ import { setReevaluationPossible } from "../util/relativePositionManager";
 
 
 const resourceGraphicsData = {}
-let resourceIconPositionUpdateCount = 0
+const resourceIconPositionUpdateCounts = {
+    bushScale: 0,
+    subBushScale: 0
+}
+
 
 export function useResourceIconGraphicsManager(thisResource) {
 
     // const [opacityControlGId] = useSelector((state) => state.importantElementIds.opacityControlGId)
+    const visionScale = useSelector(state => state.zoom.visionScale, shallowEqual)
+
     let prevDatumState = undefined;
     if (thisResource){
         prevDatumState = resourceGraphicsData[thisResource.id]
@@ -18,8 +24,14 @@ export function useResourceIconGraphicsManager(thisResource) {
     let variables = undefined;
     const potentialVariables = useRef({ //does not trigger re-render when updated
         position: {
-            center: {x:0, y:0},
-            standard: {x:0, y:0}
+            bushScale: {
+                center: {x:0, y:0},
+                topLeft: {x:0, y:0}
+            },
+            subBushScale: {
+                center: {x:0, y:0},
+                topLeft: {x:0, y:0}
+            }
         }
     })
 
@@ -57,6 +69,7 @@ export function useResourceIconGraphicsManager(thisResource) {
 
                 resourceGraphicsDatum.state.isConnected = false
                 resourceGraphicsDatum.actions.setIsConnectionLinesVisible(false)
+                this.handleTreeContainer(false)
                 resourceGraphicsDatum.actions.commitState()
             })
         },
@@ -96,17 +109,18 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 
         },
-        setAbsolutePosition(position, centerPosition){
-            variables.current.position.standard = position
-            variables.current.position.center = centerPosition
+        storeAbsolutePosition(position, centerPosition){
 
-            resourceIconPositionUpdateCount ++
+            variables.current.position[visionScale].topLeft = position
+            variables.current.position[visionScale].center = centerPosition
+
+            resourceIconPositionUpdateCounts[visionScale] ++
             
 
             // stop position reports when all resource icons have reported
-            if (resourceIconPositionUpdateCount === Object.keys(resourceGraphicsData).length){
+            if (resourceIconPositionUpdateCounts[visionScale] === Object.keys(resourceGraphicsData).length){
                 //reset update count
-                resourceIconPositionUpdateCount = 0
+                resourceIconPositionUpdateCounts[visionScale] = 0
                 setReevaluationPossible(false)
             }
         }
@@ -127,7 +141,7 @@ export function useResourceIconGraphicsManager(thisResource) {
         resourceGraphicsData[thisResource.id] = resourceGraphicsDatum
     
     
-        return [resourceGraphicsDatum, actions]
+        return [resourceGraphicsDatum, actions, visionScale] //make vision scale selector in manager
     }
 
     return actions

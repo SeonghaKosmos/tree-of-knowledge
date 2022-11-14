@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 const SubBushNodeRoot = styled.div`
 
     font-size: 8px;
-    background-color: green;
+    background-color: #709666;
     border-radius: 1em;
     width:${props => (`${props.width}px`)};
     height:${props => (`${props.height}px`)};

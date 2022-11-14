@@ -7,6 +7,7 @@ import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import useDimensions from './hooks/use-dimensions';
 import './global.css'
 import { useResourceIconGraphicsManager } from './hooks/use-resource-icon-graphics-manager';
+import usePositionSimulation from './hooks/use-positions-simulation';
 
 
 const AppRoot = styled.div`
@@ -36,6 +37,8 @@ const AppRoot = styled.div`
 
 function App() {
 
+  console.log('rendering app')
+
   const appDiv = useRef()
   const navBar = useRef()
 
@@ -56,12 +59,14 @@ function App() {
     return null
   }
 
-
+ //<hooks>
   const [availableTreeWidth, availableTreeHeight] = 
     useDimensions(computeRenderedTreeDimensions)
 
-
   const resourceIconsDataManagerActions = useResourceIconGraphicsManager()
+  usePositionSimulation() //trigger storage of positions at each visionScale (render tree num-visionscales times)
+ //</hooks>
+
 
   const onClick = () => {
     resourceIconsDataManagerActions.resetAllResourceIcons()
