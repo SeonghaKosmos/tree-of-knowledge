@@ -9,6 +9,7 @@ const ResourceConnectionLineRoot = styled.polyline`
     fill-rule: evenodd;
     fill: red;
     stroke: rgb(115, 213, 240);
+    filter: brightness(120%);
     stroke-width: ${props => `${props.strokeWidth}px`};
     
 `
