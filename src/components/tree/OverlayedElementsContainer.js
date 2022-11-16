@@ -24,11 +24,14 @@ function OverlayedElementsContainer(){
     const treeOverlayElementsContainerId = useSelector((state) => 
         state.importantElementIds.treeOverlayElementsContainerId, shallowEqual)
 
+    const [renderedTreeWidth, renderedTreeHeight] = 
+        useSelector(state => [state.renderedDimensions.renderedTreeWidth, state.renderedDimensions.renderedTreeHeight])
+
 
     return(
-        <foreignObject width={1287} height={930} className={styles.treeOverlayElementsContainerContainerForeignObject}>
+        <foreignObject width={renderedTreeWidth} height={renderedTreeHeight} className={styles.treeOverlayElementsContainerContainerForeignObject}>
             <OverlayedElementsContainerRoot>
-                <svg width={1287} height={930} 
+                <svg width={renderedTreeWidth} height={renderedTreeHeight} 
                 id={treeOverlayElementsContainerId}
                 className='treeOverlayElementsContainer'>
                     <g id='connectionLinesContainer'/>

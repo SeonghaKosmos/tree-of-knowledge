@@ -10,7 +10,7 @@ import { useResourceIconGraphicsManager } from './hooks/resource-icon/use-resour
 import usePositionSimulation from './hooks/resource-icon/use-positions-simulation';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatch } from 'd3';
-import { dimensionSliceActions } from './store/store';
+import {renderedDimensionsActions } from './store/store';
 
 
 const AppRoot = styled.div`
@@ -58,13 +58,20 @@ function App() {
 
 //<dimensions>
   const dispatch = useDispatch()
+
   function storeScreenDimensions() {
-    dispatch(dimensionSliceActions.setScreenWidth(window.innerWidth))
-    dispatch(dimensionSliceActions.setScreenHeight(window.innerHeight))
+    dispatch(renderedDimensionsActions.setScreenDimensions({
+      width: window.innerWidth,
+      height: window.innerHeight
+    }))
   }
-  //store initial screen dimensions
-  useEffect(() => storeScreenDimensions(), []) 
-  const [screenWidth, screenHeight] = useSelector(state => [state.dimensions.screenWidth, state.dimensions.screenHeight])
+
+  useEffect(() => {
+    storeScreenDimensions()
+  }, []) 
+
+  const [screenWidth, screenHeight] = useSelector(state => [state.renderedDimensions.screenWidth, state.renderedDimensions.screenHeight])
+
   const computeRenderedTreeDimensions = () => {
     if (!availableTreeDimensionsComputationComplete.current){
       return [
@@ -74,15 +81,20 @@ function App() {
     }
     return null
   }
-//</dimensions>
 
- //<hooks>
+
   const [availableTreeWidth, availableTreeHeight, doDimensionsUpdate] = 
     useDimensions(computeRenderedTreeDimensions)
 
+  dispatch(renderedDimensionsActions.setZoomableScreenDimensions({
+    width: availableTreeWidth,
+    height: availableTreeHeight
+  }))
+
+//</dimensions>
   const resourceIconsDataManagerActions = useResourceIconGraphicsManager()
   usePositionSimulation() //trigger storage of positions at each visionScale (render tree num-visionscales times)
- //</hooks>
+
 
   window.onresize = function(){
     //enable dimensions update

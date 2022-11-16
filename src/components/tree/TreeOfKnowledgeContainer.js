@@ -1,11 +1,12 @@
 import styled from "styled-components";
 import D3Tree from "./D3Tree";
 import BushNode from "../bush/BushNode";
-import { shallowEqual, useSelector } from "react-redux";
+import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import styles from '../tree.module.css'
 import React from "react";
 import useZoom from "../../hooks/use-zoom";
 import useDimensions from "../../hooks/use-dimensions";
+import { renderedDimensionsActions } from "../../store/store";
 
 
 
@@ -76,6 +77,14 @@ function TreeOfKnowledgeContainer(props){
 
     const [renderedTreeWidth, renderedTreeHeight] = 
       useDimensions(computeRenderedTreeDimensions, treeWidth, treeHeight)
+
+    
+    //store tree width
+    const dispatch = useDispatch()
+    dispatch(renderedDimensionsActions.setTreeDimensions({
+      width: renderedTreeWidth,
+      height: renderedTreeHeight
+    }))
 
     useZoom(
       `#${containerGId}`, 
