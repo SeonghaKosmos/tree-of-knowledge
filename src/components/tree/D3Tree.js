@@ -15,7 +15,9 @@ function D3Tree(props){
 
     //clear resource Icon state
     const resourceIconsActions = useResourceIconGraphicsManager()
-    // resourceIconsActions.resetAllResourceIcons() 
+    //cancel tree shading
+    useEffect(() => resourceIconsActions.handleTreeContainer(false) )
+    
 
     // console.log('rendering D3Tree')
     const nodeHeight = props.nodeHeight + 2*props.nodePadding

@@ -22,7 +22,7 @@ const zoomSlice = createSlice({
             } else {
                 state.visionScale = 'subBushScale'
             }
-            // ConnectionStatusFlags.updateVisionScale(state.visionScale)
+            ConnectionStatusFlags.updateVisionScale(state.visionScale)
         }, 
         setVisionScale(state, action){
             state.visionScale = action.payload

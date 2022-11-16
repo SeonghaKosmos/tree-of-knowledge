@@ -49,14 +49,15 @@ function ResourceIcon(props){
     //<graphics datum>
 
     //re render connection lines on scale change
-    // useEffect(() => {
-    //     if(ConnectionStatusFlags.canRefreshConnectionStatus){
-    //         console.log(resourceGraphicsDatum.state.isConnected)
-    //         graphicsDatumActions.setIsConnected(isConnected)
-    //         ConnectionStatusFlags.setCanRefreshConnectionStatus(false)
-    //         console.log('%cre rendering connection lines', 'color: purple')
-    //     }
-    // })
+    useEffect(() => {
+        // if(ConnectionStatusFlags.canRefreshConnectionStatus){
+        //     console.log(resourceGraphicsDatum.state.isConnected)
+        //     graphicsDatumActions.setIsConnected(isConnected)
+        //     ConnectionStatusFlags.setCanRefreshConnectionStatus(false)
+        //     console.log('%cre rendering connection lines', 'color: purple')
+        // }
+        console.log(`%c${isConnected}`, 'color: purple')
+    })
 
 
     //<styles>
