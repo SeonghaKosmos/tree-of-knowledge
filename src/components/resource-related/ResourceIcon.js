@@ -1,12 +1,12 @@
 import { useEffect, useState } from "react";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import styled from "styled-components";
-import { useResourceIconStyle } from "../../hooks/use-resource-icon-style";
+import { useResourceIconStyle } from "../../hooks/resource-icon/use-resource-icon-style";
 import { getRelativePositionOfElementInContainer, isReevaluationPossible } from "../../util/relativePositionManager";
 import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
-import {useResourceIconGraphicsManager} from "../../hooks/use-resource-icon-graphics-manager";
+import { useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 
 
 
@@ -66,7 +66,7 @@ function ResourceIcon(props){
     //</styles>
 
     //<element ids>
-    const resourceConnectionLinesContainer = document.getElementById('resourceIconsContainer')
+    const resourceIconsContainer = document.getElementById('resourceIconsContainer')
     //</element ids>
 
 
@@ -77,7 +77,7 @@ function ResourceIcon(props){
         if (isReevaluationPossible()){
             console.log('reporting icon position')
             const relativePosition = getRelativePositionOfElementInContainer(
-                resourceConnectionLinesContainer,
+                resourceIconsContainer,
                 document.getElementById(props.resource.id)
             )
 
@@ -153,7 +153,7 @@ function ResourceIcon(props){
             {/* show resourceIcon in original place if not connected */}
             {!isConnected && resourceIcon}
 
-            {/* show resourceIcon in resourceConnectionLinesContainer 
+            {/* show resourceIcon in treeOverlayElementsContainer 
             and leave dummy if connected */}
             {isConnected && ReactDOM.createPortal( 
                 <foreignObject 
@@ -166,7 +166,7 @@ function ResourceIcon(props){
 
                 </foreignObject>,
 
-                resourceConnectionLinesContainer
+                resourceIconsContainer
             )}
             {isConnected && <div style={{width:width, height:height, backgroundColor: 'transparent'}}/>}
 

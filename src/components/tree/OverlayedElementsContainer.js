@@ -9,11 +9,11 @@ const OverlayedElementsContainerRoot = styled.div`
     height: 930px;
     pointer-events: none;
 
-    .resourceConnectionLinesContainer{
+    .treeOverlayElementsContainer{
         pointer-events: none;
     }
 
-    .resourceConnectionLinesContainerContainerForeignObject{
+    .treeOverlayElementsContainerContainerForeignObject{
         pointer-events: none;
     }
 
@@ -21,16 +21,16 @@ const OverlayedElementsContainerRoot = styled.div`
 
 function OverlayedElementsContainer(){
 
-    const resourceConnectionLinesContainerId = useSelector((state) => 
-        state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
+    const treeOverlayElementsContainerId = useSelector((state) => 
+        state.importantElementIds.treeOverlayElementsContainerId, shallowEqual)
 
 
     return(
-        <foreignObject width={1287} height={930} className={styles.resourceConnectionLinesContainerContainerForeignObject}>
+        <foreignObject width={1287} height={930} className={styles.treeOverlayElementsContainerContainerForeignObject}>
             <OverlayedElementsContainerRoot>
                 <svg width={1287} height={930} 
-                id={resourceConnectionLinesContainerId}
-                className='resourceConnectionLinesContainer'>
+                id={treeOverlayElementsContainerId}
+                className='treeOverlayElementsContainer'>
                     <g id='connectionLinesContainer'/>
                     <g id='resourceIconsContainer'/>
                 </svg>

@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const initialState = {
     treeContainerGId: 'treeContainerG', 
     opacityControlGId: 'opacityControlG',
-    resourceConnectionLinesContainerId: 'resourceConnectionLinesContainer'
+    treeOverlayElementsContainerId: 'treeOverlayElementsContainer'
 }
 
 const importantElementIdsSlice = createSlice({

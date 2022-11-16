@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
-import { positionsActions } from "../store/store";
-import { setReevaluationPossible } from "../util/relativePositionManager";
+import { setReevaluationPossible } from "../../util/relativePositionManager";
 
 
 const resourceGraphicsData = {}

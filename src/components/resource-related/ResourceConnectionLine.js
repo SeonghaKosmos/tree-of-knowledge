@@ -2,7 +2,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import styled from "styled-components";
 import ReactDOM from 'react-dom'
 import React from "react";
-import { useresourceGraphicsDatumSelector } from "../../hooks/use-resource-icon-graphics-manager";
+import { useresourceGraphicsDatumSelector } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 
 const ResourceConnectionLineRoot = styled.polyline`
 
@@ -24,8 +24,8 @@ function ResourceConnectionLine(props){
     const zoomScale = useSelector(state => state.zoom.scale, shallowEqual)
     const strokeWidth = 3 / zoomScale
 
-    const resourceConnectionLinesContainerId = useSelector((state) => 
-        state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
+    const treeOverlayElementsContainerId = useSelector((state) => 
+        state.importantElementIds.treeOverlayElementsContainerId, shallowEqual)
     
     const x1 = resourceGraphicsDatum1.variables.current.position[visionScale].center.x
     const y1 = resourceGraphicsDatum1.variables.current.position[visionScale].center.y

@@ -1,10 +1,9 @@
 import {configureStore, getDefaultMiddleware } from '@reduxjs/toolkit'
-import dimensionsSlice from './dimensionsSlice'
+import dimensionsSlice from './visuals/dimensionsSlice'
 import importantElementIdsSlice from './importantElementIdsSlice'
-import scaleSlice from './scaleSlice'
+import scaleSlice from './visuals/scaleSlice'
 import treeDataSlice from './treeDataSlice'
-import zoomSlice from './zoomSlice'
-
+import zoomSlice from './visuals/zoomSlice'
 
 
 

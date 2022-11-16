@@ -38,9 +38,9 @@ const TreeOfKnowledgeContainerRoot = styled.div`
 function TreeOfKnowledgeContainer(props){
 
     console.log('rendering tree container')
-    const [data, resourceConnectionLinesContainerId] = useSelector((state) => [
+    const [data, treeOverlayElementsContainerId] = useSelector((state) => [
       state.treeData.structure, 
-      state.importantElementIds.resourceConnectionLinesContainerId], shallowEqual)
+      state.importantElementIds.treeOverlayElementsContainerId], shallowEqual)
     const visionScale = useSelector((state) => state.zoom.visionScale, shallowEqual)
     const scale = useSelector((state) => state.scale.treeScale, shallowEqual)
 
@@ -99,7 +99,7 @@ function TreeOfKnowledgeContainer(props){
               nodesGId={nodesGId} 
               linksGId={linksGId}
               containerGId={containerGId}
-              resourceConnectionLinesContainerId={resourceConnectionLinesContainerId}
+              treeOverlayElementsContainerId={treeOverlayElementsContainerId}
               containerSvgId='treeContainerSvg'
               treeWidth={treeWidth}
               treeHeight={treeHeight}

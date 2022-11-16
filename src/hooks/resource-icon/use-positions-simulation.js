@@ -1,7 +1,6 @@
 import { useDispatch } from "react-redux"
-import { zoomSliceActions } from "../store/store"
-import { setReevaluationPossible } from "../util/relativePositionManager"
-import { usePositionsReevaluationTrigger } from "./use-positions-reevaluation-trigger"
+import { zoomSliceActions } from "../../store/store"
+import { setReevaluationPossible } from "../../util/relativePositionManager"
 
 
 let simulationCount = 0

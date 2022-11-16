@@ -1,7 +1,7 @@
 import * as d3 from 'd3'
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom'
-import { useResourceIconGraphicsManager } from '../../hooks/use-resource-icon-graphics-manager';
+import { useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-resource-icon-graphics-manager'; 
 import styles from '../tree.module.css'
 import React from 'react';
 import OverlayedElementsContainer from './OverlayedElementsContainer';
@@ -142,7 +142,7 @@ function D3Tree(props){
                         <g id={props.nodesGId}/>
                     </g>
                     {/* add connection lines container if id available */}
-                    {props.resourceConnectionLinesContainerId &&  
+                    {props.treeOverlayElementsContainerId &&  
                         <OverlayedElementsContainer/>
                     }
                 </g>
