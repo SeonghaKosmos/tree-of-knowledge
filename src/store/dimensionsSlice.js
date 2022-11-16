@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
+    screenWidth: 0,
+    screenHeight: 0,
     resourceHeight: 30,
     resourceWidth: 24,
     subBushHeight: 30,
@@ -24,7 +26,13 @@ const initialState = {
 const dimensionsSlice = createSlice({
     name:'dimensions',
     initialState,
-    // reducers: {
+    reducers: {
+        setScreenWidth(state, action){
+            state.screenWidth = action.payload
+        },
+        setScreenHeight(state, action){
+            state.screenHeight = action.payload
+        }
     //     // setBushWidth(state, action) {
     //     //     state.bushWidth = action.payload
     //     // },
@@ -45,7 +53,7 @@ const dimensionsSlice = createSlice({
     //     //     state.treeHeight = action.payload.height
     //     //     state.treeWidth = action.payload.width
     //     // }
-    // }
+    }
 })
 
 export default dimensionsSlice

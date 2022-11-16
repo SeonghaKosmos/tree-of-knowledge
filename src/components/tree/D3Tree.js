@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom'
 import { useResourceIconGraphicsManager } from '../../hooks/use-resource-icon-graphics-manager';
 import styles from '../tree.module.css'
+import React from 'react';
 
 
 
@@ -168,4 +169,4 @@ function D3Tree(props){
         </>
     )
 }
-export default D3Tree
+export default React.memo(D3Tree)

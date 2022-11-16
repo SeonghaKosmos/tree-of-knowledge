@@ -9,7 +9,7 @@ const NavBarRoot = styled.div`
     }
     .navbar{
         /* z-index: 9999; */
-        position:relative;
+        box-sizing: border-box;
     }
 
 `

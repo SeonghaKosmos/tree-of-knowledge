@@ -8,7 +8,7 @@ import { setReevaluationPossible } from "../util/relativePositionManager"
 const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
     let [renderedWidth, setRenderedWidth] = useState(initWidth)
     let [renderedHeight, setRenderedHeight] = useState(initHeight)
-    const doUpdate = useRef(true)
+    const doDimensionsUpdate = useRef(true)
 
     const dispatch = useDispatch()
     
@@ -18,7 +18,7 @@ const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
                 const [computedWidth, computedHeight] = computeRenderedDimensions()
                 setRenderedWidth(computedWidth)
                 setRenderedHeight(computedHeight)
-                doUpdate.current = false //no more updates after reference element set
+                doDimensionsUpdate.current = false //no more updates after reference element set
             } catch (err){
                 console.log(`%c${err.message}`, 'color: orange')
                 if (err.message.includes('Cannot read properties of null')){
@@ -26,11 +26,9 @@ const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
 
                     //try update when reference element not set
                     console.log('%ctrying to update dimensions again', 'color: orange')
-                    doUpdate.current = true; 
+                    doDimensionsUpdate.current = true; 
                     //also reevaluate resource icon positions
-                    
-                    console.log('%cenabling icon positions update', 'color: orange')
-                    // setReevaluationPossible(true)
+
                     
                 }
             }
@@ -39,13 +37,13 @@ const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
     }
    
     useEffect(() => {
-        if (doUpdate.current){
+        if (doDimensionsUpdate.current){
             update()
         }
         
     })
 
-    return [renderedWidth, renderedHeight]
+    return [renderedWidth, renderedHeight, doDimensionsUpdate]
 }
 
 export default useDimensions
