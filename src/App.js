@@ -6,8 +6,8 @@ import { useEffect, useRef } from 'react';
 import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import useDimensions from './hooks/use-dimensions';
 import './global.css'
-import { useResourceIconGraphicsManager } from './hooks/use-resource-icon-graphics-manager';
-import usePositionSimulation from './hooks/use-positions-simulation';
+import { useResourceIconGraphicsManager } from './hooks/resource-icon/use-resource-icon-graphics-manager'; 
+import usePositionSimulation from './hooks/resource-icon/use-positions-simulation';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatch } from 'd3';
 import { dimensionSliceActions } from './store/store';
