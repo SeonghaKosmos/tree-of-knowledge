@@ -84,7 +84,8 @@ export function useResourceIconGraphicsManager(thisResource) {
 
             }
         },
-        setIsConnected (isConnected) { //master function that handles all connection related events
+        //master function that handles all connection related events
+        setIsConnected (isConnected) { 
 
             if (isConnected){
                 this.resetAllResourceIcons()

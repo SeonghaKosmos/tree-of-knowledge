@@ -7,8 +7,8 @@ import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
 import {useResourceIconGraphicsManager} from "../../hooks/use-resource-icon-graphics-manager";
-import { positionsActions } from "../../store/store";
-import { usePositionsReevaluationTrigger } from "../../hooks/use-positions-reevaluation-trigger";
+import ConnectionStatusFlags from "./ConnectionStatusFlags";
+
 
 
 const ResourceIconRoot = styled.div`
@@ -48,6 +48,17 @@ function ResourceIcon(props){
     const isConnectionLinesVisible = resourceGraphicsDatum.state.isConnectionLinesVisible
     //<graphics datum>
 
+    //re render connection lines on scale change
+    // useEffect(() => {
+    //     if(ConnectionStatusFlags.canRefreshConnectionStatus){
+    //         console.log(resourceGraphicsDatum.state.isConnected)
+    //         graphicsDatumActions.setIsConnected(isConnected)
+    //         ConnectionStatusFlags.setCanRefreshConnectionStatus(false)
+    //         console.log('%cre rendering connection lines', 'color: purple')
+    //     }
+    // })
+
+
     //<styles>
     const [width, height, scale] = 
         useSelector((state) => 
@@ -70,11 +81,10 @@ function ResourceIcon(props){
     const resourceConnectionLinesContainer = document.getElementById(resourceConnectionLinesContainerId)
     //</element ids>
 
-    //reevaluation
-    
-    useEffect(()=>{
 
-          //report the position of resource
+    //position reevaluation
+    useEffect(()=>{
+        //report the position of resource
         // console.log('report position triggered')
         if (isReevaluationPossible()){
             console.log('reporting icon position')
@@ -118,8 +128,6 @@ function ResourceIcon(props){
     // const showConnections = false;
 
     const onClick = (event) => {
-
-
         // console.log('clicked')
         graphicsDatumActions.setIsConnected(!isConnected)
         event.stopPropagation()
