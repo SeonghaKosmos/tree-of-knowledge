@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom'
 import { useResourceIconGraphicsManager } from '../../hooks/use-resource-icon-graphics-manager';
 import styles from '../tree.module.css'
 import React from 'react';
+import OverlayedElementsContainer from './OverlayedElementsContainer';
 
 
 
@@ -16,7 +17,6 @@ function D3Tree(props){
     //clear resource Icon state
     const resourceIconsActions = useResourceIconGraphicsManager()
     //cancel tree shading
-    useEffect(() => resourceIconsActions.handleTreeContainer(false) )
     
 
     // console.log('rendering D3Tree')
@@ -143,13 +143,7 @@ function D3Tree(props){
                     </g>
                     {/* add connection lines container if id available */}
                     {props.resourceConnectionLinesContainerId &&  
-                        <foreignObject width={1287} height={930} className={styles.resourceConnectionLinesContainerContainerForeignObject}>
-                            <div className={styles.resourceConnectionLinesContainerContainerDiv}>
-                                <svg width={901} height={651} id={props.resourceConnectionLinesContainerId} 
-                                     className={styles.resourceConnectionLinesContainer}>
-                                </svg>
-                            </div>
-                        </foreignObject>
+                        <OverlayedElementsContainer/>
                     }
                 </g>
             </svg>

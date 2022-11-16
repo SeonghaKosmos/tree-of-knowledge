@@ -35,9 +35,15 @@ export function useResourceIconGraphicsManager(thisResource) {
         }
     })
 
+
+    let isConnectedTemp = false
+    let isConnectionLinesVisibleTemp = false
     //leave variables reference unchanged if there is a reference
     if (prevDatumState){
         variables = prevDatumState.variables
+
+        isConnectedTemp = prevDatumState.state.isConnected
+        isConnectionLinesVisibleTemp = prevDatumState.state.isConnectionLinesVisible
     } else {
         //define new reference if there is no previous reference
         variables = potentialVariables
@@ -45,11 +51,9 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 
 
-            
-
     const [state, setState] = useState({ //triggers re-render when updated
-        isConnected: false,
-        isConnectionLinesVisible: false
+        isConnected: isConnectedTemp,
+        isConnectionLinesVisible: isConnectionLinesVisibleTemp
     })
 
 

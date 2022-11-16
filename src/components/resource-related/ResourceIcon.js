@@ -7,7 +7,6 @@ import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
 import {useResourceIconGraphicsManager} from "../../hooks/use-resource-icon-graphics-manager";
-import ConnectionStatusFlags from "./ConnectionStatusFlags";
 
 
 
@@ -48,16 +47,6 @@ function ResourceIcon(props){
     const isConnectionLinesVisible = resourceGraphicsDatum.state.isConnectionLinesVisible
     //<graphics datum>
 
-    //re render connection lines on scale change
-    useEffect(() => {
-        // if(ConnectionStatusFlags.canRefreshConnectionStatus){
-        //     console.log(resourceGraphicsDatum.state.isConnected)
-        //     graphicsDatumActions.setIsConnected(isConnected)
-        //     ConnectionStatusFlags.setCanRefreshConnectionStatus(false)
-        //     console.log('%cre rendering connection lines', 'color: purple')
-        // }
-        console.log(`%c${isConnected}`, 'color: purple')
-    })
 
 
     //<styles>
@@ -77,9 +66,7 @@ function ResourceIcon(props){
     //</styles>
 
     //<element ids>
-    const resourceConnectionLinesContainerId = useSelector((state) => 
-        state.importantElementIds.resourceConnectionLinesContainerId, shallowEqual)
-    const resourceConnectionLinesContainer = document.getElementById(resourceConnectionLinesContainerId)
+    const resourceConnectionLinesContainer = document.getElementById('resourceIconsContainer')
     //</element ids>
 
 

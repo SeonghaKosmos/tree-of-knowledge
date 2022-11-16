@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit'
-import ConnectionStatusFlags from '../components/resource-related/ConnectionStatusFlags'
 
 const initialState = {
     scale: 1,
@@ -22,7 +21,6 @@ const zoomSlice = createSlice({
             } else {
                 state.visionScale = 'subBushScale'
             }
-            ConnectionStatusFlags.updateVisionScale(state.visionScale)
         }, 
         setVisionScale(state, action){
             state.visionScale = action.payload

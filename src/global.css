@@ -3,6 +3,14 @@ svg {
     height: 100%;
 }
 
-foreignObject:focus{
-    outline: none;
+/* svg{
+    outline: none !important;
+} */
+
+/* foreignObject{
+    outline: none !important;
+} */
+
+g{
+    outline: none !important;
 }
