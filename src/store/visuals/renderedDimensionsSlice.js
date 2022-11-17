@@ -18,8 +18,6 @@ const renderedDimensionsSlice = createSlice({
             state.renderedTreeHeight = action.payload.height
         },
         setZoomableScreenDimensions(state, action) {
-            console.log(action.payload.width)
-            console.log(action.payload.height)
             state.zoomableScreenWidth = action.payload.width
             state.zoomableScreenHeight = action.payload.height
         },

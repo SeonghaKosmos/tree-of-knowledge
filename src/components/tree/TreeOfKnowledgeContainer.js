@@ -87,8 +87,8 @@ function TreeOfKnowledgeContainer(props){
     }))
 
     useZoom(
-      `#${containerGId}`, 
-      '#zoomWindow', 
+      'zoomWindow', 
+      `${containerGId}`, 
       renderedTreeWidth, 
       renderedTreeHeight)
     
