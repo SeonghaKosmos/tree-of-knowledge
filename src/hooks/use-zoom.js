@@ -2,7 +2,7 @@ import { useEffect } from "react"
 import * as d3 from 'd3'
 import { useDispatch, useSelector } from "react-redux"
 import { zoomSliceActions } from "../store/store"
-import { isInEdge, setEdge } from "../util/EdgeLogic";
+import { isInEdge, configureEdgeHoverNavigationLogic } from "../util/EdgeHoverNavigationLogic";
 import useEdgeMouseTreeNavigation from "./use-edge-mouse-tree-navigation";
 
 
@@ -11,8 +11,10 @@ let broadCaster = setTimeout(()=>{}, 1);
 
 const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTreeHeight) => {
 
+    
+
     const dispatch = useDispatch()
-    useEdgeMouseTreeNavigation(eventSourceId)
+    useEdgeMouseTreeNavigation(eventSourceId, applyZoomTargetId)
     
     function broadCastScale(e){
 
@@ -38,12 +40,11 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
         broadCastScale(e)
         // document.getElementById(eventSourceId).style.transform = 
         // `translate(${e.transform.x}px, ${e.transform.x}px) scale(${e.transform.k})`
-
         zoomActionTargetContainer.attr('transform', e.transform)
       }
       
 
-      let zoom = d3.zoom()
+      const zoom = d3.zoom()
         .scaleExtent([1, 8])
         .on('zoom', handleZoom)
         .translateExtent([[0,0], [renderedTreeWidth * 1.3, renderedTreeHeight]])

@@ -41,26 +41,26 @@ const BootStrapNavBar = React.forwardRef((props, ref) => {
  
     return(
         <nav className={`navbar navbar-expand-lg bg-light `} ref={ref}>
-        <div className="container-fluid">
-            <a className="navbar-brand" href="#">ToK</a>
-            <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span className="navbar-toggler-icon"></span>
-            </button>
-            <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div className="navbar-nav">
+            <div className="container-fluid">
+                <a className="navbar-brand" href="#">ToK</a>
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+                </button>
+                <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div className="navbar-nav">
 
-                {navLinks.map(link => 
-                <NavLink 
-                    className={` nav-link `} 
-                    activeclassname={styled.activeClassName} 
-                    to={link.to}
-                    key={link.key}>
-                        {link.txt}
-                </NavLink>)}
-                
+                    {navLinks.map(link => 
+                    <NavLink 
+                        className={` nav-link `} 
+                        activeclassname={styled.activeClassName} 
+                        to={link.to}
+                        key={link.key}>
+                            {link.txt}
+                    </NavLink>)}
+                    
+                </div>
+                </div>
             </div>
-            </div>
-        </div>
         </nav>
     )
 })
