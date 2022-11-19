@@ -1,27 +1,52 @@
+import { max } from "d3"
+
 let elementWidth
 let elementHeight
+let edgeThickness
 
-
-export function setEdge(elemWidth, elemHeight){
+export function setEdge(elemWidth, elemHeight, edgeThick){
     elementWidth = elemWidth
     elementHeight = elemHeight
+    edgeThickness = edgeThick
 }
 
-export function isInEdge(x, y){
-    const edgeConditions = [
-        [0, y], //left
-        [elementWidth, y], //right
-        [x, 0], //top
-        [x, elementHeight] //bottom
-    ]
 
-    for (let condition of edgeConditions){
-        const [xCondition, yCondition] = condition
-        // console.log(`condition: ${xCondition} ${yCondition}`)
-        // console.log(`real: ${x} ${y}`)
-        if (x===xCondition && y===yCondition){
-            return true
-        }
+function isOutsideSmallRect(x, y){
+    const smallRect = {
+        minX: edgeThickness, // + 0
+        maxX: elementWidth - edgeThickness,
+        minY: edgeThickness,
+        maxY: elementHeight - edgeThickness
     }
-    return false
+
+    // console.log(smallRect.minX, smallRect.maxX, smallRect.minY, smallRect.maxY)
+    // console.log(x, y)
+    if (
+    (x <= smallRect.minX || x >= smallRect.maxX) ||
+    (y <= smallRect.minY || y >= smallRect.maxY)){
+        return true
+    } return false
+}
+
+// function isInsideLargeRect(x, y){
+//     const largeRect = {
+//         minX: 0, // + 0
+//         maxX: elementWidth,
+//         minY: 0,
+//         maxY: elementHeight
+//     }
+
+//     if (
+//     (largeRect.minX <= x && x <= largeRect.maxX) &&
+//     (largeRect.minY <= y && y <= largeRect.maxY)){
+//         return true
+//     } return false
+// }
+
+
+export function isInEdge(x, y){
+
+    if (isOutsideSmallRect(x, y)){
+        return true
+    }return false
 }

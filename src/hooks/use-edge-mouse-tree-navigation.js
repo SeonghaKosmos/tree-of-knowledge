@@ -8,7 +8,7 @@ export default function useEdgeMouseTreeNavigation(zoomEventSourceId){
 
     const zoomableScreenWidth = useSelector(state => state.renderedDimensions.zoomableScreenWidth)
     const zoomableScreenHeight = useSelector(state => state.renderedDimensions.zoomableScreenHeight)
-    setEdge(zoomableScreenWidth, zoomableScreenHeight)
+    setEdge(zoomableScreenWidth, zoomableScreenHeight, 20)
     
 
     useEffect(() => {
