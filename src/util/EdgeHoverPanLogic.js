@@ -8,7 +8,7 @@ let elementHeight
 //edge logic
 let edgeThickness
 
-export function configureEdgeHoverNavigationLogic(elemWidth, elemHeight, edgeThick){
+export function configureEdgeHoverPanLogic(elemWidth, elemHeight, edgeThick){
     elementWidth = elemWidth
     elementHeight = elemHeight
     edgeThickness = edgeThick

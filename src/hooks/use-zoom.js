@@ -2,8 +2,8 @@ import { useEffect } from "react"
 import * as d3 from 'd3'
 import { useDispatch, useSelector } from "react-redux"
 import { zoomSliceActions } from "../store/store"
-import { isInEdge, configureEdgeHoverNavigationLogic } from "../util/EdgeHoverNavigationLogic";
-import useEdgeMouseTreeNavigation from "./use-edge-mouse-tree-navigation";
+import {configureEdgeHoverPanLogic} from "../util/EdgeHoverPanLogic";
+import { setUpHoverPan } from "../util/EdgeHoverPan";
 
 
 let broadCaster = setTimeout(()=>{}, 1);
@@ -12,9 +12,9 @@ let broadCaster = setTimeout(()=>{}, 1);
 const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTreeHeight) => {
 
     
-
+    
     const dispatch = useDispatch()
-    useEdgeMouseTreeNavigation(eventSourceId, applyZoomTargetId)
+    // useEdgeMouseTreeNavigation(eventSourceId, applyZoomTargetId, zoom)
     
     function broadCastScale(e){
 
@@ -26,7 +26,10 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
     }
 
 
-    
+    const zoomableScreenWidth = useSelector(state => state.renderedDimensions.zoomableScreenWidth)
+    const zoomableScreenHeight = useSelector(state => state.renderedDimensions.zoomableScreenHeight)
+    configureEdgeHoverPanLogic(zoomableScreenWidth, zoomableScreenHeight, 20)
+
     useEffect(() => {
 
       //i.e. zoomWindow
@@ -43,14 +46,16 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
         zoomActionTargetContainer.attr('transform', e.transform)
       }
       
-
       const zoom = d3.zoom()
-        .scaleExtent([1, 8])
-        .on('zoom', handleZoom)
-        .translateExtent([[0,0], [renderedTreeWidth * 1.3, renderedTreeHeight]])
-
+      .scaleExtent([1, 8])
+      .on('zoom', handleZoom)
+      .translateExtent([[0,0], [renderedTreeWidth * 1.3, renderedTreeHeight]])
 
       zoomEventSourceContainer.call(zoom)
+      //pan
+      setUpHoverPan(eventSourceId, applyZoomTargetId, zoom)
+
+
 
 
     }, [renderedTreeWidth, renderedTreeHeight])
