@@ -8,7 +8,6 @@ const NavBarRoot = styled.div`
         color:black;
     }
     .navbar{
-        /* z-index: 9999; */
         box-sizing: border-box;
     }
 
