@@ -33,7 +33,7 @@ const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
                 }
             }
             
-        }, 1)
+        }, 10)
     }
    
     useEffect(() => {

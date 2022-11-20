@@ -3,7 +3,7 @@ import D3Tree from "./D3Tree";
 import BushNode from "../bush/BushNode";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import styles from '../tree.module.css'
-import React from "react";
+import React, { useEffect } from "react";
 import useZoom from "../../hooks/use-zoom";
 import useDimensions from "../../hooks/use-dimensions";
 import { renderedDimensionsActions } from "../../store/store";
@@ -69,12 +69,13 @@ function TreeOfKnowledgeContainer(props){
 
     const treeContainerG = document.getElementById('treeContainerG')
     
-    const computeRenderedTreeDimensions = () => 
-      [
-        treeContainerG.getBoundingClientRect().width / scale, //width  
+    const computeRenderedTreeDimensions = () => {
+      console.log(treeContainerG.getBoundingClientRect().width / scale + 60)
+      return [
+        treeContainerG.getBoundingClientRect().width / scale + 60, //width (+60 - temporary fix to dimension mismatch)
         treeContainerG.getBoundingClientRect().height / scale //height
       ]
-    
+    } 
 
     const [renderedTreeWidth, renderedTreeHeight] = 
       useDimensions(computeRenderedTreeDimensions, treeWidth, treeHeight)
@@ -82,10 +83,12 @@ function TreeOfKnowledgeContainer(props){
     
     //store tree width
     const dispatch = useDispatch()
-    dispatch(renderedDimensionsActions.setTreeDimensions({
+
+    useEffect(() => {dispatch(renderedDimensionsActions.setTreeDimensions({
       width: renderedTreeWidth,
       height: renderedTreeHeight
-    }))
+    }))})
+
 
     useZoom(
       'zoomWindow', 

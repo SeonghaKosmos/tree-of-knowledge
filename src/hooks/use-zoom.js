@@ -49,7 +49,7 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
       const zoom = d3.zoom()
       .scaleExtent([1, 8])
       .on('zoom', handleZoom)
-      .translateExtent([[0,0], [renderedTreeWidth * 1.3, renderedTreeHeight]])
+      .translateExtent([[0, 0], [renderedTreeWidth * 1.07, renderedTreeHeight]])
 
       zoomEventSourceContainer.call(zoom)
       //pan
