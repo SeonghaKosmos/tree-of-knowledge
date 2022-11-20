@@ -17,10 +17,11 @@ const TreeOfKnowledgeContainerRoot = styled.div`
     
     scale: ${props => (props.scale)};
 
-    /* z-index: -1; */
 
     & #treeContainerG{
       position:relative;
+      visibility: visible;
+      pointer-events: visible;
     }
 
     & #treeContainerSvg{

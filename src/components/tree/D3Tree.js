@@ -5,6 +5,7 @@ import { useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-re
 import styles from '../tree.module.css'
 import React from 'react';
 import OverlayedElementsContainer from './OverlayedElementsContainer';
+import MouseEventCapturingRect from './MouseEventCapturingRect';
 
 
 
@@ -137,6 +138,7 @@ function D3Tree(props){
             {/* tree template */}
             <svg  id={props.containerSvgId}> 
                 <g id={props.containerGId}>
+                    <MouseEventCapturingRect/>
                     <g id='opacityControlG'>
                         <g id={props.linksGId}/>
                         <g id={props.nodesGId}/>

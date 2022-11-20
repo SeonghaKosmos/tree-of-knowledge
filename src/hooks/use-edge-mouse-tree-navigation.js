@@ -49,21 +49,22 @@ export default function useEdgeMouseTreeNavigation(zoomEventSourceId, applyZoomT
 
 
         let translateIntervalId
-
-
+        let isTranlateWithinBounds = true
         const handleHoveringMappDrag = (event) => {
           
-          clearInterval(translateIntervalId)
+          if (isTranlateWithinBounds){
+            clearInterval(translateIntervalId)
 
-          const zoomWindowMouseEventX = event.x - zoomWindowX
-          const zoomWindowMouseEventY = event.y - zoomWindowY
-          if (isInEdge(zoomWindowMouseEventX, zoomWindowMouseEventY)){
-
-            translateIntervalId = setInterval(
-              () => translationStep(zoomWindowMouseEventX, zoomWindowMouseEventY)
-              , 1)
-
-            
+            const zoomWindowMouseEventX = event.x - zoomWindowX
+            const zoomWindowMouseEventY = event.y - zoomWindowY
+            if (isInEdge(zoomWindowMouseEventX, zoomWindowMouseEventY)){
+  
+              //continue moving even when mouse is not moving
+              translateIntervalId = setInterval(
+                () => translationStep(zoomWindowMouseEventX, zoomWindowMouseEventY)
+                , 1)
+  
+            }
           }
           // console.log(zoomWindowMouseEventX, zoomWindowMouseEventY)
         }
@@ -76,6 +77,14 @@ export default function useEdgeMouseTreeNavigation(zoomEventSourceId, applyZoomT
         zoomEventSourceContainer
         .on('mousemove', handleHoveringMappDrag)
         .on('mouseleave', handleMouseLeave)
+
+        zoomActionTargetContainer
+        .on('mouseenter', ()=>isTranlateWithinBounds = true)
+        .on('mouseleave', ()=>{
+          clearInterval(translateIntervalId)
+          isTranlateWithinBounds = false
+        })
+        .on('mousemove', () => console.log(isTranlateWithinBounds))
     })
 
 }
