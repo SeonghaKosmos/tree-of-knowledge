@@ -6,6 +6,7 @@ import ResourceIcon from "../resource-related/ResourceIcon";
 import SubBushNode from "./SubBushNode";
 import styles from '../tree.module.css'
 import ResourceConnectionLine from "../resource-related/ResourceConnectionLine";
+import RootNode from "./RootNode";
 
 
 
@@ -80,14 +81,24 @@ function BushNode(props){
     const resourceIconScale = useSelector((state) => state.scale.bushResourceIconScale)
 
 
-    const [width, height] = useSelector((state) => [
+    const [width, height, 
+        originNodeWidth, originNodeHeight,
+        rootNodeWidth, rootNodeHeight] = 
+        
+        useSelector((state) => [
         state.dimensions[visionScale].bushWidth, 
-        state.dimensions[visionScale].bushHeight], shallowEqual)
+        state.dimensions[visionScale].bushHeight,
+        state.dimensions[visionScale].originNodeWidth, 
+        state.dimensions[visionScale].originNodeHeight,
+        state.dimensions[visionScale].rootNodeWidth, 
+        state.dimensions[visionScale].rootNodeHeight], shallowEqual)
+
+
         
     const [subBushHeight, padding] = useSelector((state) => [state.dimensions.subBushHeight, state.dimensions.bushPadding], shallowEqual)
 
-    const containerWidth = width + padding*2 //add space for padding
-    const containerHeight = height + padding*2 + subBushHeight/2 //add space for padding + top margin for subbush
+    let containerWidth = width + padding*2 //add space for padding
+    let containerHeight = height + padding*2 + subBushHeight/2 //add space for padding + top margin for subbush
 
     
     const bushId = uuid().replace(/-/g, '')
@@ -95,9 +106,32 @@ function BushNode(props){
     const linksGId = `Links${bushId}`
     const containerGId = `containerG${bushId}`
 
+
+    //for root and origin nodes
+    let Root = null
+
+
+
+
+    //handle other node types (than standard)
+    if (props.data.name === 'Origin'){
+        Root = () => (<></>)
+        //same as branch width and origin node width
+        containerWidth = originNodeWidth
+        containerHeight = originNodeHeight
+    } else if (props.data.name === 'Root'){
+        Root = RootNode
+        containerWidth = rootNodeWidth
+        containerHeight = rootNodeHeight
+    }
+    else{
+        Root = BushNodeRoot
+    }
+
+
     return(
         <foreignObject width={containerWidth} height={containerHeight}>
-            <BushNodeRoot width={containerWidth} height={containerHeight} padding={padding}>
+            <Root width={containerWidth} height={containerHeight} padding={padding}>
 
 
                 <span>{props.data.name}</span>
@@ -132,7 +166,7 @@ function BushNode(props){
                     nodeComponentFunc={SubBushNode}/>
                 }
 
-            </BushNodeRoot>
+            </Root>
         </foreignObject>
         
     )

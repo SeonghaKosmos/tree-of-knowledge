@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { useSelector, shallowEqual, useDispatch } from "react-redux";
+import { useSelector, shallowEqual} from "react-redux";
 import { setReevaluationPossible } from "../../util/relativePositionManager";
 
 
@@ -136,11 +136,14 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 
         const resourceGraphicsDatum = {
+            thisResource,
             variables,
             actions,
             state,
             setState
         }
+
+        console.log(resourceGraphicsDatum)
     
         resourceGraphicsData[thisResource.id] = resourceGraphicsDatum
     
@@ -157,4 +160,29 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 export function useresourceGraphicsDatumSelector(id){
     return resourceGraphicsData[id]
+}
+
+
+export function treeEditUpdates(deltaX, deltaY, bushId){
+
+
+    Object.keys(resourceGraphicsData).forEach(function(key) {
+
+
+        if (resourceGraphicsData[key].thisResource.bushId === bushId){
+
+            const thisResourcePosVars = resourceGraphicsData[key].variables.current.position
+
+            thisResourcePosVars.bushScale.center.x += deltaX
+            thisResourcePosVars.bushScale.center.y += deltaY
+            thisResourcePosVars.bushScale.topLeft.x += deltaX
+            thisResourcePosVars.bushScale.topLeft.y += deltaY
+            thisResourcePosVars.subBushScale.center.x += deltaX
+            thisResourcePosVars.subBushScale.center.y += deltaY
+            thisResourcePosVars.subBushScale.topLeft.x += deltaX
+            thisResourcePosVars.subBushScale.topLeft.y += deltaY
+
+        }
+    });
+
 }

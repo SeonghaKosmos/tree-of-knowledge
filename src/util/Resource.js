@@ -1,6 +1,7 @@
 
 class Resource {
 
+    bushId
     static allCreatedResources = []
 
     constructor(name, id, type, level, connections){

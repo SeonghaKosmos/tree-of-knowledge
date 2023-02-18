@@ -1,10 +1,12 @@
 
-.mainLink{
-    fill: none;
+/* branch */
+.mainLink{  
+    fill: none; 
     stroke: #8f6b4d;
     stroke-width: 25px;
 }
 
+/* sub bush branch */
 .subBushLink{
     fill: none;
     stroke: #8f6b4d;
