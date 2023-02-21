@@ -5,21 +5,21 @@ const initialState = {
     resourceWidth: 24,
     subBushHeight: 30,
     bushPadding: 20,
+    originNodeWidth: 50,
+    originNodeHeight: 50,
+    rootNodeWidth: 150,
+    rootNodeHeight: 170,
     'bushScale': {
         bushWidth: 120,
         bushHeight: 100,
-        originNodeWidth: 50,
-        originNodeHeight: 50,
-        rootNodeWidth: 150,
-        rootNodeHeight: 170,
         treeWidth: 1300,
         treeHeight: 770
     },
     'subBushScale': {
         bushWidth: 100,
         bushHeight: 130,
-        treeWidth: 1200,
-        treeHeight: 750
+        treeWidth: 1300,
+        treeHeight: 770
     }
     
 }

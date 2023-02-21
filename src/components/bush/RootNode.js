@@ -19,8 +19,8 @@ const RootNodeRoot = styled.div`
 function RootNode(){
 
     const [rootNodeWidth, rootNodeHeight] = useSelector((state) => [
-        state.dimensions['bushScale'].rootNodeWidth, 
-        state.dimensions['bushScale'].rootNodeHeight], shallowEqual)
+        state.dimensions.rootNodeWidth, 
+        state.dimensions.rootNodeHeight], shallowEqual)
 
     return(
         <RootNodeRoot width={rootNodeWidth} height={rootNodeHeight}>

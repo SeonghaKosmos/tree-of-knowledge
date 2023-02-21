@@ -1,5 +1,5 @@
 let reevaluationPossible = true //automatically evaluate position on first tree render
-
+let resourcePositionsStabilized = false
 export function getRelativePositionOfElementInContainer(container, element){
 
     const containerRect = container.getBoundingClientRect()
@@ -18,10 +18,20 @@ export function getRelativePositionOfElementInContainer(container, element){
 }
 
 
-export function isReevaluationPossible(){
+export function isResourcePositionReevaluationPossible(){
     return reevaluationPossible
 }
 
-export function setReevaluationPossible(val){
+export function setIsResourcePositionReevaluationPossible(val){
     reevaluationPossible = val
 }
+
+
+export function isResourcePositionsStabilized(){
+    return resourcePositionsStabilized
+}
+
+export function setIsResourcePositionsStabilized(val){
+    resourcePositionsStabilized = val
+}
+

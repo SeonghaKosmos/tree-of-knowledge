@@ -3,7 +3,7 @@ import dimensionsSlice from './visuals/dimensionsSlice'
 import importantElementIdsSlice from './importantElementIdsSlice'
 import scaleSlice from './visuals/scaleSlice'
 import treeDataSlice from './treeDataSlice'
-import zoomSlice from './visuals/zoomSlice'
+import {zoomSlice} from './visuals/zoomSlice'
 import renderedDimensionsSlice from './visuals/renderedDimensionsSlice'
 
 

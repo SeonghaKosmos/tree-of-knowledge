@@ -5,7 +5,9 @@ import { treeEditUpdates, useResourceIconGraphicsManager } from '../../hooks/res
 import styles from '../tree.module.css'
 import React from 'react';
 import OverlayedElementsContainer from './OverlayedElementsContainer';
-import { shallowEqual, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import { getRenderedDimensions } from '../../util/DimensionsLogic';
+import { renderedDimensionsActions } from '../../store/store';
 
 
 
@@ -31,11 +33,13 @@ function D3Tree(props){
 
 
     const [originNodeWidth, originNodeHeight,
-        rootNodeWidth, rootNodeHeight] = useSelector((state) => [
-        state.dimensions['bushScale'].originNodeWidth, 
-        state.dimensions['bushScale'].originNodeHeight,
-        state.dimensions['bushScale'].rootNodeWidth, 
-        state.dimensions['bushScale'].rootNodeHeight], shallowEqual)
+        rootNodeWidth, rootNodeHeight,
+        treeScale] = useSelector((state) => [
+        state.dimensions.originNodeWidth, 
+        state.dimensions.originNodeHeight,
+        state.dimensions.rootNodeWidth, 
+        state.dimensions.rootNodeHeight,
+        state.scale.treeScale], shallowEqual)
 
     function getNodeDimensionsByName(name){
         if (name === 'Origin'){
@@ -108,21 +112,26 @@ function D3Tree(props){
 
 
 
+    function generateTreeData(){
+        const treeLayout = d3.tree()
+        .size([props.treeWidth, props.treeHeight])
+        .separation(() => 2)
     
-    var treeLayout = d3.tree()
-    .size([props.treeWidth, props.treeHeight])
-    .separation(() => 2)
+        const root = d3.hierarchy(props.data)
+    
+        treeLayout(root)
 
-    var root = d3.hierarchy(props.data)
+        return root
+    }
 
-    treeLayout(root)
-    let descendants = root.descendants()
+    const root = useRef(generateTreeData())
+
 
 
     function createOrUpdateLinks(){
         d3.select(`svg #${props.linksGId}`)
         .selectAll('line.link')
-        .data(root.links())
+        .data(root.current.links())
         .join('line')
         .classed(`link ${props.linkClass}`, true)
         .attr('x1', function(d) {return d.source.x;})
@@ -139,6 +148,8 @@ function D3Tree(props){
     }
 
 
+    const dispatch = useDispatch()
+
     useEffect(() => { //create tree
 
         if (runD3.current){
@@ -150,7 +161,7 @@ function D3Tree(props){
             //nodes
             d3.select(`svg #${props.nodesGId}`)
             .selectAll('g.node')
-            .data(descendants)
+            .data(root.current.descendants())
             .join('g')
             .classed(`node`, true)
             .attr('transform', function(d) {
@@ -172,6 +183,13 @@ function D3Tree(props){
                     const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
                     return `translate(${coords.x}, ${coords.y})`
                 })
+
+                const renderedTreeDims = getRenderedDimensions(document.getElementById('treeContainerG', treeScale))
+
+                dispatch(renderedDimensionsActions.setTreeDimensions({
+                    width: renderedTreeDims.width,
+                    height: renderedTreeDims.height
+                  }))
             }))
 
             // Links
@@ -204,7 +222,7 @@ function D3Tree(props){
                 </g>
             </svg>
             {/* fill tree */}
-            {rundD3Complete.current && descendants.map(descendant => {
+            {rundD3Complete.current && root.current.descendants().map(descendant => {
                 const node = document.getElementById(descendant.data.name)
                 runD3.current = false
                 // console.log('adding nodes')

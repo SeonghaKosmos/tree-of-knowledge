@@ -47,7 +47,7 @@ const BushNodeRoot = styled.div`
 
 function BushNode(props){
 
-    // console.log('rendering bushNode')
+    console.log('rendering bushNode')
 
     Array.prototype.getResourcesOfLevel = function(level){
         return this.filter((resource) => resource.level == level)
@@ -88,12 +88,13 @@ function BushNode(props){
         useSelector((state) => [
         state.dimensions[visionScale].bushWidth, 
         state.dimensions[visionScale].bushHeight,
-        state.dimensions[visionScale].originNodeWidth, 
-        state.dimensions[visionScale].originNodeHeight,
-        state.dimensions[visionScale].rootNodeWidth, 
-        state.dimensions[visionScale].rootNodeHeight], shallowEqual)
+        state.dimensions.originNodeWidth, 
+        state.dimensions.originNodeHeight,
+        state.dimensions.rootNodeWidth, 
+        state.dimensions.rootNodeHeight], shallowEqual)
 
 
+    
         
     const [subBushHeight, padding] = useSelector((state) => [state.dimensions.subBushHeight, state.dimensions.bushPadding], shallowEqual)
 

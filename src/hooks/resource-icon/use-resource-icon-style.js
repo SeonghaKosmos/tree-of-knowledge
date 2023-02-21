@@ -34,7 +34,7 @@ export function useResourceIconStyle(){
                 color:'black', 
                 visionScale: 'bushScale'})
         } else{
-            console.log('doing nothing')
+            // console.log('doing nothing')
         }
         
 

@@ -1,13 +1,20 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { setIsResourcePositionReevaluationPossible } from '../../util/relativePositionManager'
+
+
+
+let visionScaleJustChanged = false
+
+export const scale = {val: 1}
 
 const initialState = {
     scale: 1,
     subBushScaleBoundary: 4.5,
     minusculeBushScaleBoundary: 2.5,
-    visionScale: 'subBushScale' //set initial scale to smallest to calculate position (usePositionsSimulation)
+    visionScale: 'bushScale' 
 }
 
-const zoomSlice = createSlice({
+export const zoomSlice = createSlice({
     name:'zoom',
     initialState,
     reducers: {
@@ -15,11 +22,17 @@ const zoomSlice = createSlice({
         setScale(state, action) {
             
             state.scale = action.payload
-            //update vision scale
-            if (state.scale < state.subBushScaleBoundary){
+            scale.val = action.payload
+            // update vision scale
+
+            if (state.scale < state.subBushScaleBoundary && state.visionScale != 'bushScale'){
                 state.visionScale = 'bushScale'
-            } else {
+                setIsResourcePositionReevaluationPossible(true)
+                // setIsResourcePositionReevaluationPossible(true) //update resource positions
+            } else if (state.scale >= state.subBushScaleBoundary && state.visionScale != 'subBushScale'){
                 state.visionScale = 'subBushScale'
+                setIsResourcePositionReevaluationPossible(true)
+                // setIsResourcePositionReevaluationPossible(true) //update resource positions
             }
         }, 
         setVisionScale(state, action){
@@ -28,5 +41,5 @@ const zoomSlice = createSlice({
     }
 })
 
-export default zoomSlice
+
 

@@ -7,6 +7,7 @@ import React, { useEffect } from "react";
 import useZoom from "../../hooks/use-zoom";
 import useDimensions from "../../hooks/use-dimensions";
 import { renderedDimensionsActions } from "../../store/store";
+import { getRenderedDimensions } from "../../util/DimensionsLogic";
 
 
 
@@ -35,6 +36,13 @@ const TreeOfKnowledgeContainerRoot = styled.div`
     }
 
 `
+
+
+
+
+
+
+
 
 
 function TreeOfKnowledgeContainer(props){
@@ -70,10 +78,11 @@ function TreeOfKnowledgeContainer(props){
     const treeContainerG = document.getElementById('treeContainerG')
     
     const computeRenderedTreeDimensions = () => {
-      console.log(treeContainerG.getBoundingClientRect().width / scale + 60)
+      // console.log(treeContainerG.getBoundingClientRect().width / scale + 60)
+      const dims = getRenderedDimensions(treeContainerG, scale)
       return [
-        treeContainerG.getBoundingClientRect().width / scale + 60, //width (+60 - temporary fix to dimension mismatch)
-        treeContainerG.getBoundingClientRect().height / scale //height
+        dims.width, //width (+60 - temporary fix to dimension mismatch)
+        dims.height//height
       ]
     } 
 

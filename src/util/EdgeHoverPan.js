@@ -20,7 +20,7 @@ export function setUpHoverPan(zoomEventSourceId, applyZoomTargetId, zoom){
     const 
         translateRatio = getTranslateXYRatio(zoomWindowMouseEventX, zoomWindowMouseEventY)
 
-        console.log(translateRatio.x, translateRatio.y)
+        // console.log(translateRatio.x, translateRatio.y)
         zoomEventSourceContainer
         // .transition()
         .call(zoom.translateBy, translateRatio.x, translateRatio.y)

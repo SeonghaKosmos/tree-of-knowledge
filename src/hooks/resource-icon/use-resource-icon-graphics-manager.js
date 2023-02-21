@@ -1,12 +1,18 @@
 import { useRef, useState } from "react";
 import { useSelector, shallowEqual} from "react-redux";
-import { setReevaluationPossible } from "../../util/relativePositionManager";
+import { approxEqual } from "../../util/MathStuff";
+import { isResourcePositionsStabilized, setIsResourcePositionReevaluationPossible, setIsResourcePositionsStabilized } from "../../util/relativePositionManager";
 
 
 const resourceGraphicsData = {}
 const resourceIconPositionUpdateCounts = {
     bushScale: 0,
     subBushScale: 0
+}
+
+let positionUnchangedCheckResults = {
+    bushScale: {},
+    subBushScale: {}
 }
 
 
@@ -122,11 +128,47 @@ export function useResourceIconGraphicsManager(thisResource) {
             
 
             // stop position reports when all resource icons have reported
-            if (resourceIconPositionUpdateCounts[visionScale] === Object.keys(resourceGraphicsData).length){
+            if (resourceIconPositionUpdateCounts[visionScale] === 
+                Object.keys(resourceGraphicsData).length * 20){ //20 reloads for stabilization
                 //reset update count
                 resourceIconPositionUpdateCounts[visionScale] = 0
-                setReevaluationPossible(false)
+                setIsResourcePositionReevaluationPossible(false)
             }
+        },
+        CheckPositionsAreUnchanged(newTopLeftPosition, newCenterPosition){
+
+
+            const oldCenterPos = variables.current.position[visionScale].center
+            const oldTopLeftPos = variables.current.position[visionScale].topLeft
+
+            if (approxEqual(oldCenterPos.x, newCenterPosition.x) &&
+                approxEqual(oldCenterPos.y, newCenterPosition.y) &&
+                approxEqual(oldTopLeftPos.x, newTopLeftPosition.x) &&
+                approxEqual(oldTopLeftPos.y, newTopLeftPosition.y)){
+                    // console.log(`topleft old x ${variables.current.position[visionScale].topLeft.x}`)
+                    // console.log(`topleft new x ${newTopLeftPosition.x}`)
+                positionUnchangedCheckResults[visionScale][thisResource.id] = true
+            } else { //stabilized true when values different (not stabilized)
+                positionUnchangedCheckResults[visionScale][thisResource.id] = false
+            }
+
+            // console.log(`positionUnchangedCheckCount: ${positionUnchangedCheckResults.bushScale} ${positionUnchangedCheckResults.subBushScale}`)
+            // console.log(`target: ${Object.keys(resourceGraphicsData).length}`)
+
+
+            
+            // console.log(positionUnchangedCheckResults[visionScale])
+          
+            for (let id of Object.keys(positionUnchangedCheckResults[visionScale])){
+                // console.log(positionUnchangedCheckResults[visionScale][id])
+                if (!positionUnchangedCheckResults[visionScale][id]){
+                    setIsResourcePositionsStabilized(false)
+                    // console.log('mieux')
+                    return
+                }
+            }
+            // console.log('meh')
+            setIsResourcePositionsStabilized(true)
         }
     }
 
@@ -143,7 +185,7 @@ export function useResourceIconGraphicsManager(thisResource) {
             setState
         }
 
-        console.log(resourceGraphicsDatum)
+        // console.log(resourceGraphicsDatum)
     
         resourceGraphicsData[thisResource.id] = resourceGraphicsDatum
     

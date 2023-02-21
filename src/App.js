@@ -7,7 +7,6 @@ import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import useDimensions from './hooks/use-dimensions';
 import './global.css'
 import { useResourceIconGraphicsManager } from './hooks/resource-icon/use-resource-icon-graphics-manager'; 
-import usePositionSimulation from './hooks/resource-icon/use-positions-simulation';
 import { useDispatch, useSelector } from 'react-redux';
 import { dispatch } from 'd3';
 import {renderedDimensionsActions } from './store/store';
@@ -102,7 +101,6 @@ function App() {
 
 //</dimensions>
   const resourceIconsDataManagerActions = useResourceIconGraphicsManager()
-  usePositionSimulation() //trigger storage of positions at each visionScale (render tree num-visionscales times)
 
 
   window.onresize = function(){

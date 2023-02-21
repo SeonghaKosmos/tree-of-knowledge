@@ -2,11 +2,12 @@ import { useEffect, useState } from "react";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useResourceIconStyle } from "../../hooks/resource-icon/use-resource-icon-style";
-import { getRelativePositionOfElementInContainer, isReevaluationPossible } from "../../util/relativePositionManager";
+import { getRelativePositionOfElementInContainer, isResourcePositionReevaluationPossible, isResourcePositionsStabilized, setIsResourcePositionReevaluationPossible } from "../../util/relativePositionManager";
 import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
 import { useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
+import { scale } from "../../store/visuals/zoomSlice";
 
 
 
@@ -50,12 +51,14 @@ function ResourceIcon(props){
 
 
     //<styles>
-    const [width, height, scale] = 
+    const [width, height, treeScale, scale] = 
         useSelector((state) => 
             [state.dimensions.resourceWidth, 
             state.dimensions.resourceHeight,
-            state.scale.treeScale], shallowEqual)
+            state.scale.treeScale,
+            state.zoom.scale], shallowEqual)
     
+    const theScale = scale.val
 
     const resourceIconScale = props.scale
     
@@ -66,7 +69,8 @@ function ResourceIcon(props){
     //</styles>
 
     //<element ids>
-    const resourceIconsContainer = document.getElementById('resourceIconsContainer')
+    const resourceIconsContainer = document.getElementById('treeContainerG')
+    const placeHolder = <svg width={width} height={height}/>
     //</element ids>
 
 
@@ -74,46 +78,68 @@ function ResourceIcon(props){
     useEffect(()=>{
         //report the position of resource
         // console.log('report position triggered')
-        if (isReevaluationPossible()){
+        if (isResourcePositionReevaluationPossible()){
+            
+
+
             console.log('reporting icon position')
-            const relativePosition = getRelativePositionOfElementInContainer(
-                resourceIconsContainer,
-                document.getElementById(props.resource.id)
-            )
+
+            let relativePosition
+
+            if (isConnected){
+                console.log('connected')
+                relativePosition = getRelativePositionOfElementInContainer(
+                    resourceIconsContainer,
+                    document.getElementById(`placeholder_${props.resource.id}`)
+                )
+            } else { //use dummy for position if resource itself at overlay container
+                console.log('not connected')
+                relativePosition = getRelativePositionOfElementInContainer(
+                    resourceIconsContainer,
+                    document.getElementById(props.resource.id)
+                )
+            }
+            
+ 
+
+
+            relativePosition.x /= scale
+            relativePosition.y /= scale
 
             let topLeftPosition
             if (resourceIconScale < 1){
                 topLeftPosition = {
                     //icon scale places shrunk icon at the center of original icon
                     //global scale shrinks x, y by itself
-                    x: (relativePosition.x - scale*(width - resourceIconScale*width)/2) / scale,
-                    y: (relativePosition.y - scale*(height - resourceIconScale*height)/2) / scale
+                    x: (relativePosition.x - treeScale*(width - resourceIconScale*width)/2) / treeScale,
+                    y: (relativePosition.y - treeScale*(height - resourceIconScale*height)/2) / treeScale
     
                 }
             } else{
                 topLeftPosition = {
-                    x: relativePosition.x / scale,
-                    y: relativePosition.y / scale
+                    x: relativePosition.x / treeScale,
+                    y: relativePosition.y / treeScale
                 }
             }
 
             const centerPosition = {
-                x: (relativePosition.x + width*scale*resourceIconScale/2) / scale,
-                y: (relativePosition.y + height*scale*resourceIconScale/2) /scale
+                x: (relativePosition.x + width*treeScale*resourceIconScale/2) / treeScale,
+                y: (relativePosition.y + height*treeScale*resourceIconScale/2) /treeScale
             }
 
             // console.log(position.x)
             // console.log(position.y)
-            graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
+            graphicsDatumActions.CheckPositionsAreUnchanged(topLeftPosition, centerPosition)
+
+            if (!isResourcePositionsStabilized()){
+                console.log(relativePosition)
+                graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
+            }
+
         }
 
       
     })
-    // [reevaluationTrigger.current]
-
-
-    // const [showConnections, setShowConnections] = useState(false)
-    // const showConnections = false;
 
     const onClick = (event) => {
         // console.log('clicked')
@@ -168,7 +194,13 @@ function ResourceIcon(props){
 
                 resourceIconsContainer
             )}
-            {isConnected && <div style={{width:width, height:height, backgroundColor: 'transparent'}}/>}
+            {isConnected && <ResourceIconRoot
+                id={`placeholder_${props.resource.id}`}
+                width={width} 
+                height={height} 
+                scale={props.scale}
+                backgroundColor={'transparent'}/>
+            }
 
         </>
         
