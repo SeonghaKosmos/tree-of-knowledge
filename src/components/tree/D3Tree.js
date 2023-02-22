@@ -4,7 +4,7 @@ import ReactDOM from 'react-dom'
 import { treeEditUpdates, useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-resource-icon-graphics-manager'; 
 import styles from '../tree.module.css'
 import React from 'react';
-import OverlayedElementsContainer from './OverlayedElementsContainer';
+import PositionReferenceContainer from './PositionReferenceContainer';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getRenderedDimensions } from '../../util/DimensionsLogic';
 import { renderedDimensionsActions } from '../../store/store';
@@ -184,12 +184,12 @@ function D3Tree(props){
                     return `translate(${coords.x}, ${coords.y})`
                 })
 
-                const renderedTreeDims = getRenderedDimensions(document.getElementById('treeContainerG', treeScale))
-
-                dispatch(renderedDimensionsActions.setTreeDimensions({
-                    width: renderedTreeDims.width,
-                    height: renderedTreeDims.height
-                  }))
+                // const renderedTreeDims = getRenderedDimensions(document.getElementById('treeContainerG'), treeScale)
+                // console.log(renderedTreeDims)
+                // dispatch(renderedDimensionsActions.setTreeDimensions({
+                //     width: renderedTreeDims.width,
+                //     height: renderedTreeDims.height
+                //   }))
             }))
 
             // Links
@@ -216,9 +216,11 @@ function D3Tree(props){
                         <g id={props.nodesGId}/>
                     </g>
                     {/* add connection lines container if id available */}
-                    {props.treeOverlayElementsContainerId &&  
-                        <OverlayedElementsContainer/>
-                    }
+                    <g id={'overLaidElementsContainer'}>
+                        <g id={'resourceConnectionLinesContainer'}/>
+                        <g id={'resourceIconsContainer'}/>
+                    </g>
+                    <PositionReferenceContainer/>
                 </g>
             </svg>
             {/* fill tree */}

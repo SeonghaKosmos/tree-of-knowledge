@@ -14,3 +14,11 @@ svg {
 g{
     outline: none !important;
 }
+
+foreignObject{
+    outline: none !important;
+}
+
+div{
+    outline: none !important;
+}

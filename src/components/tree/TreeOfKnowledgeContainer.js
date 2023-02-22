@@ -80,6 +80,7 @@ function TreeOfKnowledgeContainer(props){
     const computeRenderedTreeDimensions = () => {
       // console.log(treeContainerG.getBoundingClientRect().width / scale + 60)
       const dims = getRenderedDimensions(treeContainerG, scale)
+      console.log(dims)
       return [
         dims.width, //width (+60 - temporary fix to dimension mismatch)
         dims.height//height

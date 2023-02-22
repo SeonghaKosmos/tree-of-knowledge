@@ -129,7 +129,7 @@ export function useResourceIconGraphicsManager(thisResource) {
 
             // stop position reports when all resource icons have reported
             if (resourceIconPositionUpdateCounts[visionScale] === 
-                Object.keys(resourceGraphicsData).length * 20){ //20 reloads for stabilization
+                Object.keys(resourceGraphicsData).length * 10){ //20 reloads for stabilization
                 //reset update count
                 resourceIconPositionUpdateCounts[visionScale] = 0
                 setIsResourcePositionReevaluationPossible(false)

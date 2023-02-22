@@ -41,7 +41,7 @@ function ResourceConnectionLine(props){
                     points={`${x1},${y1} ${x2},${y2}`}
                     strokeWidth={strokeWidth}
                 />
-                , document.getElementById('connectionLinesContainer')
+                , document.getElementById('treeContainerG')
             )}
         </>
     )

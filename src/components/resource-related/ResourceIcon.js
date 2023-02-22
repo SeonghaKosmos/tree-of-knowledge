@@ -69,6 +69,7 @@ function ResourceIcon(props){
     //</styles>
 
     //<element ids>
+    const positionReferenceContainer = document.getElementById('treeContainerG')
     const resourceIconsContainer = document.getElementById('treeContainerG')
     const placeHolder = <svg width={width} height={height}/>
     //</element ids>
@@ -87,15 +88,13 @@ function ResourceIcon(props){
             let relativePosition
 
             if (isConnected){
-                console.log('connected')
                 relativePosition = getRelativePositionOfElementInContainer(
-                    resourceIconsContainer,
+                    positionReferenceContainer,
                     document.getElementById(`placeholder_${props.resource.id}`)
                 )
             } else { //use dummy for position if resource itself at overlay container
-                console.log('not connected')
                 relativePosition = getRelativePositionOfElementInContainer(
-                    resourceIconsContainer,
+                    positionReferenceContainer,
                     document.getElementById(props.resource.id)
                 )
             }
@@ -105,6 +104,8 @@ function ResourceIcon(props){
 
             relativePosition.x /= scale
             relativePosition.y /= scale
+
+            // console.log(relativePosition)
 
             let topLeftPosition
             if (resourceIconScale < 1){
@@ -132,7 +133,7 @@ function ResourceIcon(props){
             graphicsDatumActions.CheckPositionsAreUnchanged(topLeftPosition, centerPosition)
 
             if (!isResourcePositionsStabilized()){
-                console.log(relativePosition)
+                // console.log(relativePosition)
                 graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
             }
 
