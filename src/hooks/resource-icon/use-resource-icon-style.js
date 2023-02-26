@@ -30,7 +30,7 @@ export function useResourceIconStyle(){
         } else if ( !isMinusculeScale ){
    
             dispatchStyle({
-                borderRadius: 0, 
+                borderRadius: '4px', 
                 color:'black', 
                 visionScale: 'bushScale'})
         } else{

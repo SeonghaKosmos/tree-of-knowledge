@@ -137,7 +137,7 @@ function ResourceIcon(props){
             // console.log(document.getElementById('treeContainerSvg'))
             if (!isResourcePositionsStabilized() && !positionEvalInhibitor.val){
                 // console.log(relativePosition)
-                console.log(resourceGraphicsData)
+                // console.log(resourceGraphicsData)
                 graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
             }
 

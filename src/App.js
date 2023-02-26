@@ -7,7 +7,7 @@ import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import useDimensions from './hooks/use-dimensions';
 import './global.css'
 import { useResourceIconGraphicsManager } from './hooks/resource-icon/use-resource-icon-graphics-manager'; 
-import { useDispatch, useSelector } from 'react-redux';
+import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { dispatch } from 'd3';
 import {renderedDimensionsActions } from './store/store';
 
@@ -40,7 +40,9 @@ function App() {
     storeScreenDimensions()
   }, []) 
 
-  const [screenWidth, screenHeight] = useSelector(state => [state.renderedDimensions.screenWidth, state.renderedDimensions.screenHeight])
+  const [screenWidth, screenHeight] = useSelector(
+    state => [state.renderedDimensions.screenWidth, 
+      state.renderedDimensions.screenHeight], shallowEqual)
 
   const computeRenderedTreeDimensions = () => {
     if (!availableTreeDimensionsComputationComplete.current){
@@ -79,7 +81,7 @@ function App() {
   return (
 
 
-      <div className="App" ref={appDiv}>
+      <div className="App" ref={appDiv} onClick={onClick}>
 
         <div id='centeringContainer'>
           <TreeOfKnowledgeContainer 

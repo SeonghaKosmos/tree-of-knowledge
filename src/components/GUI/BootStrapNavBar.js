@@ -57,7 +57,7 @@ const BootStrapNavBar = React.forwardRef((props, ref) => {
 
                 <nav className={`navbar brandNavBar`}>
                     <div className="container-fluid ">
-                        <a className="navbar-brand" href="#">
+                        <a className="navbar-brand" href="/tree">
                             <img src={process.env.PUBLIC_URL + '/favicon.ico'} width="40" height="40" class="d-inline-block align-top" alt="" />
                             ToK
                         </a>

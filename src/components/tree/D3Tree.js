@@ -1,10 +1,10 @@
 import * as d3 from 'd3'
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom'
-import { treeEditUpdates, useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
+import { treeEditUpdates, updateAllResourceIconPositions, useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
 import styles from '../tree.module.css'
 import React from 'react';
-import PositionReferenceContainer from './PositionReferenceContainer';
+import OverlayedElementsContainer from './OverlayedElementsContainer';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getRenderedDimensions } from '../../util/DimensionsLogic';
 import { renderedDimensionsActions } from '../../store/store';
@@ -35,13 +35,11 @@ function D3Tree(props) {
 
 
     const [originNodeWidth, originNodeHeight,
-        rootNodeWidth, rootNodeHeight,
-        treeScale] = useSelector((state) => [
+        rootNodeWidth, rootNodeHeight] = useSelector((state) => [
             state.dimensions.originNodeWidth,
             state.dimensions.originNodeHeight,
             state.dimensions.rootNodeWidth,
-            state.dimensions.rootNodeHeight,
-            state.scale.treeScale], shallowEqual)
+            state.dimensions.rootNodeHeight], shallowEqual)
 
     function getNodeDimensionsByName(name) {
         if (name === 'Origin') {
@@ -177,31 +175,22 @@ function D3Tree(props) {
                 })
                 .call(d3.drag().on('drag', (event) => {
                     d3.select(`#${event.subject.data.id}`)
-                        .attr('transform', function (d) {
+                    .attr('transform', function (d) {
 
-                            const { x: prevTreeX, y: prevTreeY } = treeContainerGPosition
-                            const { x: treeX, y: treeY } = getRelativePositionOfElementInContainer(document.getElementById('treeOfKnowledgeContainerRoot'), document.getElementById(props.containerGId))
-                            setTreePosition(treeX, treeY)
-                            // console.log("treepos:", treeX, treeY)
+                        d.x += event.dx
+                        d.y -= event.dy
 
-                            const treePosDx = (treeX - prevTreeX) == 0 ? event.dx : 0
-                            const treePosDy = (treeY - prevTreeY) == 0 ? event.dy : 0
+                        createOrUpdateLinks()
+                        updateAllResourceIconPositions()
+                        // if (event.type === 'end'){
+                        //     //update resource position at the end of drag
+                        //     updateAllResourceIconPositions()
+                        // }
 
-                            const isTreePosChanged = treeX - prevTreeX != 0 || treeY - prevTreeY != 0
+                        const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
+                        return `translate(${coords.x}, ${coords.y})`
 
-                            // console.log("isTreePosChanged:", isTreePosChanged)
-                            // console.log(document.getElementById('treeContainerG').getBoundingClientRect())
-                            d.x += event.dx
-                            d.y -= event.dy
-                            createOrUpdateLinks()
-                            // positionEvalInhibitor.val = true
-                            // treeEditUpdates(event.dx, event.dy, d.data.id, isTreePosChanged)
-                            const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
-
-                            // console.log(getRenderedDimensions(document.getElementById(props.containerGId), treeScale))
-                            return `translate(${coords.x}, ${coords.y})`
-
-                        })
+                    })
 
                     // const renderedTreeDims = getRenderedDimensions(document.getElementById('treeContainerG'), treeScale)
                     // console.log(renderedTreeDims)
@@ -228,8 +217,8 @@ function D3Tree(props) {
     return (
         <>
             {/* tree template */}
-            <svg id={props.containerSvgId} >
-                <g id={props.containerGId} scale={treeScale}>
+            <svg id={props.containerSvgId} className={'treeContainerSvg'} width={props.treeWidth} height={props.treeHeight}>
+                <g id={props.containerGId} scale={props.treeScale}>
                     <svg id="positionReferenceContainer"></svg>
                     <g id='opacityControlG'>
                         <g id={props.linksGId} />
@@ -240,7 +229,7 @@ function D3Tree(props) {
                         <g id={'resourceConnectionLinesContainer'} />
                         <g id={'resourceIconsContainer'} />
                     </g>
-                    <PositionReferenceContainer />
+                    <OverlayedElementsContainer />
                 </g>
             </svg>
             {/* fill tree */}

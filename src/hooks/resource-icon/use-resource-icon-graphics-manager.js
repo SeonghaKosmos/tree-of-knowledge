@@ -129,10 +129,12 @@ export function useResourceIconGraphicsManager(thisResource) {
 
             // stop position reports when all resource icons have reported
             if (resourceIconPositionUpdateCounts[visionScale] === 
-                Object.keys(resourceGraphicsData).length * 10){ //20 reloads for stabilization
+                Object.keys(resourceGraphicsData).length * 2){ //20 reloads for stabilization
                 //reset update count
                 resourceIconPositionUpdateCounts[visionScale] = 0
                 setIsResourcePositionReevaluationPossible(false)
+                console.log('%cdisabling resource position updates', 'color: red')
+                
             }
         },
         CheckPositionsAreUnchanged(newTopLeftPosition, newCenterPosition){
@@ -205,15 +207,49 @@ export function useresourceGraphicsDatumSelector(id){
 }
 
 
-export function updateResourceIconPos(key, deltaX, deltaY){
-    const thisResourcePosVars = resourceGraphicsData[key].variables.current.position
 
-    thisResourcePosVars.bushScale.center.x += deltaX
-    thisResourcePosVars.bushScale.center.y += deltaY
-    thisResourcePosVars.bushScale.topLeft.x += deltaX
-    thisResourcePosVars.bushScale.topLeft.y += deltaY
-    thisResourcePosVars.subBushScale.center.x += deltaX
-    thisResourcePosVars.subBushScale.center.y += deltaY
-    thisResourcePosVars.subBushScale.topLeft.x += deltaX
-    thisResourcePosVars.subBushScale.topLeft.y += deltaY
+export function enablePositionUpdates(){
+
+    resourceIconPositionUpdateCounts['bushScale'] = 0
+    resourceIconPositionUpdateCounts['subBushScale'] = 0
+    setIsResourcePositionReevaluationPossible(true)
+    setIsResourcePositionsStabilized(false)
+
 }
+
+export function updateAllResourceIconPositions(){
+    enablePositionUpdates()
+
+    Object.keys(resourceGraphicsData).forEach(function(key) {
+
+        resourceGraphicsData[key].actions.commitState()
+
+    });
+
+}
+
+
+
+// export function treeEditUpdates(deltaX, deltaY, bushId){
+
+
+//     Object.keys(resourceGraphicsData).forEach(function(key) {
+
+
+//         if (resourceGraphicsData[key].thisResource.bushId === bushId){
+
+//             const thisResourcePosVars = resourceGraphicsData[key].variables.current.position
+
+//             thisResourcePosVars.bushScale.center.x += deltaX
+//             thisResourcePosVars.bushScale.center.y += deltaY
+//             thisResourcePosVars.bushScale.topLeft.x += deltaX
+//             thisResourcePosVars.bushScale.topLeft.y += deltaY
+//             thisResourcePosVars.subBushScale.center.x += deltaX
+//             thisResourcePosVars.subBushScale.center.y += deltaY
+//             thisResourcePosVars.subBushScale.topLeft.x += deltaX
+//             thisResourcePosVars.subBushScale.topLeft.y += deltaY
+
+//         }
+//     });
+
+// }

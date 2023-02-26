@@ -15,7 +15,7 @@ const ResourceConnectionLineRoot = styled.polyline`
 `
 
 function ResourceConnectionLine(props){
-    // console.log('rendering ResourceConnectionLine')
+    console.log('rendering ResourceConnectionLine')
     const resourceGraphicsDatum1 = useresourceGraphicsDatumSelector(props.resource1.id)
     const resourceGraphicsDatum2 = useresourceGraphicsDatumSelector(props.resource2.id)
 
@@ -46,7 +46,7 @@ function ResourceConnectionLine(props){
         </>
     )
 }
-export default React.memo(ResourceConnectionLine) 
+export default ResourceConnectionLine
 
 
 // x1={x1} 

@@ -12,6 +12,7 @@
     fill: none;
     stroke: #8f6b4d;
     stroke-width: 7px;
+    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
     /* background-color: rgb(190, 146, 146); */
     
 }

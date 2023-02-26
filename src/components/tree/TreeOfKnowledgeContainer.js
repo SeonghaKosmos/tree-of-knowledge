@@ -129,6 +129,7 @@ function TreeOfKnowledgeContainer(props){
               containerSvgId='treeContainerSvg'
               treeWidth={treeWidth}
               treeHeight={treeHeight}
+              treeScale={treeScale}
               nodeWidth={bushWidth}
               nodeHeight={bushHeight}
               nodePadding={bushPadding}

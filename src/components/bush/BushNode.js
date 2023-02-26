@@ -5,11 +5,8 @@ import D3Tree from "../tree/D3Tree";
 import ResourceIcon from "../resource-related/ResourceIcon";
 import SubBushNode from "./SubBushNode";
 import styles from '../tree.module.css'
-import ResourceConnectionLine from "../resource-related/ResourceConnectionLine";
 import RootNode from "./RootNode";
 import OriginNode from "./OriginNode";
-import { useEffect } from "react";
-
 
 
 
@@ -25,6 +22,7 @@ const BushNodeRoot = styled.div`
     flex-direction:column-reverse;
     align-items: center;
     justify-content: center;
+    overflow: visible;
 
 
     & .bushForeignObject{
