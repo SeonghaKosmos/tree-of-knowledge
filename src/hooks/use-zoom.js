@@ -3,7 +3,7 @@ import * as d3 from 'd3'
 import { useDispatch, useSelector } from "react-redux"
 import { zoomSliceActions } from "../store/store"
 import {configureEdgeHoverPanLogic} from "../util/EdgeHoverPanLogic";
-import { setUpHoverPan } from "../util/EdgeHoverPan";
+import { useEdgeHoverPan } from "./use-edge-hover-pan";
 
 
 let broadCaster = setTimeout(()=>{}, 1);
@@ -11,7 +11,7 @@ let broadCaster = setTimeout(()=>{}, 1);
 
 const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTreeHeight) => {
 
-    
+    const setupEdgeHoverPan = useEdgeHoverPan()
     
     const dispatch = useDispatch()
     // useEdgeMouseTreeNavigation(eventSourceId, applyZoomTargetId, zoom)
@@ -53,7 +53,7 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
 
       zoomEventSourceContainer.call(zoom)
       //pan
-      setUpHoverPan(eventSourceId, applyZoomTargetId, zoom)
+      setupEdgeHoverPan(eventSourceId, applyZoomTargetId, zoom)
 
 
 

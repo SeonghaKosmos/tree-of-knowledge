@@ -2,14 +2,15 @@ import { useEffect, useState } from "react";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useResourceIconStyle } from "../../hooks/resource-icon/use-resource-icon-style";
-import { getRelativePositionOfElementInContainer, isResourcePositionReevaluationPossible, isResourcePositionsStabilized, setIsResourcePositionReevaluationPossible } from "../../util/relativePositionManager";
+import { getRelativePositionOfElementInContainer, isResourcePositionReevaluationPossible, isResourcePositionsStabilized, setIsResourcePositionReevaluationPossible } from "../../util/positionManager";
 import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
-import { useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
+import { resourceGraphicsData, useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 import { scale } from "../../store/visuals/zoomSlice";
 
 
+export const positionEvalInhibitor = {val:false}
 
 const ResourceIconRoot = styled.div`
     width: ${props => (`${props.width}px`)};
@@ -69,7 +70,7 @@ function ResourceIcon(props){
     //</styles>
 
     //<element ids>
-    const positionReferenceContainer = document.getElementById('treeContainerG')
+    const positionReferenceContainer = document.getElementById('positionReferenceContainer')
     const resourceIconsContainer = document.getElementById('treeContainerG')
     const placeHolder = <svg width={width} height={height}/>
     //</element ids>
@@ -132,8 +133,11 @@ function ResourceIcon(props){
             // console.log(position.y)
             graphicsDatumActions.CheckPositionsAreUnchanged(topLeftPosition, centerPosition)
 
-            if (!isResourcePositionsStabilized()){
+            // console.log(props.resource.id)
+            // console.log(document.getElementById('treeContainerSvg'))
+            if (!isResourcePositionsStabilized() && !positionEvalInhibitor.val){
                 // console.log(relativePosition)
+                console.log(resourceGraphicsData)
                 graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
             }
 
@@ -166,6 +170,12 @@ function ResourceIcon(props){
         {props.resource.name}
     </ResourceIconRoot>
 
+
+    // if (props.resource.id === 'dachem'){
+    //     // console.log('treecontainerg: ',positionReferenceContainer.getBoundingClientRect())
+    //     // console.log('resourceicon: ',document.getElementById(props.resource.id).getBoundingClientRect())
+    //     console.log('resource datum: ',resourceGraphicsData['dachem'].variables.current.position.bushScale)
+    // }
 
     return(
         

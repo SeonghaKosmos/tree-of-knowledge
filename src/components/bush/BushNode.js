@@ -7,6 +7,8 @@ import SubBushNode from "./SubBushNode";
 import styles from '../tree.module.css'
 import ResourceConnectionLine from "../resource-related/ResourceConnectionLine";
 import RootNode from "./RootNode";
+import OriginNode from "./OriginNode";
+import { useEffect } from "react";
 
 
 
@@ -18,10 +20,18 @@ const BushNodeRoot = styled.div`
     padding: ${props => (`${props.padding}px`)};
     border-radius: 2em;
 
+
     display: flex;
     flex-direction:column-reverse;
     align-items: center;
     justify-content: center;
+
+
+    & .bushForeignObject{
+        -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    }
 
     & .resourceIconContainer{
         display: flex;
@@ -116,10 +126,11 @@ function BushNode(props){
 
     //handle other node types (than standard)
     if (props.data.name === 'Origin'){
-        Root = () => (<></>)
+        Root = OriginNode
         //same as branch width and origin node width
         containerWidth = originNodeWidth
         containerHeight = originNodeHeight
+        
     } else if (props.data.name === 'Root'){
         Root = RootNode
         containerWidth = rootNodeWidth
@@ -130,8 +141,10 @@ function BushNode(props){
     }
 
 
+
+
     return(
-        <foreignObject width={containerWidth} height={containerHeight}>
+        <foreignObject width={containerWidth} height={containerHeight} className={'bushForeignObject'}>
             <Root width={containerWidth} height={containerHeight} padding={padding}>
 
 

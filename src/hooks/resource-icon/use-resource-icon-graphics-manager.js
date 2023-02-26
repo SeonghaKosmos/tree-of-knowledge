@@ -1,10 +1,10 @@
 import { useRef, useState } from "react";
 import { useSelector, shallowEqual} from "react-redux";
 import { approxEqual } from "../../util/MathStuff";
-import { isResourcePositionsStabilized, setIsResourcePositionReevaluationPossible, setIsResourcePositionsStabilized } from "../../util/relativePositionManager";
+import { isResourcePositionsStabilized, setIsResourcePositionReevaluationPossible, setIsResourcePositionsStabilized } from "../../util/positionManager";
 
 
-const resourceGraphicsData = {}
+export const resourceGraphicsData = {}
 const resourceIconPositionUpdateCounts = {
     bushScale: 0,
     subBushScale: 0
@@ -205,26 +205,15 @@ export function useresourceGraphicsDatumSelector(id){
 }
 
 
-export function treeEditUpdates(deltaX, deltaY, bushId){
+export function updateResourceIconPos(key, deltaX, deltaY){
+    const thisResourcePosVars = resourceGraphicsData[key].variables.current.position
 
-
-    Object.keys(resourceGraphicsData).forEach(function(key) {
-
-
-        if (resourceGraphicsData[key].thisResource.bushId === bushId){
-
-            const thisResourcePosVars = resourceGraphicsData[key].variables.current.position
-
-            thisResourcePosVars.bushScale.center.x += deltaX
-            thisResourcePosVars.bushScale.center.y += deltaY
-            thisResourcePosVars.bushScale.topLeft.x += deltaX
-            thisResourcePosVars.bushScale.topLeft.y += deltaY
-            thisResourcePosVars.subBushScale.center.x += deltaX
-            thisResourcePosVars.subBushScale.center.y += deltaY
-            thisResourcePosVars.subBushScale.topLeft.x += deltaX
-            thisResourcePosVars.subBushScale.topLeft.y += deltaY
-
-        }
-    });
-
+    thisResourcePosVars.bushScale.center.x += deltaX
+    thisResourcePosVars.bushScale.center.y += deltaY
+    thisResourcePosVars.bushScale.topLeft.x += deltaX
+    thisResourcePosVars.bushScale.topLeft.y += deltaY
+    thisResourcePosVars.subBushScale.center.x += deltaX
+    thisResourcePosVars.subBushScale.center.y += deltaY
+    thisResourcePosVars.subBushScale.topLeft.x += deltaX
+    thisResourcePosVars.subBushScale.topLeft.y += deltaY
 }

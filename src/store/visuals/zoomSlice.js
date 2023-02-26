@@ -1,7 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { setIsResourcePositionReevaluationPossible } from '../../util/relativePositionManager'
-
-
+import { setIsResourcePositionReevaluationPossible } from '../../util/positionManager'
 
 let visionScaleJustChanged = false
 

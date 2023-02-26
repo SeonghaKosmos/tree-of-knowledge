@@ -1,0 +1,15 @@
+
+
+
+#rootNode{
+    background-color: #ae6448;
+    border-radius: 0px 0px 1em 1em;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    pointer-events: all;
+}
+
+.potText{
+    font-size:30px;
+}

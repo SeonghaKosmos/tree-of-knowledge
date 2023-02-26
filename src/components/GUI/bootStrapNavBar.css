@@ -1,0 +1,136 @@
+.nav-link {
+    text-align: center !important;
+}
+
+
+.navBarHeader {
+    width: 100%;
+    display: flex;
+    align-items: top;
+    justify-content: space-between;
+}
+
+.navbar-brand {
+    font-size: 30px;
+    width: 100px;
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    pointer-events: all;
+}
+
+
+
+.navbar{
+    pointer-events: none;
+}
+
+
+
+.brandNavBar {
+    height: 70px;
+}
+
+
+.close-navbar-toggler {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.close-navbar-toggler.collapsed {
+    z-index: -1;
+}
+
+
+
+
+
+
+.dropdownMenuNavBar {
+    width: 300px;
+    z-index: 2;
+}
+
+.dropdownMenuNavBar.expanded {
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+}
+
+
+.dropdownContainer {
+    justify-content: flex-end !important;
+}
+
+
+
+.navbar-toggler {
+    pointer-events: all;
+    outline: none !important;
+    background: none !important;
+    border: none !important;
+    
+}
+
+.navbar-toggler:active,
+.navbar-toggler:focus {
+    outline: none !important;
+    background: none !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+.navbar-toggler .icon-bar {
+    display: block;
+    width: 33px;
+    height: 3px;
+    border-radius: 2px;
+    margin: 6px 0 6px 0;
+    transition: all 0.2s;
+}
+
+.navbar-dark .navbar-toggler .icon-bar {
+    background-color: #ffff;
+}
+
+.icon-bar {
+    background-color: grey;
+}
+
+
+
+.navbar-toggler .icon-bar:nth-of-type(1) {
+    transform: translateX(5px) rotate(45deg);
+    transform-origin: 10% 10%;
+}
+
+.navbar-toggler .icon-bar:nth-of-type(2) {
+    opacity: 0;
+    filter: alpha(opacity=0);
+}
+
+.navbar-toggler .icon-bar:nth-of-type(3) {
+    transform: translateX(5px) rotate(-45deg);
+    transform-origin: 10% 90%;
+}
+
+.navbar-toggler.collapsed .icon-bar:nth-of-type(1) {
+    transform: rotate(0);
+}
+
+.navbar-toggler.collapsed .icon-bar:nth-of-type(2) {
+    opacity: 1;
+    filter: alpha(opacity=100);
+}
+
+.navbar-toggler.collapsed .icon-bar:nth-of-type(3) {
+    transform: rotate(0);
+}

@@ -29,7 +29,7 @@ export const treeData =
                 "name": "Chemistry",
                 "id": `i${uuid().replace(/-/g, '')}`,
                 "resources": [
-                  new Resource('book chem', uuid(), 'book', 1, []), 
+                  new Resource('book chem', 'dachem', 'book', 1, []), 
                   new Resource('video chem', uuid(), 'video', 2, []), 
                   new Resource('course chem', uuid(), 'course', 3, [])],
                 "children": [

@@ -5,8 +5,8 @@ const initialState = {
     resourceWidth: 24,
     subBushHeight: 30,
     bushPadding: 20,
-    originNodeWidth: 50,
-    originNodeHeight: 50,
+    originNodeWidth: 25,
+    originNodeHeight: 35,
     rootNodeWidth: 150,
     rootNodeHeight: 170,
     'bushScale': {

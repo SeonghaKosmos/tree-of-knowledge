@@ -22,3 +22,8 @@ foreignObject{
 div{
     outline: none !important;
 }
+
+.pointerEventLess{
+    pointer-events: none;
+}
+

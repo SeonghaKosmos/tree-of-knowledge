@@ -1,20 +1,7 @@
+import { useEffect } from "react";
 import { shallowEqual, useSelector } from "react-redux";
-import styled from "styled-components";
+import './RootNode.css'
 
-const RootNodeRoot = styled.div`
-    width: ${props => (`${props.width}px`)};
-    height: ${props => (`${props.height}px`)};
-    background-color: #ae6448;
-    border-radius: 0px 0px 1em 1em;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-
-
-    .potText{
-        font-size:30px;
-    }
-`
 
 function RootNode(){
 
@@ -22,15 +9,36 @@ function RootNode(){
         state.dimensions.rootNodeWidth, 
         state.dimensions.rootNodeHeight], shallowEqual)
 
+
+    const stateStyles = {
+        width:`${rootNodeWidth}px`, 
+        height:`${rootNodeHeight}px`
+    }
+
+    useEffect(()=>{
+
+        //remove shadow from root node
+        try{
+            const bushContainerG = document.getElementById('rootNode').parentElement.parentElement
+            bushContainerG.classList = []
+            bushContainerG.classList.add('pointerEventLess')
+        } catch{
+            
+        }
+    })
+
     return(
-        <RootNodeRoot width={rootNodeWidth} height={rootNodeHeight}>
+        <div id="rootNode" style={{
+            width:`${rootNodeWidth}px`, 
+            height:`${rootNodeHeight}px`
+        }}>
             <div className="potText">
                 Your
                 <br/>
                 Tree
             </div>
 
-        </RootNodeRoot>
+        </div>
     )
 }
 export default RootNode

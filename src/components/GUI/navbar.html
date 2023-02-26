@@ -1,0 +1,63 @@
+<div class="pos-f-t">
+    <div class="collapse" id="navbarToggleExternalContent">
+        <div class="bg-dark p-4">
+            <span>hello</span>
+            {/* <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div className="navbar-nav">
+
+                    {navLinks.map(link =>
+                        <NavLink
+                            className={` nav-link `}
+                            activeclassname={styled.activeClassName}
+                            to={link.to}
+                            key={link.key}>
+                            {link.txt}
+                        </NavLink>)}
+
+                </div>
+            </div> */}
+        </div>
+    </div>
+    <nav className={`navbar`} ref={ref}>
+        <div className="container-fluid">
+            <a className="navbar-brand" href="#">ToK</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggleExternalContent" aria-controls="navbarToggleExternalContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span className="navbar-toggler-icon"></span>
+            </button>
+        </div>
+    </nav>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+<nav className={`navbar navbar-expand-lg bg-light `} ref={ref}>
+    <div className="container-fluid">
+        <a className="navbar-brand" href="#">ToK</a>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div className="navbar-nav">
+
+            {navLinks.map(link => 
+            <NavLink 
+                className={` nav-link `} 
+                activeclassname={styled.activeClassName} 
+                to={link.to}
+                key={link.key}>
+                    {link.txt}
+            </NavLink>)}
+            
+        </div>
+        </div>
+    </div>
+</nav>

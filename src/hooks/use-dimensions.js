@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react"
 import { useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { positionsActions } from "../store/store"
-import { setReevaluationPossible } from "../util/relativePositionManager"
+import { setReevaluationPossible } from "../util/positionManager"
 
 
 const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
@@ -19,6 +19,7 @@ const useDimensions = (computeRenderedDimensions ,initWidth, initHeight) => {
                 setRenderedWidth(computedWidth)
                 setRenderedHeight(computedHeight)
                 doDimensionsUpdate.current = false //no more updates after reference element set
+                console.log('%cupdating rendered dimensions', 'color: green')
             } catch (err){
                 console.log(`%c${err.message}`, 'color: orange')
                 if (err.message.includes('Cannot read properties of null')){

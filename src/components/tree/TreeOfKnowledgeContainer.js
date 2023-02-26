@@ -21,8 +21,9 @@ const TreeOfKnowledgeContainerRoot = styled.div`
 
     & #treeContainerG{
       position:relative;
-      visibility: visible;
+      /* visibility: visible; */
       pointer-events: visible;
+      border: 2px solid black;
     }
 
     & #treeContainerSvg{
@@ -52,7 +53,7 @@ function TreeOfKnowledgeContainer(props){
       state.treeData.structure, 
       state.importantElementIds.treeOverlayElementsContainerId], shallowEqual)
     const visionScale = useSelector((state) => state.zoom.visionScale, shallowEqual)
-    const scale = useSelector((state) => state.scale.treeScale, shallowEqual)
+    const treeScale = useSelector((state) => state.scale.treeScale, shallowEqual)
 
 
     //tree dimensions
@@ -79,7 +80,7 @@ function TreeOfKnowledgeContainer(props){
     
     const computeRenderedTreeDimensions = () => {
       // console.log(treeContainerG.getBoundingClientRect().width / scale + 60)
-      const dims = getRenderedDimensions(treeContainerG, scale)
+      const dims = getRenderedDimensions(treeContainerG, treeScale)
       console.log(dims)
       return [
         dims.width, //width (+60 - temporary fix to dimension mismatch)
@@ -100,8 +101,10 @@ function TreeOfKnowledgeContainer(props){
     }))})
 
 
+    console.log(`renderedTreeWidth ${renderedTreeWidth} renderedTreeHeight ${renderedTreeHeight}`)
+
     useZoom(
-      'zoomWindow', 
+      'treeContainerSvg', 
       `${containerGId}`, 
       renderedTreeWidth, 
       renderedTreeHeight)
@@ -115,7 +118,7 @@ function TreeOfKnowledgeContainer(props){
               zoomActionTargetDivId={zoomActionTargetDivId}
               width={renderedTreeWidth} 
               height={renderedTreeHeight} 
-              scale={scale}>  
+              scale={treeScale}>  
 
             <D3Tree 
               data={data} 

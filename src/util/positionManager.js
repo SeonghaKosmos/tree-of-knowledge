@@ -1,5 +1,15 @@
 let reevaluationPossible = true //automatically evaluate position on first tree render
 let resourcePositionsStabilized = false
+export const treeContainerGPosition = {
+    x: 0,
+    y: 0
+}
+
+export function setTreePosition(x, y){
+    treeContainerGPosition.x = x
+    treeContainerGPosition.y = y
+}
+
 export function getRelativePositionOfElementInContainer(container, element){
 
     const containerRect = container.getBoundingClientRect()

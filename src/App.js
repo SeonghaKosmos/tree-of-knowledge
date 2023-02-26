@@ -12,44 +12,6 @@ import { dispatch } from 'd3';
 import {renderedDimensionsActions } from './store/store';
 
 
-const AppRoot = styled.div`
-
-  & #zoomWindow{
-    /* position:absolute; */
-    /* top: ${props => (`${props.navBarHeight}px`)}; */
-    /* left:0 ; */
-    /* width: ${props => (`${props.availableTreeWidth}px`)};
-    height: ${props => (`${props.availableTreeHeight}px`)}; */
-    flex-grow: 1;
-    width: 100%;
-  }
-
-  & #mainContainer{
-
-    /* width: ${props => (`${props.availableTreeWidth}px`)};
-    height: ${props => (`${props.availableTreeHeight}px`)}; */
-    /* position: absolute; */
-    /* border: 1px solid green; */
-    width:100%;
-    height: 100%;
-    max-width: ${props => (`${props.availableTreeWidth}px`)};
-    max-height: ${props => (`${props.availableTreeHeight}px`)};
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-
-  & .nav-icon{
-    display: inline-block;
-    width:30px;
-    height: 30px;
-    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%280, 0, 0, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
-    background-position: center;
-    background-size: 100%;
-  }
-  
-`
 
 function App() {
 
@@ -115,24 +77,21 @@ function App() {
   }
 
   return (
-    <AppRoot 
-    availableTreeWidth={availableTreeWidth}
-    availableTreeHeight={availableTreeHeight}
-    onClick={onClick}>
+
 
       <div className="App" ref={appDiv}>
-        <div id='zoomWindow'>
-          <div id='mainContainer'>
-            <TreeOfKnowledgeContainer 
-              availableTreeWidth={availableTreeWidth}
-              availableTreeHeight={availableTreeHeight}/>
-          </div>
+
+        <div id='centeringContainer'>
+          <TreeOfKnowledgeContainer 
+            availableTreeWidth={availableTreeWidth}
+            availableTreeHeight={availableTreeHeight}/>
         </div>
+
         {/* <span className="nav-icon"></span> */}
         <BootStrapNavBar ref={navBar}/>
       </div>
 
-    </AppRoot>
+   
   );
 }
 
