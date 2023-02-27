@@ -30,21 +30,6 @@ function isOutsideMainBodyRect(x, y){
     } return false
 }
 
-function isInsideLargeRect(x, y){
-    const largeRect = {
-        minX: 0, // + 0
-        maxX: elementWidth,
-        minY: 0,
-        maxY: elementHeight
-    }
-
-    if (
-    (largeRect.minX <= x && x <= largeRect.maxX) &&
-    (largeRect.minY <= y && y <= largeRect.maxY)){
-        return true
-    } return false
-}
-
 
 export function isInEdge(x, y){
 

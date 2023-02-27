@@ -1,6 +1,6 @@
 import { useEffect } from "react"
 import * as d3 from 'd3'
-import { useDispatch, useSelector } from "react-redux"
+import { shallowEqual, useDispatch, useSelector } from "react-redux"
 import { zoomSliceActions } from "../store/store"
 import {configureEdgeHoverPanLogic} from "../util/EdgeHoverPanLogic";
 import { useEdgeHoverPan } from "./use-edge-hover-pan";
@@ -11,7 +11,10 @@ let broadCaster = setTimeout(()=>{}, 1);
 
 const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTreeHeight) => {
 
-    const setupEdgeHoverPan = useEdgeHoverPan()
+
+    const setUpEdgeHoverPan = useEdgeHoverPan()
+    const maxScale = useSelector((state) => state.zoom.maxScale, shallowEqual)
+    // console.log('maxScale:',maxScale)
     
     const dispatch = useDispatch()
     // useEdgeMouseTreeNavigation(eventSourceId, applyZoomTargetId, zoom)
@@ -47,13 +50,13 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
       }
       
       const zoom = d3.zoom()
-      .scaleExtent([1, 8])
+      .scaleExtent([1, maxScale])
       .on('zoom', handleZoom)
       .translateExtent([[0, 0], [renderedTreeWidth * 1.07, renderedTreeHeight]])
 
       zoomEventSourceContainer.call(zoom)
       //pan
-      setupEdgeHoverPan(eventSourceId, applyZoomTargetId, zoom)
+      setUpEdgeHoverPan(eventSourceId, applyZoomTargetId, zoom)
 
 
 

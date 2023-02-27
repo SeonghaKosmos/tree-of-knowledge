@@ -22,7 +22,6 @@ export function useEdgeHoverPan(){
 
             // console.log(translateRatio.x, translateRatio.y)
             zoomEventSourceContainer
-            // .transition()
             .call(zoom.translateBy, translateRatio.x, translateRatio.y)
             // zoomActionTargetContainer.attr('transform',
             // `translate(${newTranslate.x}, ${newTranslate.y}) scale(${currentScale})`)
@@ -34,6 +33,7 @@ export function useEdgeHoverPan(){
         
 
             clearInterval(translateIntervalId)
+            // console.log(event.x)
 
             const zoomWindowMouseEventX = event.x - zoomWindowX
             const zoomWindowMouseEventY = event.y - zoomWindowY
@@ -53,8 +53,7 @@ export function useEdgeHoverPan(){
             clearInterval(translateIntervalId)
         }
 
-
-        zoomEventSourceContainer
+        zoomActionTargetContainer
         .on('mousemove', handleHoveringMappDrag)
         .on('mouseleave', handleMouseLeave)
 

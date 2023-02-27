@@ -6,11 +6,6 @@ import styles from '../tree.module.css'
 import React from 'react';
 import OverlayedElementsContainer from './OverlayedElementsContainer';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { getRenderedDimensions } from '../../util/DimensionsLogic';
-import { renderedDimensionsActions } from '../../store/store';
-import { getRelativePositionOfElementInContainer, setTreePosition, treeContainerGPosition } from '../../util/positionManager';
-import { positionEvalInhibitor } from '../resource-related/ResourceIcon';
-import './d3Tree.css'
 
 
 
@@ -217,7 +212,7 @@ function D3Tree(props) {
     return (
         <>
             {/* tree template */}
-            <svg id={props.containerSvgId} className={'treeContainerSvg'} width={props.treeWidth} height={props.treeHeight}>
+            <svg id={props.containerSvgId} className={`treeContainerSvg ${styles.treeContainerSvg} ${props.containerSvgClasses}`} width={props.treeWidth} height={props.treeHeight}>
                 <g id={props.containerGId} scale={props.treeScale}>
                     <svg id="positionReferenceContainer"></svg>
                     <g id='opacityControlG'>

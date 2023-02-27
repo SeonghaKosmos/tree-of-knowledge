@@ -91,6 +91,9 @@ function App() {
 
         {/* <span className="nav-icon"></span> */}
         <BootStrapNavBar ref={navBar}/>
+        {/* <div id='hoverPanOuter'>
+          <div id='hoverPanInner'/>
+        </div> */}
       </div>
 
    

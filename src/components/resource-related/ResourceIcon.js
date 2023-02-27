@@ -8,6 +8,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import { resourceGraphicsData, useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 import { scale } from "../../store/visuals/zoomSlice";
+import './ResourceIcon.css'
 
 
 export const positionEvalInhibitor = {val:false}
@@ -21,6 +22,7 @@ const ResourceIconRoot = styled.div`
     padding-top: 0.2em;
     text-align:center;
     filter: brightness(${props => (props.brightness)});
+    filter: drop-shadow(1px 2px 1px rgb(0 0 0 / 0.4));
     background-color: ${props => (props.backgroundColor)};
     /* background-color: rgb(235, 75, 75); */
     color: black;
@@ -29,6 +31,7 @@ const ResourceIconRoot = styled.div`
     color: ${props => (props.color)};
 
     pointer-events: auto;
+    cursor: pointer;
 
 `
 
@@ -41,7 +44,7 @@ const ResourceIconRoot = styled.div`
 
 function ResourceIcon(props){
 
-    console.log('rendering ResourceIcon')
+    // console.log('rendering ResourceIcon')
 
     //<graphics datum>
     const [resourceGraphicsDatum, graphicsDatumActions, visionScale] = useResourceIconGraphicsManager(props.resource)
@@ -84,7 +87,7 @@ function ResourceIcon(props){
             
 
 
-            console.log('reporting icon position')
+            // console.log('reporting icon position')
 
             let relativePosition
 
@@ -194,6 +197,7 @@ function ResourceIcon(props){
             and leave dummy if connected */}
             {isConnected && ReactDOM.createPortal( 
                 <foreignObject 
+                className="resourceIconForeignObject"
                 width={width} 
                 height={height} 
                 x={resourceGraphicsDatum.variables.current.position[visionScale].topLeft.x}

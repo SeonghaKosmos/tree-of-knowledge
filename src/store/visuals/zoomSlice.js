@@ -7,6 +7,7 @@ export const scale = {val: 1}
 
 const initialState = {
     scale: 1,
+    maxScale: 8,
     subBushScaleBoundary: 4.5,
     minusculeBushScaleBoundary: 2.5,
     visionScale: 'bushScale' 

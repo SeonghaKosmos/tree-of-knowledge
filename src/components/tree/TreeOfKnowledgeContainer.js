@@ -8,6 +8,7 @@ import useZoom from "../../hooks/use-zoom";
 import useDimensions from "../../hooks/use-dimensions";
 import { renderedDimensionsActions } from "../../store/store";
 import { getRenderedDimensions } from "../../util/DimensionsLogic";
+import { scale } from "../../store/visuals/zoomSlice";
 
 
 
@@ -48,13 +49,14 @@ const TreeOfKnowledgeContainerRoot = styled.div`
 
 function TreeOfKnowledgeContainer(props){
 
-    console.log('rendering tree container')
+    // console.log('rendering tree container')
     const [data, treeOverlayElementsContainerId] = useSelector((state) => [
       state.treeData.structure, 
       state.importantElementIds.treeOverlayElementsContainerId], shallowEqual)
     const visionScale = useSelector((state) => state.zoom.visionScale, shallowEqual)
     const treeScale = useSelector((state) => state.scale.treeScale, shallowEqual)
-
+    const maxScale = useSelector((state) => state.zoom.maxScale, shallowEqual)
+    const scale = useSelector((state) => state.zoom.scale, shallowEqual)
 
     //tree dimensions
     const [treeWidth, treeHeight] = useSelector((state) => [
@@ -101,7 +103,7 @@ function TreeOfKnowledgeContainer(props){
     }))})
 
 
-    console.log(`renderedTreeWidth ${renderedTreeWidth} renderedTreeHeight ${renderedTreeHeight}`)
+    // console.log(`renderedTreeWidth ${renderedTreeWidth} renderedTreeHeight ${renderedTreeHeight}`)
 
     useZoom(
       'treeContainerSvg', 
@@ -127,6 +129,7 @@ function TreeOfKnowledgeContainer(props){
               containerGId={containerGId}
               treeOverlayElementsContainerId={treeOverlayElementsContainerId}
               containerSvgId='treeContainerSvg'
+              containerSvgClasses={scale === maxScale ? 'zoom-out-cursor' : 'zoom-in-cursor'}
               treeWidth={treeWidth}
               treeHeight={treeHeight}
               treeScale={treeScale}
