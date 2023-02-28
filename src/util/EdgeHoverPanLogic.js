@@ -1,50 +1,47 @@
+import { getRenderedDimensions } from "./DimensionsLogic"
 
 
 
-let elementWidth
-let elementHeight
+export const edgeHoverDetectingContainer = {id:''}
 
 
 //edge logic
 let edgeThickness
 
-export function configureEdgeHoverPanLogic(elemWidth, elemHeight, edgeThick){
-    elementWidth = elemWidth
-    elementHeight = elemHeight
+export function configureEdgeHoverPanLogic(edgeHoverDetectorContainerId, edgeThick){
+    edgeHoverDetectingContainer.id = edgeHoverDetectorContainerId
     edgeThickness = edgeThick
-}
-
-
-function isOutsideMainBodyRect(x, y){
-    const smallRect = {
-        minX: edgeThickness, // + 0
-        maxX: elementWidth - edgeThickness,
-        minY: edgeThickness,
-        maxY: elementHeight - edgeThickness
-    }
-
-    if (
-    (x <= smallRect.minX || x >= smallRect.maxX) ||
-    (y <= smallRect.minY || y >= smallRect.maxY)){
-        return true
-    } return false
 }
 
 
 export function isInEdge(x, y){
 
-    if (isOutsideMainBodyRect(x, y)){
+    const edgeHoverDetectingContainerDims = getRenderedDimensions(document.getElementById(edgeHoverDetectingContainer.id), 1)
+    // console.log(edgeHoverDetectingContainerDims)
+    const smallRect = {
+        minX: edgeThickness, // + 0
+        maxX: edgeHoverDetectingContainerDims.width - edgeThickness,
+        minY: edgeThickness,
+        maxY: edgeHoverDetectingContainerDims.height - edgeThickness
+    }
+
+    if (
+    (x <= smallRect.minX || x >= smallRect.maxX) ||
+    (y <= smallRect.minY || y >= smallRect.maxY)){
+        // console.log('is in edge')
         return true
-    }return false
+    } return false
 }
 
 
 /*translate logic*/
 
 export function getTranslateXYRatio(x, y){
+
+    const edgeHoverDetectingContainerDims = getRenderedDimensions(document.getElementById(edgeHoverDetectingContainer.id), 1)
     const centerOfElement = {
-        x: elementWidth / 2,
-        y: elementHeight / 2
+        x: edgeHoverDetectingContainerDims.width / 2,
+        y: edgeHoverDetectingContainerDims.height / 2
     }
 
     const XdistanceFromCenter = centerOfElement.x - x

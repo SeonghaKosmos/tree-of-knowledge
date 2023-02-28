@@ -11,11 +11,16 @@ import { setTreeContainerSvgClass } from "../util/d3Related";
 let broadCaster = setTimeout(()=>{}, 1);
 
 
-const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTreeHeight) => {
+const useZoom = (eventSourceId, applyZoomTargetId) => {
 
 
+    configureEdgeHoverPanLogic('App', 20)
     const setUpEdgeHoverPan = useEdgeHoverPan()
     const maxScale = useSelector((state) => state.zoom.maxScale, shallowEqual)
+
+    const [renderedTreeWidth, renderedTreeHeight] = useSelector((state) => [
+      state.renderedDimensions.renderedTreeWidth,
+      state.renderedDimensions.renderedTreeHeight], shallowEqual)
     
     const dispatch = useDispatch()
     // useEdgeMouseTreeNavigation(eventSourceId, applyZoomTargetId, zoom)
@@ -28,11 +33,6 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
       }, 100)
       
     }
-
-
-    const zoomableScreenWidth = useSelector(state => state.renderedDimensions.zoomableScreenWidth, shallowEqual)
-    const zoomableScreenHeight = useSelector(state => state.renderedDimensions.zoomableScreenHeight, shallowEqual)
-    configureEdgeHoverPanLogic(zoomableScreenWidth, zoomableScreenHeight, 20)
 
     useEffect(() => {
 
@@ -51,7 +51,6 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
       }
       
   
-      console.log({w:renderedTreeWidth, h:renderedTreeHeight})
       // console.log(treeContainerSvgDimensions)
 
       const zoom = d3.zoom()
@@ -61,7 +60,7 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
 
       zoomEventSourceContainer.call(zoom)
       //pan
-      setUpEdgeHoverPan(eventSourceId, 'hoverPanDetector', zoom)
+      setUpEdgeHoverPan(eventSourceId, zoom)
 
 
 

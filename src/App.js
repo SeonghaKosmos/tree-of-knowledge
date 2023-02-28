@@ -41,28 +41,6 @@ function App() {
     document.getElementById('App').addEventListener('mousemove', onAppMouseMoved)
   }, [])
 
-  const [screenWidth, screenHeight] = useSelector(
-    state => [state.renderedDimensions.screenWidth,
-    state.renderedDimensions.screenHeight], shallowEqual)
-
-  const computeRenderedTreeDimensions = () => {
-    if (!availableTreeDimensionsComputationComplete.current) {
-      return [
-        screenWidth,
-        screenHeight - navBar.current.offsetHeight
-      ]
-    }
-    return null
-  }
-
-
-  const [availableTreeWidth, availableTreeHeight, doDimensionsUpdate] =
-    useDimensions(computeRenderedTreeDimensions)
-
-  dispatch(renderedDimensionsActions.setZoomableScreenDimensions({
-    width: availableTreeWidth,
-    height: availableTreeHeight
-  }))
 
   //</dimensions>
   const resourceIconsDataManagerActions = useResourceIconGraphicsManager()
@@ -70,7 +48,6 @@ function App() {
 
   window.onresize = function () {
     //enable dimensions update
-    doDimensionsUpdate.current = true;
     storeScreenDimensions()
   }
 
@@ -94,19 +71,17 @@ function App() {
 
   return (
 
-    <div id='hoverPanDetector'>
-      <div id="App" ref={appDiv} onClick={onAppClicked}>
 
-        <div className='centeringContainer'>
-          <TreeOfKnowledgeContainer
-            availableTreeWidth={availableTreeWidth}
-            availableTreeHeight={availableTreeHeight} />
-        </div>
+    <div id="App" ref={appDiv} onClick={onAppClicked}>
 
-        {/* <span className="nav-icon"></span> */}
-        <BootStrapNavBar ref={navBar} />
+      <div className='centeringContainer'>
+        <TreeOfKnowledgeContainer />
       </div>
+
+      {/* <span className="nav-icon"></span> */}
+      <BootStrapNavBar ref={navBar} />
     </div>
+
 
 
   );
