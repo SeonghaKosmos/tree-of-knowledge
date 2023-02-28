@@ -44,7 +44,7 @@ const ResourceIconRoot = styled.div`
 
 function ResourceIcon(props){
 
-    // console.log('rendering ResourceIcon')
+    console.log('rendering ResourceIcon')
 
     //<graphics datum>
     const [resourceGraphicsDatum, graphicsDatumActions, visionScale] = useResourceIconGraphicsManager(props.resource)
@@ -87,7 +87,7 @@ function ResourceIcon(props){
             
 
 
-            // console.log('reporting icon position')
+            console.log('reporting icon position')
 
             let relativePosition
 

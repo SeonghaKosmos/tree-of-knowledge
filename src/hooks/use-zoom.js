@@ -14,7 +14,7 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
 
     const setUpEdgeHoverPan = useEdgeHoverPan()
     const maxScale = useSelector((state) => state.zoom.maxScale, shallowEqual)
-    // console.log('maxScale:',maxScale)
+    console.log('maxScale:',maxScale)
     
     const dispatch = useDispatch()
     // useEdgeMouseTreeNavigation(eventSourceId, applyZoomTargetId, zoom)
@@ -56,8 +56,7 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
 
       zoomEventSourceContainer.call(zoom)
       //pan
-      setUpEdgeHoverPan(eventSourceId, applyZoomTargetId, zoom)
-
+      setUpEdgeHoverPan(eventSourceId, 'hoverPanDetector', zoom)
 
 
 

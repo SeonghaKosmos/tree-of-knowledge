@@ -6,10 +6,10 @@ import { useEffect, useRef } from 'react';
 import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import useDimensions from './hooks/use-dimensions';
 import './global.css'
-import { useResourceIconGraphicsManager } from './hooks/resource-icon/use-resource-icon-graphics-manager'; 
+import { useResourceIconGraphicsManager } from './hooks/resource-icon/use-resource-icon-graphics-manager';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { dispatch } from 'd3';
-import {renderedDimensionsActions } from './store/store';
+import { renderedDimensionsActions } from './store/store';
 
 
 
@@ -20,13 +20,13 @@ function App() {
   const appDiv = useRef()
   const navBar = useRef()
 
-  const navBarHeight = navBar.current==undefined ? 0 : navBar.current.offsetHeight
+  const navBarHeight = navBar.current == undefined ? 0 : navBar.current.offsetHeight
 
   //zoomwindow
 
   let availableTreeDimensionsComputationComplete = useRef(false)
 
-//<dimensions>
+  //<dimensions>
   const dispatch = useDispatch()
 
   function storeScreenDimensions() {
@@ -38,14 +38,15 @@ function App() {
 
   useEffect(() => {
     storeScreenDimensions()
-  }, []) 
+    document.getElementById('App').addEventListener('mousemove', onAppMouseMoved)
+  }, [])
 
   const [screenWidth, screenHeight] = useSelector(
-    state => [state.renderedDimensions.screenWidth, 
-      state.renderedDimensions.screenHeight], shallowEqual)
+    state => [state.renderedDimensions.screenWidth,
+    state.renderedDimensions.screenHeight], shallowEqual)
 
   const computeRenderedTreeDimensions = () => {
-    if (!availableTreeDimensionsComputationComplete.current){
+    if (!availableTreeDimensionsComputationComplete.current) {
       return [
         screenWidth,
         screenHeight - navBar.current.offsetHeight
@@ -55,7 +56,7 @@ function App() {
   }
 
 
-  const [availableTreeWidth, availableTreeHeight, doDimensionsUpdate] = 
+  const [availableTreeWidth, availableTreeHeight, doDimensionsUpdate] =
     useDimensions(computeRenderedTreeDimensions)
 
   dispatch(renderedDimensionsActions.setZoomableScreenDimensions({
@@ -63,40 +64,51 @@ function App() {
     height: availableTreeHeight
   }))
 
-//</dimensions>
+  //</dimensions>
   const resourceIconsDataManagerActions = useResourceIconGraphicsManager()
 
 
-  window.onresize = function(){
+  window.onresize = function () {
     //enable dimensions update
     doDimensionsUpdate.current = true;
     storeScreenDimensions()
   }
 
-  const onClick = () => {
+  const onAppClicked = (event) => {
     resourceIconsDataManagerActions.resetAllResourceIcons()
     resourceIconsDataManagerActions.handleTreeContainer(false)
+    console.log('click')
+
+
   }
+
+  const onAppMouseMoved = (event) => {
+    event.stopPropagation()
+  }
+
+
+  // const onHoverPanDetectorMouseMoved = (event) => {
+  //   console.log('onHoverPanDetectorMouseMoved')
+  // }
+
 
   return (
 
+    <div id='hoverPanDetector'>
+      <div id="App" ref={appDiv} onClick={onAppClicked}>
 
-      <div className="App" ref={appDiv} onClick={onClick}>
-
-        <div id='centeringContainer'>
-          <TreeOfKnowledgeContainer 
+        <div className='centeringContainer'>
+          <TreeOfKnowledgeContainer
             availableTreeWidth={availableTreeWidth}
-            availableTreeHeight={availableTreeHeight}/>
+            availableTreeHeight={availableTreeHeight} />
         </div>
 
         {/* <span className="nav-icon"></span> */}
-        <BootStrapNavBar ref={navBar}/>
-        {/* <div id='hoverPanOuter'>
-          <div id='hoverPanInner'/>
-        </div> */}
+        <BootStrapNavBar ref={navBar} />
       </div>
+    </div>
 
-   
+
   );
 }
 

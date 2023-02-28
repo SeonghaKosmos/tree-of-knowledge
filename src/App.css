@@ -1,6 +1,6 @@
 
 
-.App {
+#App {
   /* text-align: center; */
   /* display: flex;
   align-items: center;
@@ -8,10 +8,11 @@
   /* height: 100%; */
 
   /* pointer-events: none; */
-  height: 100vh;
+  height: 100%;
+  width: 100%;
 }
 
-#centeringContainer{
+.centeringContainer{
 
   /* width: ${props => (`${props.availableTreeWidth}px`)};
   height: ${props => (`${props.availableTreeHeight}px`)}; */
@@ -29,22 +30,9 @@
 }
 
 
-#hoverPanOuter{
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* z-index: 100; */
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  cursor: pointer;
-  
-}
-
-#hoverPanInner{
-  width: 100%;
-  height: 100%;
-  cursor: pointer;
+#hoverPanDetector{
+  height: 100vh;
+  padding: 5px;
 }
 
 
