@@ -85,8 +85,8 @@ function BushNode(props){
         ]
     }
 
-    const visionScale = useSelector((state) => state.zoom.visionScale)
-    const resourceIconScale = useSelector((state) => state.scale.bushResourceIconScale)
+    const visionScale = useSelector((state) => state.zoom.visionScale, shallowEqual)
+    const resourceIconScale = useSelector((state) => state.scale.bushResourceIconScale, shallowEqual)
 
 
     const [width, height, 

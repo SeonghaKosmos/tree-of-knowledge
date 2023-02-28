@@ -29,8 +29,8 @@ const useZoom = (eventSourceId, applyZoomTargetId, renderedTreeWidth, renderedTr
     }
 
 
-    const zoomableScreenWidth = useSelector(state => state.renderedDimensions.zoomableScreenWidth)
-    const zoomableScreenHeight = useSelector(state => state.renderedDimensions.zoomableScreenHeight)
+    const zoomableScreenWidth = useSelector(state => state.renderedDimensions.zoomableScreenWidth, shallowEqual)
+    const zoomableScreenHeight = useSelector(state => state.renderedDimensions.zoomableScreenHeight, shallowEqual)
     configureEdgeHoverPanLogic(zoomableScreenWidth, zoomableScreenHeight, 20)
 
     useEffect(() => {

@@ -18,7 +18,7 @@ function D3Tree(props) {
     //cancel tree shading
 
 
-    // console.log('rendering D3Tree')
+    console.log('rendering D3Tree')
     const nodeHeight = props.nodeHeight + 2 * props.nodePadding
     const nodeWidth = props.nodeWidth + 2 * props.nodePadding
 

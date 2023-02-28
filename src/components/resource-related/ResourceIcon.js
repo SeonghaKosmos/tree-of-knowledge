@@ -6,7 +6,7 @@ import { getRelativePositionOfElementInContainer, isResourcePositionReevaluation
 import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
-import { resourceGraphicsData, useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
+import { resourceGraphicsData, updateAllResourceIconPositions, useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 import { scale } from "../../store/visuals/zoomSlice";
 import './ResourceIcon.css'
 
@@ -55,12 +55,11 @@ function ResourceIcon(props){
 
 
     //<styles>
-    const [width, height, treeScale, scale] = 
+    const [width, height, treeScale] = 
         useSelector((state) => 
             [state.dimensions.resourceWidth, 
             state.dimensions.resourceHeight,
-            state.scale.treeScale,
-            state.zoom.scale], shallowEqual)
+            state.scale.treeScale], shallowEqual)
     
     const theScale = scale.val
 
@@ -106,8 +105,8 @@ function ResourceIcon(props){
  
 
 
-            relativePosition.x /= scale
-            relativePosition.y /= scale
+            relativePosition.x /= theScale
+            relativePosition.y /= theScale
 
             // console.log(relativePosition)
 
@@ -134,15 +133,15 @@ function ResourceIcon(props){
 
             // console.log(position.x)
             // console.log(position.y)
-            graphicsDatumActions.CheckPositionsAreUnchanged(topLeftPosition, centerPosition)
+            // graphicsDatumActions.CheckPositionsAreUnchanged(topLeftPosition, centerPosition)
+            graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
 
             // console.log(props.resource.id)
             // console.log(document.getElementById('treeContainerSvg'))
-            if (!isResourcePositionsStabilized() && !positionEvalInhibitor.val){
-                // console.log(relativePosition)
-                // console.log(resourceGraphicsData)
-                graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
-            }
+            // if (!isResourcePositionsStabilized() && !positionEvalInhibitor.val){
+            //     // console.log(relativePosition)
+            //     // console.log(resourceGraphicsData)
+            // }
 
         }
 
@@ -154,6 +153,14 @@ function ResourceIcon(props){
         graphicsDatumActions.setIsConnected(!isConnected)
         event.stopPropagation()
     }
+
+
+    const onMouseEnter = (event) => {
+        updateAllResourceIconPositions()
+    }
+
+
+
 
 
     
@@ -168,6 +175,7 @@ function ResourceIcon(props){
         backgroundColor={backgroundColor}
         brightness = {brightness}
         onClick={onClick}
+        onMouseEnter={onMouseEnter}
         >
 
         {props.resource.name}

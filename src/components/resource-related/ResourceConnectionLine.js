@@ -3,6 +3,7 @@ import styled from "styled-components";
 import ReactDOM from 'react-dom'
 import React from "react";
 import { useresourceGraphicsDatumSelector } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
+import { scale } from "../../store/visuals/zoomSlice";
 
 const ResourceConnectionLineRoot = styled.polyline`
 
@@ -21,8 +22,7 @@ function ResourceConnectionLine(props){
 
     
     const visionScale = useSelector(state => state.zoom.visionScale, shallowEqual)
-    const zoomScale = useSelector(state => state.zoom.scale, shallowEqual)
-    const strokeWidth = 3 / zoomScale
+    const strokeWidth = 3 / scale.val
 
     const treeOverlayElementsContainerId = useSelector((state) => 
         state.importantElementIds.treeOverlayElementsContainerId, shallowEqual)

@@ -26,11 +26,11 @@ export const zoomSlice = createSlice({
 
             if (state.scale < state.subBushScaleBoundary && state.visionScale != 'bushScale'){
                 state.visionScale = 'bushScale'
-                setIsResourcePositionReevaluationPossible(true)
+                // setIsResourcePositionReevaluationPossible(true)
                 // setIsResourcePositionReevaluationPossible(true) //update resource positions
             } else if (state.scale >= state.subBushScaleBoundary && state.visionScale != 'subBushScale'){
                 state.visionScale = 'subBushScale'
-                setIsResourcePositionReevaluationPossible(true)
+                // setIsResourcePositionReevaluationPossible(true)
                 // setIsResourcePositionReevaluationPossible(true) //update resource positions
             }
         }, 

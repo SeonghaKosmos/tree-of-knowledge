@@ -5,15 +5,6 @@ import { isResourcePositionsStabilized, setIsResourcePositionReevaluationPossibl
 
 
 export const resourceGraphicsData = {}
-const resourceIconPositionUpdateCounts = {
-    bushScale: 0,
-    subBushScale: 0
-}
-
-let positionUnchangedCheckResults = {
-    bushScale: {},
-    subBushScale: {}
-}
 
 
 export function useResourceIconGraphicsManager(thisResource) {
@@ -123,54 +114,6 @@ export function useResourceIconGraphicsManager(thisResource) {
 
             variables.current.position[visionScale].topLeft = position
             variables.current.position[visionScale].center = centerPosition
-
-            resourceIconPositionUpdateCounts[visionScale] ++
-            
-
-            // stop position reports when all resource icons have reported
-            if (resourceIconPositionUpdateCounts[visionScale] === 
-                Object.keys(resourceGraphicsData).length * 2){ //20 reloads for stabilization
-                //reset update count
-                resourceIconPositionUpdateCounts[visionScale] = 0
-                setIsResourcePositionReevaluationPossible(false)
-                console.log('%cdisabling resource position updates', 'color: red')
-                
-            }
-        },
-        CheckPositionsAreUnchanged(newTopLeftPosition, newCenterPosition){
-
-
-            const oldCenterPos = variables.current.position[visionScale].center
-            const oldTopLeftPos = variables.current.position[visionScale].topLeft
-
-            if (approxEqual(oldCenterPos.x, newCenterPosition.x) &&
-                approxEqual(oldCenterPos.y, newCenterPosition.y) &&
-                approxEqual(oldTopLeftPos.x, newTopLeftPosition.x) &&
-                approxEqual(oldTopLeftPos.y, newTopLeftPosition.y)){
-                    // console.log(`topleft old x ${variables.current.position[visionScale].topLeft.x}`)
-                    // console.log(`topleft new x ${newTopLeftPosition.x}`)
-                positionUnchangedCheckResults[visionScale][thisResource.id] = true
-            } else { //stabilized true when values different (not stabilized)
-                positionUnchangedCheckResults[visionScale][thisResource.id] = false
-            }
-
-            // console.log(`positionUnchangedCheckCount: ${positionUnchangedCheckResults.bushScale} ${positionUnchangedCheckResults.subBushScale}`)
-            // console.log(`target: ${Object.keys(resourceGraphicsData).length}`)
-
-
-            
-            // console.log(positionUnchangedCheckResults[visionScale])
-          
-            for (let id of Object.keys(positionUnchangedCheckResults[visionScale])){
-                // console.log(positionUnchangedCheckResults[visionScale][id])
-                if (!positionUnchangedCheckResults[visionScale][id]){
-                    setIsResourcePositionsStabilized(false)
-                    // console.log('mieux')
-                    return
-                }
-            }
-            // console.log('meh')
-            setIsResourcePositionsStabilized(true)
         }
     }
 
@@ -210,8 +153,6 @@ export function useresourceGraphicsDatumSelector(id){
 
 export function enablePositionUpdates(){
 
-    resourceIconPositionUpdateCounts['bushScale'] = 0
-    resourceIconPositionUpdateCounts['subBushScale'] = 0
     setIsResourcePositionReevaluationPossible(true)
     setIsResourcePositionsStabilized(false)
 
@@ -229,27 +170,3 @@ export function updateAllResourceIconPositions(){
 }
 
 
-
-// export function treeEditUpdates(deltaX, deltaY, bushId){
-
-
-//     Object.keys(resourceGraphicsData).forEach(function(key) {
-
-
-//         if (resourceGraphicsData[key].thisResource.bushId === bushId){
-
-//             const thisResourcePosVars = resourceGraphicsData[key].variables.current.position
-
-//             thisResourcePosVars.bushScale.center.x += deltaX
-//             thisResourcePosVars.bushScale.center.y += deltaY
-//             thisResourcePosVars.bushScale.topLeft.x += deltaX
-//             thisResourcePosVars.bushScale.topLeft.y += deltaY
-//             thisResourcePosVars.subBushScale.center.x += deltaX
-//             thisResourcePosVars.subBushScale.center.y += deltaY
-//             thisResourcePosVars.subBushScale.topLeft.x += deltaX
-//             thisResourcePosVars.subBushScale.topLeft.y += deltaY
-
-//         }
-//     });
-
-// }

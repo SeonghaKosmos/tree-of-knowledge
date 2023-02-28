@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import React from "react";
 import ResourceIcon from "../resource-related/ResourceIcon";
-import { useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 const SubBushNodeRoot = styled.div`
 
     font-size: 8px;
@@ -39,7 +39,7 @@ function SubBushNode(props){
     const width = props.width;
     const height = props.height;
 
-    const resourceIconScale = useSelector((state) => state.scale.subBushResourceIconScale)
+    const resourceIconScale = useSelector((state) => state.scale.subBushResourceIconScale, shallowEqual)
 
 
     return(
