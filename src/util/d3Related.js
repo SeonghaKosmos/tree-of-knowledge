@@ -16,3 +16,16 @@ export function getScaleFromTransformString(transformString){
     let scaleString = transformString.substring(transformString.indexOf("scale(")+6, transformString.length - 1);
     return Number(scaleString)
 }
+
+
+export function setTreeContainerSvgClass(isMaxScale){
+    const treeContainerSvgClassList = document.getElementById('treeContainerSvg').classList
+
+    if (isMaxScale){
+        treeContainerSvgClassList.remove('zoom-in-cursor')
+        treeContainerSvgClassList.add('zoom-out-cursor')
+    } else {
+        treeContainerSvgClassList.remove('zoom-out-cursor')
+        treeContainerSvgClassList.add('zoom-in-cursor')
+    }
+}

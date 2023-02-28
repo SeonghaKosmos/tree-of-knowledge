@@ -212,7 +212,7 @@ function D3Tree(props) {
     return (
         <>
             {/* tree template */}
-            <svg id={props.containerSvgId} className={`treeContainerSvg ${styles.treeContainerSvg} ${props.containerSvgClasses}`} width={props.treeWidth} height={props.treeHeight}>
+            <svg id={props.containerSvgId} className={`treeContainerSvg ${styles.treeContainerSvg} zoom-in-cursor`} width={props.treeWidth} height={props.treeHeight}>
                 <g id={props.containerGId} scale={props.treeScale}>
                     <svg id="positionReferenceContainer"></svg>
                     <g id='opacityControlG'>

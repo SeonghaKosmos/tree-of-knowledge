@@ -10,7 +10,8 @@ const initialState = {
     maxScale: 8,
     subBushScaleBoundary: 4.5,
     minusculeBushScaleBoundary: 2.5,
-    visionScale: 'bushScale' 
+    visionScale: 'bushScale',
+    treeContainerSvgStyleClass: 'zoom-in-cursor'
 }
 
 export const zoomSlice = createSlice({
@@ -26,13 +27,17 @@ export const zoomSlice = createSlice({
 
             if (state.scale < state.subBushScaleBoundary && state.visionScale != 'bushScale'){
                 state.visionScale = 'bushScale'
+                console.log('scale:                    bushScale')
                 // setIsResourcePositionReevaluationPossible(true)
                 // setIsResourcePositionReevaluationPossible(true) //update resource positions
             } else if (state.scale >= state.subBushScaleBoundary && state.visionScale != 'subBushScale'){
                 state.visionScale = 'subBushScale'
+                console.log('scale:                    subBushScale')
                 // setIsResourcePositionReevaluationPossible(true)
                 // setIsResourcePositionReevaluationPossible(true) //update resource positions
             }
+
+            state.treeContainerSvgStyleClass = state.scale === state.maxScale ? 'zoom-out-cursor' : 'zoom-in-cursor'
         }, 
         setVisionScale(state, action){
             state.visionScale = action.payload

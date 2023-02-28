@@ -7,6 +7,7 @@ import SubBushNode from "./SubBushNode";
 import styles from '../tree.module.css'
 import RootNode from "./RootNode";
 import OriginNode from "./OriginNode";
+import React from 'react';
 
 
 
@@ -184,4 +185,4 @@ function BushNode(props){
     )
 }
 
-export default BushNode
+export default React.memo(BushNode)
