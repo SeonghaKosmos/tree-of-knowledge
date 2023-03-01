@@ -20,12 +20,8 @@ function App() {
   const appDiv = useRef()
   const navBar = useRef()
 
-  const navBarHeight = navBar.current == undefined ? 0 : navBar.current.offsetHeight
 
   //zoomwindow
-
-  let availableTreeDimensionsComputationComplete = useRef(false)
-
   //<dimensions>
   const dispatch = useDispatch()
 
@@ -43,7 +39,6 @@ function App() {
 
 
   //</dimensions>
-  const resourceIconsDataManagerActions = useResourceIconGraphicsManager()
 
 
   window.onresize = function () {
