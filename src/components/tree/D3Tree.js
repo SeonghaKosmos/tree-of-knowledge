@@ -1,11 +1,12 @@
 import * as d3 from 'd3'
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom'
-import { treeEditUpdates, updateAllResourceIconPositions, useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
+import { connectedResourceGraphicsDataGlobal, getGraphicsDataFromIds, treeEditUpdates, updateConnectedResourceIconPositions, updateResourceIconPositions, useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
 import styles from '../tree.module.css'
 import React from 'react';
 import OverlayedElementsContainer from './OverlayedElementsContainer';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
+import Resource from '../../util/Resource';
 
 
 
@@ -175,11 +176,15 @@ function D3Tree(props) {
                         d.x += event.dx
                         d.y -= event.dy
 
+
                         createOrUpdateLinks()
-                        updateAllResourceIconPositions()
+                        const bushResourceIds = Resource.getIdList(d.data.resources)
+                        const graphicsData = getGraphicsDataFromIds(bushResourceIds)
+                        console.log(graphicsData)
+                        updateResourceIconPositions(graphicsData)
                         // if (event.type === 'end'){
                         //     //update resource position at the end of drag
-                        //     updateAllResourceIconPositions()
+                        //     updateConnectedResourceIconPositions()
                         // }
 
                         const coords = getCoords(d, getNodeDimensionsByName(d.data.name))

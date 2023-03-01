@@ -2,11 +2,11 @@ import { useEffect, useState } from "react";
 import { useSelector, shallowEqual, useDispatch } from "react-redux";
 import styled from "styled-components";
 import { useResourceIconStyle } from "../../hooks/resource-icon/use-resource-icon-style";
-import { getRelativePositionOfElementInContainer, isResourcePositionReevaluationPossible, isResourcePositionsStabilized, setIsResourcePositionReevaluationPossible } from "../../util/positionManager";
+import { getRelativePositionOfElementInContainer , isResourcePositionReevaluationPossibleGlobal} from "../../util/positionManager";
 import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
-import { resourceGraphicsData, updateAllResourceIconPositions, useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
+import { useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 import { scale } from "../../store/visuals/zoomSlice";
 import './ResourceIcon.css'
 
@@ -82,7 +82,7 @@ function ResourceIcon(props){
     useEffect(()=>{
         //report the position of resource
         // console.log('report position triggered')
-        if (isResourcePositionReevaluationPossible()){
+        if (resourceGraphicsDatum.variables.isResourcePositionReevaluationPossible || isConnected){ //reevaluate position of connected rerendered icons
             
 
 
@@ -131,17 +131,8 @@ function ResourceIcon(props){
                 y: (relativePosition.y + height*treeScale*resourceIconScale/2) /treeScale
             }
 
-            // console.log(position.x)
-            // console.log(position.y)
-            // graphicsDatumActions.CheckPositionsAreUnchanged(topLeftPosition, centerPosition)
             graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
-
-            // console.log(props.resource.id)
-            // console.log(document.getElementById('treeContainerSvg'))
-            // if (!isResourcePositionsStabilized() && !positionEvalInhibitor.val){
-            //     // console.log(relativePosition)
-            //     // console.log(resourceGraphicsData)
-            // }
+            graphicsDatumActions.setIsResourcePositionReevaluationPossible(false)
 
         }
 
@@ -156,7 +147,7 @@ function ResourceIcon(props){
 
 
     const onMouseEnter = (event) => {
-        updateAllResourceIconPositions()
+        graphicsDatumActions.updateConnectedResourceIconPositions()
     }
 
 

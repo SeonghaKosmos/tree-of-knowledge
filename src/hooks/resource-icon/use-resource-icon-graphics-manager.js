@@ -1,11 +1,11 @@
 import { useRef, useState } from "react";
 import { useSelector, shallowEqual} from "react-redux";
-import { approxEqual } from "../../util/MathStuff";
-import { isResourcePositionsStabilized, setIsResourcePositionReevaluationPossible, setIsResourcePositionsStabilized } from "../../util/positionManager";
+import { isResourcePositionReevaluationPossibleGlobal, setIsResourcePositionReevaluationPossibleGlobal } from "../../util/positionManager";
 
 
 export const resourceGraphicsData = {}
-
+export let connectedResourceGraphicsDataGlobal = {}
+export let potentialConnectedResourceGraphicsDataGlobal = {}
 
 export function useResourceIconGraphicsManager(thisResource) {
 
@@ -28,7 +28,8 @@ export function useResourceIconGraphicsManager(thisResource) {
                 center: {x:0, y:0},
                 topLeft: {x:0, y:0}
             }
-        }
+        },
+        isResourcePositionReevaluationPossible:true
     })
 
 
@@ -58,42 +59,43 @@ export function useResourceIconGraphicsManager(thisResource) {
             const temp = {...state}
             setState(temp) //set state to modified copy to trigger rerender
         },
+        setIsResourcePositionReevaluationPossible(val){
+            resourceGraphicsData[thisResource.id].variables.isResourcePositionReevaluationPossible = val
+        },
+        getConnectedResourceGraphicsData(){
+
+            const connectedResourceGraphicsData = {}
+            connectedResourceGraphicsData[thisResource.id] = resourceGraphicsData[thisResource.id]
+
+
+            thisResource.connections.map((connectedResource)=>{
+                connectedResourceGraphicsData[connectedResource.id] = resourceGraphicsData[connectedResource.id]
+            }) 
+
+            potentialConnectedResourceGraphicsDataGlobal = {...connectedResourceGraphicsData}
+            return connectedResourceGraphicsData
+        },
+        updateConnectedResourceIconPositions(){
+
+            updateResourceIconPositions(this.getConnectedResourceGraphicsData())
+        
+        },
         setIsConnectionLinesVisible (isConnectionLinesVisible) {
 
             state.isConnectionLinesVisible = isConnectionLinesVisible
 
         },
-        resetAllResourceIcons() { //erase all connections
-            Object.keys(resourceGraphicsData).map((id) => {
-                const resourceGraphicsDatum = resourceGraphicsData[id]
-
-                resourceGraphicsDatum.state.isConnected = false
-                resourceGraphicsDatum.actions.setIsConnectionLinesVisible(false)
-                this.handleTreeContainer(false)
-                resourceGraphicsDatum.actions.commitState()
-            })
-        },
-        handleTreeContainer(isConnected){
-            
-            const opacityControlG = document.getElementById('opacityControlG')
-            if (isConnected){
-                opacityControlG.style.filter = 'brightness(60%)'
-
-            } else{
-                opacityControlG.style.filter = 'brightness(100%)'
-
-            }
-        },
         //master function that handles all connection related events
         setIsConnected (isConnected) { 
 
             if (isConnected){
-                this.resetAllResourceIcons()
+                resetAllResourceIcons()
+                connectedResourceGraphicsDataGlobal = {...potentialConnectedResourceGraphicsDataGlobal}
+                // setIsResourcePositionReevaluationPossibleGlobal(false)
             }
-
             //update connected status for all connected resources
-            thisResource.connections.map((connectedResource)=>{
-                const connectedresourceGraphicsDatum = resourceGraphicsData[connectedResource.id]
+            Object.keys(this.getConnectedResourceGraphicsData()).map((id) => {
+                const connectedresourceGraphicsDatum = resourceGraphicsData[id]
 
                 setTimeout(() => { //set delay to ensure resourceIcon rerenders go over connection lines
                     connectedresourceGraphicsDatum.state.isConnected = isConnected
@@ -105,7 +107,7 @@ export function useResourceIconGraphicsManager(thisResource) {
             //update stuff in thisResource
             state.isConnected = isConnected
             this.setIsConnectionLinesVisible(isConnected)
-            this.handleTreeContainer(isConnected)
+            handleTreeContainer(isConnected)
             this.commitState()
 
 
@@ -127,7 +129,7 @@ export function useResourceIconGraphicsManager(thisResource) {
             variables,
             actions,
             state,
-            setState
+            setState,
         }
 
         // console.log(resourceGraphicsDatum)
@@ -150,23 +152,49 @@ export function useresourceGraphicsDatumSelector(id){
 }
 
 
+export function handleTreeContainer(isConnected){
+            
+    const opacityControlG = document.getElementById('opacityControlG')
+    if (isConnected){
+        opacityControlG.style.filter = 'brightness(60%)'
 
-export function enablePositionUpdates(){
+    } else{
+        opacityControlG.style.filter = 'brightness(100%)'
 
-    setIsResourcePositionReevaluationPossible(true)
-    setIsResourcePositionsStabilized(false)
-
+    }
 }
 
-export function updateAllResourceIconPositions(){
-    enablePositionUpdates()
+export function resetAllResourceIcons() { //erase all connections
+    Object.keys(resourceGraphicsData).map((id) => {
+        const resourceGraphicsDatum = resourceGraphicsData[id]
 
-    Object.keys(resourceGraphicsData).forEach(function(key) {
+        resourceGraphicsDatum.state.isConnected = false
+        resourceGraphicsDatum.actions.setIsConnectionLinesVisible(false)
+        handleTreeContainer(false)
+        resourceGraphicsDatum.actions.commitState()
+    })
 
-        resourceGraphicsData[key].actions.commitState()
-
-    });
-
+    // setIsResourcePositionReevaluationPossibleGlobal(true)
 }
+
+export function updateResourceIconPositions(data){
+
+    if (isResourcePositionReevaluationPossibleGlobal()){
+        Object.keys(data).forEach(function(id) {
+        
+            resourceGraphicsData[id].actions.setIsResourcePositionReevaluationPossible(true)
+            resourceGraphicsData[id].actions.commitState()
+    
+        });
+    }
+}
+
+export function getGraphicsDataFromIds(idList){
+    const graphicsData = {}
+    idList.map((id) => graphicsData[id] = resourceGraphicsData[id])
+    return graphicsData
+}
+
+
 
 

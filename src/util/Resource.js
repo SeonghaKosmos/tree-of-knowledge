@@ -14,6 +14,10 @@ class Resource {
         Resource.allCreatedResources.push(this)
     }
 
+    static getIdList(resourceList) {
+        return resourceList.map((resource) => resource.id)
+    }
+
 }
 
 export default Resource

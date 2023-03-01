@@ -6,7 +6,7 @@ import { useEffect, useRef } from 'react';
 import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import useDimensions from './hooks/use-dimensions';
 import './global.css'
-import { useResourceIconGraphicsManager } from './hooks/resource-icon/use-resource-icon-graphics-manager';
+import { handleTreeContainer, resetAllResourceIcons, useResourceIconGraphicsManager } from './hooks/resource-icon/use-resource-icon-graphics-manager';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { dispatch } from 'd3';
 import { renderedDimensionsActions } from './store/store';
@@ -52,8 +52,8 @@ function App() {
   }
 
   const onAppClicked = (event) => {
-    resourceIconsDataManagerActions.resetAllResourceIcons()
-    resourceIconsDataManagerActions.handleTreeContainer(false)
+    resetAllResourceIcons()
+    handleTreeContainer(false)
     console.log('click')
 
 

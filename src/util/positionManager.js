@@ -28,20 +28,12 @@ export function getRelativePositionOfElementInContainer(container, element){
 }
 
 
-export function isResourcePositionReevaluationPossible(){
+export function isResourcePositionReevaluationPossibleGlobal(){
     return reevaluationPossible
 }
 
-export function setIsResourcePositionReevaluationPossible(val){
+export function setIsResourcePositionReevaluationPossibleGlobal(val){
     reevaluationPossible = val
 }
 
-
-export function isResourcePositionsStabilized(){
-    return resourcePositionsStabilized
-}
-
-export function setIsResourcePositionsStabilized(val){
-    resourcePositionsStabilized = val
-}
 
