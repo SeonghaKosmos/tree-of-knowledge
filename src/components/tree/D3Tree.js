@@ -7,6 +7,7 @@ import React from 'react';
 import OverlayedElementsContainer from './OverlayedElementsContainer';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Resource from '../../util/Resource';
+import D3TreeFiller from './D3TreeFiller';
 
 
 
@@ -15,7 +16,7 @@ import Resource from '../../util/Resource';
 function D3Tree(props) {
 
     //clear resource Icon state
-    const resourceIconsActions = useResourceIconGraphicsManager()
+    // const resourceIconsActions = useResourceIconGraphicsManager()
     //cancel tree shading
 
 
@@ -82,31 +83,6 @@ function D3Tree(props) {
 
 
 
-    let runD3 = useRef(false)
-    let rundD3Complete = useRef(false)
-    const [reRenderTrigger, setReRenderTrigger] = useState({})
-
-
-    function updateD3RunRefs() {
-
-        // console.log('before update:')
-        // console.log(`runD3: ${runD3.current}`)
-        // console.log(`runD3Complete: ${rundD3Complete.current}`)
-
-        if (rundD3Complete.current) {
-            runD3.current = false
-            rundD3Complete.current = false //reset to initial state
-        } else {
-            runD3.current = true
-        }
-
-        // console.log('after update:')
-        // console.log(`runD3: ${runD3.current}`)
-        // console.log(`runD3Complete: ${rundD3Complete.current}`)
-
-    }
-
-
 
     function generateTreeData() {
         const treeLayout = d3.tree()
@@ -145,32 +121,22 @@ function D3Tree(props) {
     }
 
 
-    const dispatch = useDispatch()
-
-    useEffect(() => { //create tree
-
-        if (runD3.current) {
-            // console.log(descendants)
-            // descendants = descendants.filter(descendant =>
-            //     descendant.data.name != 'Root')
-            // console.log(descendants)
-
-            //nodes
-            d3.select(`svg #${props.nodesGId}`)
-                .selectAll(`g.${styles.node}`)
-                .data(root.current.descendants())
-                .join('g')
-                .classed(`${styles.node}`, true)
-                .attr('transform', function (d) {
-                    //smaller g for origin node
-                    const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
-                    return `translate(${coords.x}, ${coords.y})`
-                })
-                .attr('id', (d) => {
-                    return d.data.id
-                })
-                .call(d3.drag().on('drag', (event) => {
-                    d3.select(`#${event.subject.data.id}`)
+    function createBushNodes() {
+        d3.select(`svg #${props.nodesGId}`)
+            .selectAll(`g.${styles.node}`)
+            .data(root.current.descendants())
+            .join('g')
+            .classed(`${styles.node}`, true)
+            .attr('transform', function (d) {
+                //smaller g for origin node
+                const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
+                return `translate(${coords.x}, ${coords.y})`
+            })
+            .attr('id', (d) => {
+                return d.data.id
+            })
+            .call(d3.drag().on('drag', (event) => {
+                d3.select(`#${event.subject.data.id}`)
                     .attr('transform', function (d) {
 
                         d.x += event.dx
@@ -192,31 +158,27 @@ function D3Tree(props) {
 
                     })
 
-                    // const renderedTreeDims = getRenderedDimensions(document.getElementById('treeContainerG'), treeScale)
-                    // console.log(renderedTreeDims)
-                    // dispatch(renderedDimensionsActions.setTreeDimensions({
-                    //     width: renderedTreeDims.width,
-                    //     height: renderedTreeDims.height
-                    //   }))
-                }))
+            }))
+    }
 
-            // Links
-            createOrUpdateLinks()
 
-            rundD3Complete.current = true
-            setReRenderTrigger({})
 
-            // console.log('d3 complete')
-        }
 
+    // Links
+
+    useEffect(() => {
+        createBushNodes()
+        createOrUpdateLinks()
     })
 
 
 
-    const NodeComponent = props.nodeComponentFunc
+
+
+    
+
     return (
         <>
-            {/* tree template */}
             <svg id={props.containerSvgId} className={`${styles.treeContainerSvg} zoom-in-cursor`} width={props.treeWidth} height={props.treeHeight}>
                 <g id={props.containerGId} scale={props.treeScale}>
                     <svg id="positionReferenceContainer"></svg>
@@ -229,29 +191,14 @@ function D3Tree(props) {
                         <g id={'resourceConnectionLinesContainer'} />
                         <g id={'resourceIconsContainer'} />
                     </g>
-                    <OverlayedElementsContainer />
                 </g>
             </svg>
-            {/* fill tree */}
-            {rundD3Complete.current && root.current.descendants().map(descendant => {
-                const node = document.getElementById(descendant.data.name)
-                runD3.current = false
-                // console.log('adding nodes')
 
-
-                return ReactDOM.createPortal(
-                    <NodeComponent
-                        data={descendant.data}
-                        width={props.nodeWidth}
-                        height={props.nodeHeight} />
-
-                    ,
-
-                    document.getElementById(descendant.data.id))
-
-            })}
-
-            {updateD3RunRefs()}
+            <D3TreeFiller
+                descendants={root.current.descendants()}
+                nodeWidth={props.nodeWidth}
+                nodeHeight={props.nodeHeight}
+                nodeComponentFunc={props.nodeComponentFunc}/>
         </>
     )
 }

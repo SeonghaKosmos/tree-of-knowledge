@@ -9,6 +9,7 @@ import useDimensions from "../../hooks/use-dimensions";
 import { renderedDimensionsActions } from "../../store/store";
 import { getRenderedDimensions } from "../../util/DimensionsLogic";
 import { scale } from "../../store/visuals/zoomSlice";
+import D3TreeTemplate from "./D3Tree";
 
 
 
@@ -47,77 +48,77 @@ const TreeOfKnowledgeContainerRoot = styled.div`
 
 
 
-function TreeOfKnowledgeContainer(props){
+function TreeOfKnowledgeContainer(props) {
 
-    console.log('rendering tree container')
-    const [data, treeOverlayElementsContainerId] = useSelector((state) => [
-      state.treeData.structure, 
-      state.importantElementIds.treeOverlayElementsContainerId], shallowEqual)
-    const treeScale = useSelector((state) => state.scale.treeScale, shallowEqual)
+  console.log('rendering tree container')
+  const [data, treeOverlayElementsContainerId] = useSelector((state) => [
+    state.treeData.structure,
+    state.importantElementIds.treeOverlayElementsContainerId], shallowEqual)
+  const treeScale = useSelector((state) => state.scale.treeScale, shallowEqual)
 
-    //tree dimensions
-    const [treeWidth, treeHeight] = useSelector((state) => [
-      state.dimensions.treeWidth, 
-      state.dimensions.treeHeight], shallowEqual)
-
-
-    const [bushWidth, bushHeight, bushPadding] = useSelector((state) => [
-      state.dimensions.bushWidth, 
-      state.dimensions.bushHeight, 
-      state.dimensions.bushPadding], shallowEqual)
+  //tree dimensions
+  const [treeWidth, treeHeight] = useSelector((state) => [
+    state.dimensions.treeWidth,
+    state.dimensions.treeHeight], shallowEqual)
 
 
-
-    const nodesGId = "mainNodes"
-    const linksGId = "mainLinks"
-    const containerGId = useSelector((state) => 
-      state.importantElementIds.treeContainerGId, shallowEqual)
-
-    const zoomActionTargetDivId = 'zoomActionTargetDiv'
-
-    
+  const [bushWidth, bushHeight, bushPadding] = useSelector((state) => [
+    state.dimensions.bushWidth,
+    state.dimensions.bushHeight,
+    state.dimensions.bushPadding], shallowEqual)
 
 
 
-    useDimensions(treeScale)
+  const nodesGId = "mainNodes"
+  const linksGId = "mainLinks"
+  const containerGId = useSelector((state) =>
+    state.importantElementIds.treeContainerGId, shallowEqual)
+
+  const zoomActionTargetDivId = 'zoomActionTargetDiv'
 
 
 
 
 
-    // console.log(`renderedTreeWidth ${renderedTreeWidth} renderedTreeHeight ${renderedTreeHeight}`)
-
-    useZoom('treeContainerSvg', `${containerGId}`)
-    
+  useDimensions(treeScale)
 
 
 
-    return(
-        <TreeOfKnowledgeContainerRoot 
-              id='treeOfKnowledgeContainerRoot' 
-              zoomActionTargetDivId={zoomActionTargetDivId}
-              // width={renderedTreeWidth} 
-              // height={renderedTreeHeight} 
-              scale={treeScale}>  
 
-            <D3Tree 
-              data={data} 
-              nodesGId={nodesGId} 
-              linksGId={linksGId}
-              containerGId={containerGId}
-              treeOverlayElementsContainerId={treeOverlayElementsContainerId}
-              containerSvgId='treeContainerSvg'
-              treeWidth={treeWidth}
-              treeHeight={treeHeight}
-              treeScale={treeScale}
-              nodeWidth={bushWidth}
-              nodeHeight={bushHeight}
-              nodePadding={bushPadding}
-              linkClass={styles.mainLink}
-              nodeComponentFunc={BushNode}/> 
-             
-        </TreeOfKnowledgeContainerRoot>
 
-    )
+  // console.log(`renderedTreeWidth ${renderedTreeWidth} renderedTreeHeight ${renderedTreeHeight}`)
+
+  useZoom('treeContainerSvg', `${containerGId}`)
+
+
+
+
+  return (
+    <TreeOfKnowledgeContainerRoot
+      id='treeOfKnowledgeContainerRoot'
+      zoomActionTargetDivId={zoomActionTargetDivId}
+      // width={renderedTreeWidth} 
+      // height={renderedTreeHeight} 
+      scale={treeScale}>
+
+      <D3Tree
+        data={data}
+        nodesGId={nodesGId}
+        linksGId={linksGId}
+        containerGId={containerGId}
+        treeOverlayElementsContainerId={treeOverlayElementsContainerId}
+        containerSvgId='treeContainerSvg'
+        treeWidth={treeWidth}
+        treeHeight={treeHeight}
+        treeScale={treeScale}
+        nodeWidth={bushWidth}
+        nodeHeight={bushHeight}
+        nodePadding={bushPadding}
+        linkClass={styles.mainLink}
+        nodeComponentFunc={BushNode} />
+
+    </TreeOfKnowledgeContainerRoot>
+
+  )
 }
 export default React.memo(TreeOfKnowledgeContainer)
