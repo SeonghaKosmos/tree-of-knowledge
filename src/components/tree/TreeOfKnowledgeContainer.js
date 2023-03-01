@@ -53,18 +53,17 @@ function TreeOfKnowledgeContainer(props){
     const [data, treeOverlayElementsContainerId] = useSelector((state) => [
       state.treeData.structure, 
       state.importantElementIds.treeOverlayElementsContainerId], shallowEqual)
-    const visionScale = useSelector((state) => state.zoom.visionScale, shallowEqual)
     const treeScale = useSelector((state) => state.scale.treeScale, shallowEqual)
 
     //tree dimensions
     const [treeWidth, treeHeight] = useSelector((state) => [
-      state.dimensions[visionScale].treeWidth, 
-      state.dimensions[visionScale].treeHeight], shallowEqual)
+      state.dimensions.treeWidth, 
+      state.dimensions.treeHeight], shallowEqual)
 
 
     const [bushWidth, bushHeight, bushPadding] = useSelector((state) => [
-      state.dimensions[visionScale].bushWidth, 
-      state.dimensions[visionScale].bushHeight, 
+      state.dimensions.bushWidth, 
+      state.dimensions.bushHeight, 
       state.dimensions.bushPadding], shallowEqual)
 
 

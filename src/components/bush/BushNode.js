@@ -26,6 +26,11 @@ const BushNodeRoot = styled.div`
     overflow: visible;
 
 
+    & .subBushScaleLabelSpan{
+        font-size: 10px;
+    }
+
+
     & .bushForeignObject{
         -webkit-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         -moz-box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
@@ -95,8 +100,8 @@ function BushNode(props){
         rootNodeWidth, rootNodeHeight] = 
         
         useSelector((state) => [
-        state.dimensions[visionScale].bushWidth, 
-        state.dimensions[visionScale].bushHeight,
+        state.dimensions.bushWidth, 
+        state.dimensions.bushHeight,
         state.dimensions.originNodeWidth, 
         state.dimensions.originNodeHeight,
         state.dimensions.rootNodeWidth, 
@@ -108,7 +113,7 @@ function BushNode(props){
     const [subBushHeight, padding] = useSelector((state) => [state.dimensions.subBushHeight, state.dimensions.bushPadding], shallowEqual)
 
     let containerWidth = width + padding*2 //add space for padding
-    let containerHeight = height + padding*2 + subBushHeight/2 //add space for padding + top margin for subbush
+    let containerHeight = height + padding*2 //add space for padding + top margin for subbush
 
     
     const bushId = uuid().replace(/-/g, '')
@@ -147,7 +152,9 @@ function BushNode(props){
             <Root width={containerWidth} height={containerHeight} padding={padding}>
 
 
-                <span>{props.data.name}</span>
+                <span className={visionScale === 'subBushScale' ? "subBushScaleLabelSpan" : ''}>
+                    {props.data.name}
+                </span>
 
 
                 {/* render representative resources at bush scale */}

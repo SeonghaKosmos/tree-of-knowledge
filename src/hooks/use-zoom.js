@@ -60,7 +60,7 @@ const useZoom = (eventSourceId, applyZoomTargetId) => {
 
       zoomEventSourceContainer.call(zoom)
       //pan
-      setUpEdgeHoverPan(eventSourceId, zoom)
+      // setUpEdgeHoverPan(eventSourceId, zoom)
 
 
 

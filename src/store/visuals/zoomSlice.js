@@ -4,6 +4,7 @@ import { setIsResourcePositionReevaluationPossible } from '../../util/positionMa
 let visionScaleJustChanged = false
 
 export const scale = {val: 1}
+export const visionScale = {val: 'bushScale'}
 
 const initialState = {
     scale: 1,
@@ -27,12 +28,14 @@ export const zoomSlice = createSlice({
 
             if (state.scale < state.subBushScaleBoundary && state.visionScale != 'bushScale'){
                 state.visionScale = 'bushScale'
-                console.log('scale:                    bushScale')
+                visionScale.val = 'bushScale'
+                console.log('%cscale: bushScale','color:green')
                 // setIsResourcePositionReevaluationPossible(true)
                 // setIsResourcePositionReevaluationPossible(true) //update resource positions
             } else if (state.scale >= state.subBushScaleBoundary && state.visionScale != 'subBushScale'){
                 state.visionScale = 'subBushScale'
-                console.log('scale:                    subBushScale')
+                visionScale.val = 'subBushScale'
+                console.log('%cscale: subBushScale','color:green')
                 // setIsResourcePositionReevaluationPossible(true)
                 // setIsResourcePositionReevaluationPossible(true) //update resource positions
             }

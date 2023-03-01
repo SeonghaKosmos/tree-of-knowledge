@@ -1,6 +1,8 @@
 import { createSlice } from '@reduxjs/toolkit'
 
 const initialState = {
+    treeWidth: 1300,
+    treeHeight: 770,
     resourceHeight: 30,
     resourceWidth: 24,
     subBushHeight: 30,
@@ -9,20 +11,12 @@ const initialState = {
     originNodeHeight: 35,
     rootNodeWidth: 150,
     rootNodeHeight: 170,
-    'bushScale': {
-        bushWidth: 120,
-        bushHeight: 100,
-        treeWidth: 1300,
-        treeHeight: 770
-    },
-    'subBushScale': {
-        bushWidth: 100,
-        bushHeight: 130,
-        treeWidth: 1300,
-        treeHeight: 770
-    }
-    
+    bushWidth: 120,
+    bushHeight: 120
 }
+
+
+export const rawDimensions = {...initialState}
 
 
 const dimensionsSlice = createSlice({
