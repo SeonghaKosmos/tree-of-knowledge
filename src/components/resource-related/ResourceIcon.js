@@ -10,28 +10,12 @@ import { useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-re
 import { scale } from "../../store/visuals/zoomSlice";
 import './ResourceIcon.css'
 
-
 export const positionEvalInhibitor = {val:false}
 
 const ResourceIconRoot = styled.div`
     width: ${props => (`${props.width}px`)};
     height: ${props => (`${props.height}px`)}; 
     scale: ${props => (props.scale)};
-
-    font-size: 6px;
-    padding-top: 0.2em;
-    text-align:center;
-    filter: brightness(${props => (props.brightness)});
-    filter: drop-shadow(1px 2px 1px rgb(0 0 0 / 0.4));
-    background-color: ${props => (props.backgroundColor)};
-    /* background-color: rgb(235, 75, 75); */
-    color: black;
-
-    border-radius: ${props => (props.borderRadius)};
-    color: ${props => (props.color)};
-
-    pointer-events: auto;
-    cursor: pointer;
 
 `
 
@@ -63,12 +47,9 @@ function ResourceIcon(props){
     
     const theScale = scale.val
 
-    const resourceIconScale = props.scale
+    const resourceIconScale = useSelector((state) => state.scale.bushResourceIconScale, shallowEqual)
     
-    const [borderRadius, color] = useResourceIconStyle()
-
-    const brightness = isConnected ? '130%' : 'inherit'
-    const backgroundColor = isConnected ? '#f15125' : '#f07655'
+    const styleClasses = useResourceIconStyle(isConnected)
     //</styles>
 
     //<element ids>
@@ -157,14 +138,11 @@ function ResourceIcon(props){
     
     const resourceIcon = 
     <ResourceIconRoot
+        className={`resourceIcon ${styleClasses}`}
         id={props.resource.id}
         width={width} 
         height={height} 
         scale={props.scale}
-        borderRadius={borderRadius}
-        color={color}
-        backgroundColor={backgroundColor}
-        brightness = {brightness}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
         >

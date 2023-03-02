@@ -1,3 +1,37 @@
 .resourceIconForeignObject{
     overflow:visible;
 }
+
+.resourceIcon{
+    font-size: 6px;
+    padding-top: 0.2em;
+    text-align:center;
+
+    filter: drop-shadow(1px 2px 1px rgb(0 0 0 / 0.4));
+    background-color: #f07655;
+
+
+    border-radius: 50%;
+    color: black;
+
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+.minusculeScale{
+    border-radius: 50%;
+    color: transparent;
+}
+
+.notMinusculeScale{
+    border-radius: 4px;
+    color: black;
+}
+
+
+
+.isConnected{
+    filter: brightness(130%);
+    background-color: #f15125;
+}
+
