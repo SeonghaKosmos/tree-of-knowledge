@@ -4,8 +4,8 @@ import { isResourcePositionReevaluationPossibleGlobal, setIsResourcePositionReev
 
 
 export const resourceGraphicsData = {}
-export let connectedResourceGraphicsDataGlobal = {}
-export let potentialConnectedResourceGraphicsDataGlobal = {}
+export let connectedResourceGraphicsDataIdsGlobal = {}
+export let potentialconnectedResourceGraphicsDataIdsGlobal = {}
 
 export function useResourceIconGraphicsManager(thisResource) {
 
@@ -62,22 +62,18 @@ export function useResourceIconGraphicsManager(thisResource) {
         setIsResourcePositionReevaluationPossible(val){
             resourceGraphicsData[thisResource.id].variables.isResourcePositionReevaluationPossible = val
         },
-        getConnectedResourceGraphicsData(){
+        getConnectedResourceGraphicsDataIds(){
 
-            const connectedResourceGraphicsData = {}
-            connectedResourceGraphicsData[thisResource.id] = resourceGraphicsData[thisResource.id]
+            const connectedIds = thisResource.connections.map((resource) => resource.id)
+            const connectedResourceGraphicsData = [thisResource.id, ...connectedIds]
 
-
-            thisResource.connections.map((connectedResource)=>{
-                connectedResourceGraphicsData[connectedResource.id] = resourceGraphicsData[connectedResource.id]
-            }) 
-
-            potentialConnectedResourceGraphicsDataGlobal = {...connectedResourceGraphicsData}
+            //set potention connected icons to just evaluated icons
+            potentialconnectedResourceGraphicsDataIdsGlobal = [...connectedResourceGraphicsData]
             return connectedResourceGraphicsData
         },
         updateConnectedResourceIconPositions(){
 
-            updateResourceIconPositions(this.getConnectedResourceGraphicsData())
+            updateResourceIconPositions(this.getConnectedResourceGraphicsDataIds())
         
         },
         setIsConnectionLinesVisible (isConnectionLinesVisible) {
@@ -87,20 +83,19 @@ export function useResourceIconGraphicsManager(thisResource) {
         },
         //master function that handles all connection related events
         setIsConnected (isConnected) { 
-
             if (isConnected){
                 resetAllResourceIcons()
-                connectedResourceGraphicsDataGlobal = {...potentialConnectedResourceGraphicsDataGlobal}
-                // setIsResourcePositionReevaluationPossibleGlobal(false)
+                //clicked to confirm icon connected: potential=real
+                connectedResourceGraphicsDataIdsGlobal = {...potentialconnectedResourceGraphicsDataIdsGlobal}
             }
             //update connected status for all connected resources
-            Object.keys(this.getConnectedResourceGraphicsData()).map((id) => {
+            this.getConnectedResourceGraphicsDataIds().map((id) => {
                 const connectedresourceGraphicsDatum = resourceGraphicsData[id]
 
-                setTimeout(() => { //set delay to ensure resourceIcon rerenders go over connection lines
-                    connectedresourceGraphicsDatum.state.isConnected = isConnected
-                    connectedresourceGraphicsDatum.actions.commitState()
-                }, 1)
+
+                connectedresourceGraphicsDatum.state.isConnected = isConnected
+                connectedresourceGraphicsDatum.actions.commitState()
+
             })  // update connection visibility of connected resources
 
 
@@ -177,10 +172,10 @@ export function resetAllResourceIcons() { //erase all connections
     // setIsResourcePositionReevaluationPossibleGlobal(true)
 }
 
-export function updateResourceIconPositions(data){
+export function updateResourceIconPositions(ids){
 
     if (isResourcePositionReevaluationPossibleGlobal()){
-        Object.keys(data).forEach(function(id) {
+        ids.forEach(function(id) {
         
             resourceGraphicsData[id].actions.setIsResourcePositionReevaluationPossible(true)
             resourceGraphicsData[id].actions.commitState()

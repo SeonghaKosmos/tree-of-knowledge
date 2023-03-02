@@ -47,15 +47,14 @@ function ResourceIcon(props){
     
     const theScale = scale.val
 
-    const resourceIconScale = useSelector((state) => state.scale.bushResourceIconScale, shallowEqual)
-    
+
+    const resourceIconScale = useSelector((state) => state.scale[visionScale].resourceIconScale, shallowEqual)
     const styleClasses = useResourceIconStyle(isConnected)
     //</styles>
 
     //<element ids>
     const positionReferenceContainer = document.getElementById('positionReferenceContainer')
-    const resourceIconsContainer = document.getElementById('treeContainerG')
-    const placeHolder = <svg width={width} height={height}/>
+    const resourceIconsContainer = document.getElementById('resourceIconsContainer')
     //</element ids>
 
 
@@ -94,7 +93,7 @@ function ResourceIcon(props){
             let topLeftPosition
             if (resourceIconScale < 1){
                 topLeftPosition = {
-                    //icon scale places shrunk icon at the center of original icon
+                    //icon scale places the shrunk icon at the center of original icon
                     //global scale shrinks x, y by itself
                     x: (relativePosition.x - treeScale*(width - resourceIconScale*width)/2) / treeScale,
                     y: (relativePosition.y - treeScale*(height - resourceIconScale*height)/2) / treeScale
@@ -113,6 +112,9 @@ function ResourceIcon(props){
             }
 
             graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
+            // console.log(topLeftPosition)
+            // console.log(document.getElementById(props.resource.id))
+            console.log('resourceIconScale: ', resourceIconScale)
             graphicsDatumActions.setIsResourcePositionReevaluationPossible(false)
 
         }
@@ -142,7 +144,7 @@ function ResourceIcon(props){
         id={props.resource.id}
         width={width} 
         height={height} 
-        scale={props.scale}
+        scale={resourceIconScale}
         onClick={onClick}
         onMouseEnter={onMouseEnter}
         >
@@ -175,6 +177,7 @@ function ResourceIcon(props){
             {isConnected && ReactDOM.createPortal( 
                 <foreignObject 
                 className="resourceIconForeignObject"
+                id={`resourceIconForeignObject${props.resource.id}`}
                 width={width} 
                 height={height} 
                 x={resourceGraphicsDatum.variables.current.position[visionScale].topLeft.x}
@@ -190,7 +193,7 @@ function ResourceIcon(props){
                 id={`placeholder_${props.resource.id}`}
                 width={width} 
                 height={height} 
-                scale={props.scale}
+                scale={resourceIconScale}
                 backgroundColor={'transparent'}/>
             }
 

@@ -39,8 +39,6 @@ function SubBushNode(props){
     const width = props.width;
     const height = props.height;
 
-    const resourceIconScale = useSelector((state) => state.scale.subBushResourceIconScale, shallowEqual)
-
 
     return(
         <foreignObject width={width} height={height}>
@@ -48,7 +46,7 @@ function SubBushNode(props){
                 <div className="subBushNameTag">{props.data.name}</div>
                 <div className="resourceContainer">
                     {props.data.resources.map((resource) =>  
-                        <ResourceIcon resource={resource} scale={resourceIconScale}/> )}
+                        <ResourceIcon resource={resource}/> )}
                 </div>
             </SubBushNodeRoot>
         </foreignObject>

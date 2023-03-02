@@ -108,6 +108,10 @@ function TreeOfKnowledgeContainer(props) {
         containerGId={containerGId}
         treeOverlayElementsContainerId={treeOverlayElementsContainerId}
         containerSvgId='treeContainerSvg'
+        positionReferenceContainerId={'positionReferenceContainer'}
+        opacityControlGId={'opacityControlG'}
+        resourceConnectionLinesContainerId={'resourceConnectionLinesContainer'}
+        resourceIconsContainerId={'resourceIconsContainer'}
         treeWidth={treeWidth}
         treeHeight={treeHeight}
         treeScale={treeScale}

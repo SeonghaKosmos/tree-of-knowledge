@@ -1,10 +1,9 @@
 import * as d3 from 'd3'
 import { useEffect, useRef, useState } from 'react';
 import ReactDOM from 'react-dom'
-import { connectedResourceGraphicsDataGlobal, getGraphicsDataFromIds, treeEditUpdates, updateConnectedResourceIconPositions, updateResourceIconPositions, useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
+import { connectedResourceGraphicsDataIdsGlobal, getGraphicsDataFromIds, treeEditUpdates, updateConnectedResourceIconPositions, updateResourceIconPositions, useResourceIconGraphicsManager } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
 import styles from '../tree.module.css'
 import React from 'react';
-import OverlayedElementsContainer from './OverlayedElementsContainer';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Resource from '../../util/Resource';
 import D3TreeFiller from './D3TreeFiller';
@@ -145,9 +144,7 @@ function D3Tree(props) {
 
                         createOrUpdateLinks()
                         const bushResourceIds = Resource.getIdList(d.data.resources)
-                        const graphicsData = getGraphicsDataFromIds(bushResourceIds)
-                        console.log(graphicsData)
-                        updateResourceIconPositions(graphicsData)
+                        updateResourceIconPositions(bushResourceIds)
                         // if (event.type === 'end'){
                         //     //update resource position at the end of drag
                         //     updateConnectedResourceIconPositions()
@@ -181,15 +178,15 @@ function D3Tree(props) {
         <>
             <svg id={props.containerSvgId} className={`${styles.treeContainerSvg} zoom-in-cursor`} width={props.treeWidth} height={props.treeHeight}>
                 <g id={props.containerGId} scale={props.treeScale}>
-                    <svg id="positionReferenceContainer"></svg>
-                    <g id='opacityControlG'>
+                    <svg id={props.positionReferenceContainerId}></svg>
+                    <g id={props.opacityControlGId}>
                         <g id={props.linksGId} />
                         <g id={props.nodesGId} />
                     </g>
                     {/* add connection lines container if id available */}
-                    <g id={'overLaidElementsContainer'}>
-                        <g id={'resourceConnectionLinesContainer'} />
-                        <g id={'resourceIconsContainer'} />
+                    <g className={props.overLaidElementsContainerId}>
+                        <g id={props.resourceConnectionLinesContainerId} />
+                        <g id={props.resourceIconsContainerId} />
                     </g>
                 </g>
             </svg>

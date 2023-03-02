@@ -118,7 +118,7 @@ function BushNode(props){
     const bushId = uuid().replace(/-/g, '')
     const nodesGId = `Nodes${bushId}`
     const linksGId = `Links${bushId}`
-    const containerGId = `containerG${bushId}`
+    const containerGId = `treeContainerG${bushId}`
 
 
     //for root and origin nodes
@@ -175,6 +175,10 @@ function BushNode(props){
                     linksGId={linksGId}
                     containerGId={containerGId}
                     containerSvgId={`containerSvg${bushId}`}
+                    positionReferenceContainerId={`positionReferenceContainer${bushId}`}
+                    opacityControlGId={`opacityControlG${bushId}`}
+                    resourceConnectionLinesContainerId={`resourceConnectionLinesContainer${bushId}`}
+                    resourceIconsContainerId={`resourceIconsContainer${bushId}`}
                     treeWidth={width}
                     treeHeight={height - 50}
                     nodeWidth={width}

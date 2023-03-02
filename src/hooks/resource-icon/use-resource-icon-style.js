@@ -9,15 +9,15 @@ export function useResourceIconStyle(isConnected){
 
     const [styleClasses, setStyleClasses] = useState('minusculeScale')
     const connectedIconStyleClass = isConnected ? 'isConnected' : ''
-    console.log('evaluating styles')
+    // console.log('evaluating styles')
 
     useEffect(()=>{ //update styles when scale changes
 
-        if (isMinusculeScale){
+        if (isMinusculeScale && styleClasses != 'minusculeScale'){
             
             setStyleClasses('minusculeScale')
             
-        } else if ( !isMinusculeScale ){
+        } else if ( !isMinusculeScale && styleClasses != 'notMinusculeScale'){
    
             setStyleClasses('notMinusculeScale')
         } else{
