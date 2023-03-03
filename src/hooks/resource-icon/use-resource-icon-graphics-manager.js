@@ -1,46 +1,48 @@
 import { useRef, useState } from "react";
-import { useSelector, shallowEqual} from "react-redux";
+import { useSelector, shallowEqual } from "react-redux";
 import { isResourcePositionReevaluationPossibleGlobal, setIsResourcePositionReevaluationPossibleGlobal } from "../../util/positionManager";
 
 
 export const resourceGraphicsData = {}
-export let connectedResourceGraphicsDataIdsGlobal = {}
-export let potentialconnectedResourceGraphicsDataIdsGlobal = {}
+export let connectedResourceGraphicsDataIdsGlobal = []
+export let potentialconnectedResourceGraphicsDataIdsGlobal = []
 
 export function useResourceIconGraphicsManager(thisResource) {
 
-    // const [opacityControlGId] = useSelector((state) => state.importantElementIds.opacityControlGId)
+    // const [brightnessControlGId] = useSelector((state) => state.importantElementIds.brightnessControlGId)
     const visionScale = useSelector(state => state.zoom.visionScale, shallowEqual)
 
     let prevDatumState = undefined;
-    if (thisResource){
+    if (thisResource) {
         prevDatumState = resourceGraphicsData[thisResource.id]
     }
-    
+
     let variables = undefined;
     const potentialVariables = useRef({ //does not trigger re-render when updated
         position: {
             bushScale: {
-                center: {x:0, y:0},
-                topLeft: {x:0, y:0}
+                center: { x: 0, y: 0 },
+                topLeft: { x: 0, y: 0 }
             },
             subBushScale: {
-                center: {x:0, y:0},
-                topLeft: {x:0, y:0}
+                center: { x: 0, y: 0 },
+                topLeft: { x: 0, y: 0 }
             }
         },
-        isResourcePositionReevaluationPossible:true
+        isResourcePositionReevaluationPossible: true
     })
 
 
     let isConnectedTemp = false
     let isConnectionLinesVisibleTemp = false
+    let delayLightUpStyleTemp = false
     //leave variables reference unchanged if there is a reference
-    if (prevDatumState){
+    if (prevDatumState) {
         variables = prevDatumState.variables
 
         isConnectedTemp = prevDatumState.state.isConnected
         isConnectionLinesVisibleTemp = prevDatumState.state.isConnectionLinesVisible
+        delayLightUpStyleTemp = prevDatumState.state.isConnectionLinesVisible.delayLightUpStyle
     } else {
         //define new reference if there is no previous reference
         variables = potentialVariables
@@ -50,19 +52,20 @@ export function useResourceIconGraphicsManager(thisResource) {
 
     const [state, setState] = useState({ //triggers re-render when updated
         isConnected: isConnectedTemp,
-        isConnectionLinesVisible: isConnectionLinesVisibleTemp
+        isConnectionLinesVisible: isConnectionLinesVisibleTemp,
+        delayLightUpStyle: delayLightUpStyleTemp
     })
 
 
     const actions = {
         commitState() { //commit changes and trigger rerender
-            const temp = {...state}
+            const temp = { ...state }
             setState(temp) //set state to modified copy to trigger rerender
         },
-        setIsResourcePositionReevaluationPossible(val){
+        setIsResourcePositionReevaluationPossible(val) {
             resourceGraphicsData[thisResource.id].variables.isResourcePositionReevaluationPossible = val
         },
-        getConnectedResourceGraphicsDataIds(){
+        getConnectedResourceGraphicsDataIds() {
 
             const connectedIds = thisResource.connections.map((resource) => resource.id)
             const connectedResourceGraphicsData = [thisResource.id, ...connectedIds]
@@ -71,43 +74,49 @@ export function useResourceIconGraphicsManager(thisResource) {
             potentialconnectedResourceGraphicsDataIdsGlobal = [...connectedResourceGraphicsData]
             return connectedResourceGraphicsData
         },
-        updateConnectedResourceIconPositions(){
+        updateConnectedResourceIconPositions() {
 
             updateResourceIconPositions(this.getConnectedResourceGraphicsDataIds())
-        
+
         },
-        setIsConnectionLinesVisible (isConnectionLinesVisible) {
+        setIsConnectionLinesVisible(isConnectionLinesVisible) {
 
             state.isConnectionLinesVisible = isConnectionLinesVisible
 
         },
         //master function that handles all connection related events
-        setIsConnected (isConnected) { 
-            if (isConnected){
-                resetAllResourceIcons()
+        setIsConnected(isConnected) {
+            resetAllResourceIcons()
+            if (isConnected) {
                 //clicked to confirm icon connected: potential=real
-                connectedResourceGraphicsDataIdsGlobal = {...potentialconnectedResourceGraphicsDataIdsGlobal}
+                connectedResourceGraphicsDataIdsGlobal = [...potentialconnectedResourceGraphicsDataIdsGlobal]
+
+                //update connected status for all connected resources
+                this.getConnectedResourceGraphicsDataIds().map((id) => {
+                    const connectedresourceGraphicsDatum = resourceGraphicsData[id]
+
+
+                    connectedresourceGraphicsDatum.state.isConnected = isConnected
+                    //light up delay for thisResource
+                    connectedresourceGraphicsDatum.state.delayLightUpStyle = true
+                    connectedresourceGraphicsDatum.actions.commitState()
+
+                })
+
+                state.delayLightUpStyle = false
+
+
+                //update stuff in thisResource
+                state.isConnected = isConnected
+                this.setIsConnectionLinesVisible(isConnected)
+                handleTreeContainer(isConnected)
+                this.commitState()
             }
-            //update connected status for all connected resources
-            this.getConnectedResourceGraphicsDataIds().map((id) => {
-                const connectedresourceGraphicsDatum = resourceGraphicsData[id]
 
-
-                connectedresourceGraphicsDatum.state.isConnected = isConnected
-                connectedresourceGraphicsDatum.actions.commitState()
-
-            })  // update connection visibility of connected resources
-
-
-            //update stuff in thisResource
-            state.isConnected = isConnected
-            this.setIsConnectionLinesVisible(isConnected)
-            handleTreeContainer(isConnected)
-            this.commitState()
 
 
         },
-        storeAbsolutePosition(position, centerPosition){
+        storeAbsolutePosition(position, centerPosition) {
 
             variables.current.position[visionScale].topLeft = position
             variables.current.position[visionScale].center = centerPosition
@@ -116,7 +125,7 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 
     //store datum in resource data if this resource parameter given
-    if (thisResource){
+    if (thisResource) {
 
 
         const resourceGraphicsDatum = {
@@ -128,10 +137,10 @@ export function useResourceIconGraphicsManager(thisResource) {
         }
 
         // console.log(resourceGraphicsDatum)
-    
+
         resourceGraphicsData[thisResource.id] = resourceGraphicsDatum
-    
-    
+
+
         return [resourceGraphicsDatum, actions, visionScale] //make vision scale selector in manager
     }
 
@@ -142,19 +151,19 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 
 
-export function useresourceGraphicsDatumSelector(id){
+export function useresourceGraphicsDatumSelector(id) {
     return resourceGraphicsData[id]
 }
 
 
-export function handleTreeContainer(isConnected){
-            
-    const opacityControlG = document.getElementById('opacityControlG')
-    if (isConnected){
-        opacityControlG.style.filter = 'brightness(60%)'
+export function handleTreeContainer(isConnected) {
 
-    } else{
-        opacityControlG.style.filter = 'brightness(100%)'
+    const brightnessControlG = document.getElementById('brightnessControlG')
+    if (isConnected) {
+        brightnessControlG.style.filter = 'brightness(60%)'
+
+    } else {
+        brightnessControlG.style.filter = 'brightness(100%)'
 
     }
 }
@@ -164,6 +173,7 @@ export function resetAllResourceIcons() { //erase all connections
         const resourceGraphicsDatum = resourceGraphicsData[id]
 
         resourceGraphicsDatum.state.isConnected = false
+        resourceGraphicsDatum.state.delayLightUpStyle = false
         resourceGraphicsDatum.actions.setIsConnectionLinesVisible(false)
         handleTreeContainer(false)
         resourceGraphicsDatum.actions.commitState()
@@ -172,19 +182,18 @@ export function resetAllResourceIcons() { //erase all connections
     // setIsResourcePositionReevaluationPossibleGlobal(true)
 }
 
-export function updateResourceIconPositions(ids){
+export function updateResourceIconPositions(ids) {
+    if (isResourcePositionReevaluationPossibleGlobal()) {
+        ids.forEach(function (id) {
 
-    if (isResourcePositionReevaluationPossibleGlobal()){
-        ids.forEach(function(id) {
-        
             resourceGraphicsData[id].actions.setIsResourcePositionReevaluationPossible(true)
             resourceGraphicsData[id].actions.commitState()
-    
+
         });
     }
 }
 
-export function getGraphicsDataFromIds(idList){
+export function getGraphicsDataFromIds(idList) {
     const graphicsData = {}
     idList.map((id) => graphicsData[id] = resourceGraphicsData[id])
     return graphicsData

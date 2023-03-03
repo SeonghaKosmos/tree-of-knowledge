@@ -179,7 +179,7 @@ function D3Tree(props) {
             <svg id={props.containerSvgId} className={`${styles.treeContainerSvg} zoom-in-cursor`} width={props.treeWidth} height={props.treeHeight}>
                 <g id={props.containerGId} scale={props.treeScale}>
                     <svg id={props.positionReferenceContainerId}></svg>
-                    <g id={props.opacityControlGId}>
+                    <g id={props.brightnessControlGId}>
                         <g id={props.linksGId} />
                         <g id={props.nodesGId} />
                     </g>

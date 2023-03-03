@@ -1,25 +1,28 @@
-import { useEffect, useReducer, useState } from "react"
+import { useEffect, useReducer, useRef, useState } from "react"
 import { shallowEqual, useSelector } from "react-redux"
 
 
-export function useResourceIconStyle(isConnected){
+export function useResourceIconStyle(resourceGraphicsDatum){
     
+    const isConnected = resourceGraphicsDatum.state.isConnected
+    const delayedLightUp = resourceGraphicsDatum.state.delayLightUpStyle ? 'delayedLightUp' : ''
     const minusculeBushScaleBoundary = useSelector((state) => state.zoom.minusculeBushScaleBoundary, shallowEqual)
     const isMinusculeScale = useSelector((state) => state.zoom.scale < minusculeBushScaleBoundary, shallowEqual)
 
-    const [styleClasses, setStyleClasses] = useState('minusculeScale')
-    const connectedIconStyleClass = isConnected ? 'isConnected' : ''
-    // console.log('evaluating styles')
+    // const styleClasses
+    const [scaleDependentClass, setScaleDependentClass] = useState('minusculeScale')
+    const connectionDependentClass = isConnected ? 'isConnected' : ''
+    // console.log('delayedLightUp: ',delayedLightUp)
 
     useEffect(()=>{ //update styles when scale changes
 
-        if (isMinusculeScale && styleClasses != 'minusculeScale'){
+        if (isMinusculeScale && scaleDependentClass != 'minusculeScale'){
             
-            setStyleClasses('minusculeScale')
+            setScaleDependentClass('minusculeScale')
             
-        } else if ( !isMinusculeScale && styleClasses != 'notMinusculeScale'){
+        } else if ( !isMinusculeScale && scaleDependentClass != 'notMinusculeScale'){
    
-            setStyleClasses('notMinusculeScale')
+            setScaleDependentClass('notMinusculeScale')
         } else{
             // console.log('doing nothing')
         }
@@ -27,5 +30,6 @@ export function useResourceIconStyle(isConnected){
 
     }, [isMinusculeScale])
 
-    return styleClasses+' '+connectedIconStyleClass
+    const styleClasses = [scaleDependentClass, connectionDependentClass, delayedLightUp]
+    return styleClasses
 }

@@ -49,7 +49,7 @@ function ResourceIcon(props){
 
 
     const resourceIconScale = useSelector((state) => state.scale[visionScale].resourceIconScale, shallowEqual)
-    const styleClasses = useResourceIconStyle(isConnected)
+    const styleClasses = useResourceIconStyle(resourceGraphicsDatum)
     //</styles>
 
     //<element ids>
@@ -114,10 +114,13 @@ function ResourceIcon(props){
             graphicsDatumActions.storeAbsolutePosition(topLeftPosition, centerPosition)
             // console.log(topLeftPosition)
             // console.log(document.getElementById(props.resource.id))
-            console.log('resourceIconScale: ', resourceIconScale)
             graphicsDatumActions.setIsResourcePositionReevaluationPossible(false)
 
+            //no delay
+
         }
+
+        // resourceGraphicsDatum.state.delayLightUpStyle = false
 
       
     })
@@ -140,7 +143,7 @@ function ResourceIcon(props){
     
     const resourceIcon = 
     <ResourceIconRoot
-        className={`resourceIcon ${styleClasses}`}
+        className={`resourceIcon ${styleClasses.join(' ')}`}
         id={props.resource.id}
         width={width} 
         height={height} 

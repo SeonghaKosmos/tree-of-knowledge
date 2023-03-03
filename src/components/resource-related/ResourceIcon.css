@@ -21,11 +21,13 @@
 .minusculeScale{
     border-radius: 50%;
     color: transparent;
+    transition: 0.1s ease-in-out;
 }
 
 .notMinusculeScale{
     border-radius: 4px;
     color: black;
+    transition: 0.1s ease-in-out;
 }
 
 
@@ -35,3 +37,23 @@
     background-color: #f15125;
 }
 
+
+.delayedLightUp{
+    animation: delayedLightUp 0.4s;
+}
+
+
+@keyframes delayedLightUp{
+    0%{
+        filter: brightness(60%);
+        background-color: #f07655;
+    }
+    50%{
+        filter: brightness(60%);
+        background-color: #f07655;
+    }
+    100%{
+        filter: brightness(130%);
+        background-color: #f15125;
+    }
+}
