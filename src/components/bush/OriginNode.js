@@ -11,7 +11,7 @@ function OriginNode(){
         //remove shadow from origin node
         try{
             const bushContainerG = document.getElementById('originNode').parentElement.parentElement
-            bushContainerG.classList = []
+            bushContainerG.classList.remove('drop-shadowed-bush')
             bushContainerG.classList.add('pointerEventLess')
         } catch{
             

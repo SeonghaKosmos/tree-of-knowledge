@@ -1,3 +1,5 @@
+import { getRenderedDimensions } from "./DimensionsLogic"
+
 let reevaluationPossible = true //automatically evaluate position on first tree render
 let resourcePositionsStabilized = false
 export const treeContainerGPosition = {
@@ -25,6 +27,34 @@ export function getRelativePositionOfElementInContainer(container, element){
         x: x,
         y: y
     }
+}
+
+export function getZoomParams(isCentered){
+
+    const treeContainerG = document.getElementById('treeContainerG')
+    const treeContainerSvg = document.getElementById('treeContainerSvg')
+
+
+    const treeDims = getRenderedDimensions(treeContainerG, 1)
+    const treeSvgDims = getRenderedDimensions(treeContainerSvg, 1)
+
+    console.log(treeDims)
+    console.log(treeSvgDims)
+    console.log(isCentered)
+
+    const offSets  = {}
+
+    if (isCentered) {
+        offSets.x = (treeSvgDims.width - treeDims.width) / 2
+        offSets.y = (treeSvgDims.height - treeDims.height) / 2 
+    } else {
+        const treeRelativePos = getRelativePositionOfElementInContainer(treeContainerSvg, treeContainerG)
+        offSets.x = treeRelativePos.x
+        offSets.y = treeRelativePos.y
+    }
+
+
+    return [treeDims, offSets]
 }
 
 

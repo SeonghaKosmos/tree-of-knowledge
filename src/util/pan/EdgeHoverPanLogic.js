@@ -1,4 +1,4 @@
-import { getRenderedDimensions } from "./DimensionsLogic"
+import { getRenderedDimensions } from "../DimensionsLogic"
 
 
 

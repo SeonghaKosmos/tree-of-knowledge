@@ -1,54 +1,14 @@
-import styled from "styled-components";
 import D3Tree from "./D3Tree";
 import BushNode from "../bush/BushNode";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import styles from '../tree.module.css'
 import React, { useEffect } from "react";
-import useZoom from "../../hooks/use-zoom";
-import useDimensions from "../../hooks/use-dimensions";
-import { renderedDimensionsActions } from "../../store/store";
-import { getRenderedDimensions } from "../../util/DimensionsLogic";
-import { scale } from "../../store/visuals/zoomSlice";
-import D3TreeTemplate from "./D3Tree";
-
-
-
-const TreeOfKnowledgeContainerRoot = styled.div`
-    width: ${props => (`${props.width}px`)};
-    height: ${props => (`${props.height}px`)};
-    /* border:1px solid red; */
-    
-    scale: ${props => (props.scale)};
-
-
-    & #treeContainerG{
-      position:relative;
-      /* visibility: visible; */
-      pointer-events: visible;
-      border: 2px solid black;
-    }
-
-    & #treeContainerSvg{
-      overflow: visible;
-    }
-
-    & #${props => (props.zoomActionTargetDivId)}{
-      width: ${props => (`${props.width}px`)};
-      height: ${props => (`${props.height}px`)};
-      position:relative;
-    }
-
-`
 
 
 
 
 
-
-
-
-
-function TreeOfKnowledgeContainer(props) {
+function TreeOfKnowledgeContainer() {
 
   console.log('rendering tree container')
   const [data, treeOverlayElementsContainerId] = useSelector((state) => [
@@ -74,35 +34,21 @@ function TreeOfKnowledgeContainer(props) {
   const containerGId = useSelector((state) =>
     state.importantElementIds.treeContainerGId, shallowEqual)
 
-  const zoomActionTargetDivId = 'zoomActionTargetDiv'
-
-
-
-
-
-  useDimensions(treeScale)
-
 
 
 
 
   // console.log(`renderedTreeWidth ${renderedTreeWidth} renderedTreeHeight ${renderedTreeHeight}`)
 
-  useZoom('treeContainerSvg', `${containerGId}`)
-
 
 
 
   return (
-    <TreeOfKnowledgeContainerRoot
-      id='treeOfKnowledgeContainerRoot'
-      zoomActionTargetDivId={zoomActionTargetDivId}
-      // width={renderedTreeWidth} 
-      // height={renderedTreeHeight} 
-      scale={treeScale}>
+    <>
 
       <D3Tree
         data={data}
+        setupMotherTree={true}
         nodesGId={nodesGId}
         linksGId={linksGId}
         containerGId={containerGId}
@@ -121,7 +67,7 @@ function TreeOfKnowledgeContainer(props) {
         linkClass={styles.mainLink}
         nodeComponentFunc={BushNode} />
 
-    </TreeOfKnowledgeContainerRoot>
+    </>
 
   )
 }

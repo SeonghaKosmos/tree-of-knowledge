@@ -20,7 +20,7 @@ function RootNode(){
         //remove shadow from root node
         try{
             const bushContainerG = document.getElementById('rootNode').parentElement.parentElement
-            bushContainerG.classList = []
+            // console.log(bushContainerG.classList)
             bushContainerG.classList.add('pointerEventLess')
             bushContainerG.classList.add('rootNodeContainerG')
         } catch{

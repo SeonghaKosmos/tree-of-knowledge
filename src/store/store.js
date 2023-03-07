@@ -8,7 +8,7 @@ import renderedDimensionsSlice from './visuals/renderedDimensionsSlice'
 
 
 
-let store = configureStore({
+export let store = configureStore({
     reducer: {
         dimensions: dimensionsSlice.reducer,
         scale: scaleSlice.reducer,
@@ -29,6 +29,5 @@ export const TreeDataSliceActions = treeDataSlice.actions
 export const zoomSliceActions = zoomSlice.actions
 export const importantElementIdsActions = importantElementIdsSlice.actions
 export const renderedDimensionsActions = renderedDimensionsSlice.actions
-export default store
 
 

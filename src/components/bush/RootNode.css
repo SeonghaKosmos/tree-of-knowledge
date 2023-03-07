@@ -10,10 +10,6 @@
     pointer-events: none;
 }
 
-.rootNodeContainerG{
-    filter: drop-shadow(3px 5px 2px rgb(0 0 0 / 0.4));
-}
-
 .potText{
     font-size:30px;
 }

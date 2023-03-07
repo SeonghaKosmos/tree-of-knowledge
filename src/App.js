@@ -1,15 +1,12 @@
-import logo from './logo.svg';
 import './App.css';
-import styled from "styled-components";
 import TreeOfKnowledgeContainer from './components/tree/TreeOfKnowledgeContainer';
 import { useEffect, useRef } from 'react';
 import BootStrapNavBar from './components/GUI/BootStrapNavBar';
-import useDimensions from './hooks/use-dimensions';
 import './global.css'
-import { handleTreeContainer, resetAllResourceIcons, useResourceIconGraphicsManager } from './hooks/resource-icon/use-resource-icon-graphics-manager';
-import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { dispatch } from 'd3';
-import { renderedDimensionsActions } from './store/store';
+import { handleTreeContainer, resetAllResourceIcons } from './hooks/resource-icon/use-resource-icon-graphics-manager';
+import { getZoomParams } from './util/positionManager';
+import setupZoom from './util/tree/setupZoom';
+import setupMotherTree from './util/tree/setupMotherTree';
 
 
 
@@ -21,36 +18,18 @@ function App() {
   const navBar = useRef()
 
 
-  //zoomwindow
-  //<dimensions>
-  const dispatch = useDispatch()
-
-  function storeScreenDimensions() {
-    dispatch(renderedDimensionsActions.setScreenDimensions({
-      width: window.innerWidth,
-      height: window.innerHeight
-    }))
-  }
 
   useEffect(() => {
-    storeScreenDimensions()
     document.getElementById('App').addEventListener('mousemove', onAppMouseMoved)
   }, [])
 
 
   //</dimensions>
 
-
-  window.onresize = function () {
-    //enable dimensions update
-    storeScreenDimensions()
-  }
-
   const onAppClicked = (event) => {
     resetAllResourceIcons()
     handleTreeContainer(false)
     console.log('click')
-
 
   }
 
@@ -59,9 +38,8 @@ function App() {
   }
 
 
-  // const onHoverPanDetectorMouseMoved = (event) => {
-  //   console.log('onHoverPanDetectorMouseMoved')
-  // }
+
+
 
 
   return (

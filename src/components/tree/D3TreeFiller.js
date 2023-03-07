@@ -1,6 +1,8 @@
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
+import { useDispatch } from 'react-redux'
+import setupMotherTree from '../../util/tree/setupMotherTree'
 
 
 
@@ -8,16 +10,26 @@ import ReactDOM from 'react-dom'
 
 function D3TreeFiller(props) {
 
+    console.log('filling tree')
+
     const [isTreeLoaded, setIsTreeLoaded] = useState(false)
 
     const NodeComponent = props.nodeComponentFunc
 
-    useEffect(() => setIsTreeLoaded(true))
+    const dispatch = useDispatch()
+
+    useEffect(() => {
+        setIsTreeLoaded(true)
+        if (isTreeLoaded && props.setupMotherTree){
+            setupMotherTree(props.updateTreePositionFunc, dispatch)
+        }
+    })
+
+    const descendants = props.dataRoot.current.descendants()
 
     return (
         <>
-            {isTreeLoaded && props.descendants.map(descendant => {
-                const node = document.getElementById(descendant.data.name)
+            {isTreeLoaded && descendants.map(descendant => {
 
                 return ReactDOM.createPortal(
                     <NodeComponent

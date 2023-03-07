@@ -5,6 +5,10 @@
 } */
 
 .treeContainerSvg{
-    overflow: visible;
+    overflow:visible;
     height:inherit;
+}
+
+.scalerG {
+    scale: 0.7;
 }

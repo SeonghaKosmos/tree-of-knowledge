@@ -5,6 +5,7 @@ let visionScaleJustChanged = false
 
 export const scale = {val: 1}
 export const visionScale = {val: 'bushScale'}
+export const maxScale = {val: 8}
 
 const initialState = {
     scale: 1,
