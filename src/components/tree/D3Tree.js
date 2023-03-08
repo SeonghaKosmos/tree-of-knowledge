@@ -6,7 +6,7 @@ import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import Resource from '../../util/Resource';
 import D3TreeFiller from './D3TreeFiller';
-import {getZoomParams} from '../../util/positionManager';
+import {getBushDragDisplacement, getZoomParams} from '../../util/positionManager';
 import setupZoom from '../../util/tree/setupZoom';
 import setupMotherTree from '../../util/tree/setupMotherTree';
 
@@ -58,7 +58,7 @@ function D3Tree(props) {
     function getCoords(d, nodeData) {
 
         // console.log(`init: ${nodeData.nodeWidth}, ${nodeData.nodeHeight}`)
-        let yCoord = props.treeHeight - d.y + nodeHeight / 2//invert (bottom to top) and add space for first node 
+        let yCoord = d.y + nodeHeight / 2
 
         //for links
         if (!nodeData.nodeWidth) {
@@ -96,12 +96,20 @@ function D3Tree(props) {
         return root
     }
 
+
+    function invertTreeData(root){
+        root.descendants().map((node) => {
+            node.y = props.treeHeight - node.y
+        })
+    }
     
     const root = generateTreeData()
+    invertTreeData(root)
     const rootRef = useRef(root)
     if (props.setupMotherTree){
         motherTreeRootRef = {...rootRef}
     }
+
 
 
     function updateLinePositions(){
@@ -142,8 +150,12 @@ function D3Tree(props) {
             d3.select(`#${event.subject.data.id}`)
                 .attr('transform', function (d) {
 
-                    d.x += event.dx
-                    d.y -= event.dy
+                    const bushDisplacement = getBushDragDisplacement(
+                        d.x, d.y, 
+                        event.dx, event.dy,
+                        props.nodeWidth, props.nodeHeight)
+                    d.x += bushDisplacement.dx
+                    d.y += bushDisplacement.dy
 
                     updateLinePositions()
                     const bushResourceIds = Resource.getIdList(d.data.resources)
