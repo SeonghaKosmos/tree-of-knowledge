@@ -4,7 +4,7 @@ import { updateResourceIconPositions } from '../../hooks/resource-icon/use-resou
 import styles from '../tree.module.css'
 import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import Resource from '../../util/Resource';
+import { getResourceIdsList, Resource } from '../../util/Resource';
 import D3TreeFiller from './D3TreeFiller';
 import {getBushDragDisplacement, getZoomParams} from '../../util/positionManager';
 import setupZoom from '../../util/tree/setupZoom';
@@ -92,6 +92,8 @@ function D3Tree(props) {
         const root = d3.hierarchy(props.data)
 
         treeLayout(root)
+        console.log(root)
+        // console.log(JSON.stringify(root))
 
         return root
     }
@@ -158,7 +160,7 @@ function D3Tree(props) {
                     d.y += bushDisplacement.dy
 
                     updateLinePositions()
-                    const bushResourceIds = Resource.getIdList(d.data.resources)
+                    const bushResourceIds = getResourceIdsList(d.data.resources)
                     updateResourceIconPositions(bushResourceIds)
                     if (event.type === 'end') {
                         const [treeDims, offSets] = getZoomParams()
@@ -241,7 +243,7 @@ function D3Tree(props) {
         <>
             <svg id={props.containerSvgId} className={`${styles.treeContainerSvg} zoom-in-cursor`} width={window.screen.width} height={window.screen.height}>
                 <g id={props.containerGId}>
-                    <g className='scalerG' style={{ transform: `scale(${props.treeScale})`, transformOrigin: '0 0' }}>
+                    <g style={{ transform: `scale(${props.treeScale})`, transformOrigin: '0 0' }}>
                         <svg id={props.positionReferenceContainerId}></svg>
                         <g id={props.brightnessControlGId}>
                             <g id={props.linksGId} />

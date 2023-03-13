@@ -67,7 +67,7 @@ export function useResourceIconGraphicsManager(thisResource) {
         },
         getConnectedResourceGraphicsDataIds() {
 
-            const connectedIds = thisResource.connections.map((resource) => resource.id)
+            const connectedIds = thisResource.connections
             const connectedResourceGraphicsData = [thisResource.id, ...connectedIds]
 
             //set potention connected icons to just evaluated icons

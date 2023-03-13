@@ -1,12 +1,10 @@
 import './App.css';
 import TreeOfKnowledgeContainer from './components/tree/TreeOfKnowledgeContainer';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import './global.css'
 import { handleTreeContainer, resetAllResourceIcons } from './hooks/resource-icon/use-resource-icon-graphics-manager';
-import { getZoomParams } from './util/positionManager';
-import setupZoom from './util/tree/setupZoom';
-import setupMotherTree from './util/tree/setupMotherTree';
+import React from "react";
 
 
 
@@ -38,10 +36,6 @@ function App() {
   }
 
 
-
-
-
-
   return (
 
 
@@ -60,4 +54,4 @@ function App() {
   );
 }
 
-export default App;
+export default React.memo(App);

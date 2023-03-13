@@ -13,7 +13,8 @@ let prevOffsets = {
 }
 
 
-const setupMotherTree = (updateTreePositionFunc, dispatch) => {
+export default async function setupMotherTree(updateTreePositionFunc, dispatch){
+
     // let [renderedWidth, setRenderedWidth] = useState(initWidth)
     // let [renderedHeight, setRenderedHeight] = useState(initHeight)
     console.log('setting up tree')
@@ -53,6 +54,7 @@ const setupMotherTree = (updateTreePositionFunc, dispatch) => {
 
     prevOffsets = {...offSets}
 
-}
 
-export default setupMotherTree
+    return 'setup done'
+
+}

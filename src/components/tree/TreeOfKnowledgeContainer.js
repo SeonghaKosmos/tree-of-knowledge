@@ -2,7 +2,10 @@ import D3Tree from "./D3Tree";
 import BushNode from "../bush/BushNode";
 import { shallowEqual, useDispatch, useSelector } from "react-redux";
 import styles from '../tree.module.css'
-import React, { useEffect } from "react";
+import React, { useState } from "react";
+import axios from 'axios';
+import { allCreatedResources, setAllCreatedResources } from "../../util/Resource";
+import LoadingMessage from "./LoadingMessage";
 
 
 
@@ -11,9 +14,9 @@ import React, { useEffect } from "react";
 function TreeOfKnowledgeContainer() {
 
   console.log('rendering tree container')
-  const [data, treeOverlayElementsContainerId] = useSelector((state) => [
-    state.treeData.structure,
-    state.importantElementIds.treeOverlayElementsContainerId], shallowEqual)
+  const treeOverlayElementsContainerId = useSelector((state) =>
+    state.importantElementIds.treeOverlayElementsContainerId, shallowEqual)
+
   const treeScale = useSelector((state) => state.scale.treeScale, shallowEqual)
 
   //tree dimensions
@@ -36,7 +39,20 @@ function TreeOfKnowledgeContainer() {
 
 
 
+  const [treeData, setTreeData] = useState()
 
+  if (!treeData){
+    axios.get('http://localhost:3001')
+    .then(res => {
+      console.log(res.data)
+      setTreeData(res.data.treeData)
+      setAllCreatedResources({...res.data.allResources})
+      console.log(allCreatedResources)
+    })
+    .catch(e => {
+      console.log(e)
+    })
+  }
 
   // console.log(`renderedTreeWidth ${renderedTreeWidth} renderedTreeHeight ${renderedTreeHeight}`)
 
@@ -44,30 +60,33 @@ function TreeOfKnowledgeContainer() {
 
 
   return (
+
     <>
-
-      <D3Tree
-        data={data}
-        setupMotherTree={true}
-        nodesGId={nodesGId}
-        linksGId={linksGId}
-        containerGId={containerGId}
-        treeOverlayElementsContainerId={treeOverlayElementsContainerId}
-        containerSvgId='treeContainerSvg'
-        positionReferenceContainerId={'positionReferenceContainer'}
-        brightnessControlGId={'brightnessControlG'}
-        resourceConnectionLinesContainerId={'resourceConnectionLinesContainer'}
-        resourceIconsContainerId={'resourceIconsContainer'}
-        treeWidth={treeWidth}
-        treeHeight={treeHeight}
-        treeScale={treeScale}
-        nodeWidth={bushWidth}
-        nodeHeight={bushHeight}
-        nodePadding={bushPadding}
-        linkClass={styles.mainLink}
-        nodeComponentFunc={BushNode} />
-
+      {treeData &&
+        <D3Tree
+          data={treeData}
+          setupMotherTree={true}
+          nodesGId={nodesGId}
+          linksGId={linksGId}
+          containerGId={containerGId}
+          treeOverlayElementsContainerId={treeOverlayElementsContainerId}
+          containerSvgId='treeContainerSvg'
+          positionReferenceContainerId={'positionReferenceContainer'}
+          brightnessControlGId={'brightnessControlG'}
+          resourceConnectionLinesContainerId={'resourceConnectionLinesContainer'}
+          resourceIconsContainerId={'resourceIconsContainer'}
+          treeWidth={treeWidth}
+          treeHeight={treeHeight}
+          treeScale={treeScale}
+          nodeWidth={bushWidth}
+          nodeHeight={bushHeight}
+          nodePadding={bushPadding}
+          linkClass={styles.mainLink}
+          nodeComponentFunc={BushNode} />
+      }
+      {!treeData && <LoadingMessage/>}
     </>
+
 
   )
 }

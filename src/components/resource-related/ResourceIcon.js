@@ -9,6 +9,7 @@ import ReactDOM from "react-dom";
 import { useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 import { scale } from "../../store/visuals/zoomSlice";
 import './ResourceIcon.css'
+import { allCreatedResources, Resource } from "../../util/Resource";
 
 export const positionEvalInhibitor = {val:false}
 
@@ -166,10 +167,11 @@ function ResourceIcon(props){
         
         <>
             {/* show connection lines if connected and is the source (showconnected = true)*/}
-            {(isConnected && isConnectionLinesVisible) && props.resource.connections.map((connectedResource)=>{
+            {(isConnected && isConnectionLinesVisible) && props.resource.connections.map((connectedResourceId)=>{
+                console.log(allCreatedResources)
                 return <ResourceConnectionLine
                     resource1={props.resource}
-                    resource2={connectedResource}/> //draw line between this resource and connected resource
+                    resource2={allCreatedResources[connectedResourceId]}/> //draw line between this resource and connected resource
             })}
 
             {/* show resourceIcon in original place if not connected */}

@@ -3,13 +3,14 @@ svg {
     height: 100%;
 }
 
-/* svg{
-    outline: none !important;
-} */
+#treeContainerG{
+    opacity: 0;
+}
 
-/* foreignObject{
-    outline: none !important;
-} */
+.fadeIn{
+    transition: 0.1s ease-in-out;
+    opacity: 1 !important;
+}
 
 g{
     outline: none !important;

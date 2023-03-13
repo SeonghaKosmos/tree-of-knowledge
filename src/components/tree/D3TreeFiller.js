@@ -22,6 +22,12 @@ function D3TreeFiller(props) {
         setIsTreeLoaded(true)
         if (isTreeLoaded && props.setupMotherTree){
             setupMotherTree(props.updateTreePositionFunc, dispatch)
+            .then((msg)=>{
+                console.log(msg)
+                const treeContainerGClassList = document.getElementById('treeContainerG').classList
+
+                treeContainerGClassList.add('fadeIn')
+            })
         }
     })
 
