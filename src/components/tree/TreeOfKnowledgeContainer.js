@@ -49,6 +49,7 @@ function TreeOfKnowledgeContainer() {
       <D3Tree
         data={data}
         setupMotherTree={true}
+        editable={true}
         nodesGId={nodesGId}
         linksGId={linksGId}
         containerGId={containerGId}
