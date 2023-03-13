@@ -203,7 +203,10 @@ function D3Tree(props) {
             })
 
         updateNodePositions()
-        setupBushDrag(nodesSelection)
+        if (props.editable){
+            setupBushDrag(nodesSelection)
+        }
+
             
     }
 
