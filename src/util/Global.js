@@ -11,3 +11,19 @@ export function mapObj(obj, action){
         }
     }
 }
+
+
+
+export function repeatSetTimeout(repetitionCount, interval, func){
+
+    if (repetitionCount > 0){
+        return setTimeout ( 
+            () => {
+                console.log('running timout')
+                func()
+                repeatSetTimeout(repetitionCount - 1, interval, func)
+            }, 
+            interval)
+    }
+
+}

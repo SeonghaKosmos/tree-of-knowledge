@@ -9,6 +9,7 @@ import D3TreeFiller from './D3TreeFiller';
 import {getBushDragDisplacement, getZoomParams} from '../../util/positionManager';
 import setupZoom from '../../util/tree/setupZoom';
 import setupMotherTree from '../../util/tree/setupMotherTree';
+import { repeatSetTimeout } from '../../util/Global';
 
 
 
@@ -234,9 +235,7 @@ function D3Tree(props) {
         if (afterResizeAnimationTimeout){
             clearTimeout(afterResizeAnimationTimeout)
         }
-        afterResizeAnimationTimeout = setTimeout(
-            ()=> updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal),
-            500)
+        afterResizeAnimationTimeout = repeatSetTimeout(12, 50, ()=> updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal))
 
         setupMotherTree(updateTreePosition, dispatch)
     }
