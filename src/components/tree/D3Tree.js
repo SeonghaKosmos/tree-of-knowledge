@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 import { useEffect, useRef } from 'react';
-import { updateResourceIconPositions } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
+import { connectedResourceGraphicsDataIdsGlobal, updateResourceIconPositions } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
 import styles from '../tree.module.css'
 import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -226,7 +226,18 @@ function D3Tree(props) {
     
     const dispatch = useDispatch()
     
+
+    let afterResizeAnimationTimeout
     const onScreenResize = (event) => {
+        updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal)
+
+        if (afterResizeAnimationTimeout){
+            clearTimeout(afterResizeAnimationTimeout)
+        }
+        afterResizeAnimationTimeout = setTimeout(
+            ()=> updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal),
+            500)
+
         setupMotherTree(updateTreePosition, dispatch)
     }
 
