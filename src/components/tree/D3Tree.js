@@ -6,7 +6,7 @@ import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getResourceIdsList, Resource } from '../../util/Resource';
 import D3TreeFiller from './D3TreeFiller';
-import {getBushDragDisplacement, getZoomParams} from '../../util/positionManager';
+import { getBushDragDisplacement, getZoomParams } from '../../util/positionManager';
 import setupZoom from '../../util/tree/setupZoom';
 import setupMotherTree from '../../util/tree/setupMotherTree';
 import { repeatSetTimeout } from '../../util/Global';
@@ -86,50 +86,63 @@ function D3Tree(props) {
 
 
     function generateTreeData() {
+        console.log(props.hierarchy)
         const treeLayout = d3.tree()
             .size([props.treeWidth, props.treeHeight])
             .separation(() => 2)
 
-        const root = d3.hierarchy(props.data)
+        const root = d3.hierarchy(props.hierarchy)
 
         treeLayout(root)
-        // console.log(root)
-        // console.log(JSON.stringify(root))
+
+        //use loaded bush positions
+        if (props.bushPositions){
+            root.descendants().map((node) => {
+                node.x = props.bushPositions[node.data.name].x
+                node.y = props.bushPositions[node.data.name].y
+            })
+        }
+
+
 
         return root
     }
 
 
-    function invertTreeData(root){
+    function invertTreeData(root) {
         root.descendants().map((node) => {
             node.y = props.treeHeight - node.y
         })
     }
-    
+
     const root = generateTreeData()
-    invertTreeData(root)
+    if (!props.bushPositions){
+        invertTreeData(root)
+    }
+
     const rootRef = useRef(root)
-    if (props.setupMotherTree){
-        motherTreeRootRef = {...rootRef}
+    if (props.setupMotherTree) {
+        motherTreeRootRef = { ...rootRef }
     }
 
 
 
-    function updateLinePositions(){
+
+    function updateLinePositions() {
 
         d3.select(`svg #${props.linksGId}`)
-        .selectAll('line.link')
-        .attr('x1', function (d) { return d.source.x; })
-        .attr('y1', function (d) { return getCoords(d.source, { nodeHeight }).y; })
-        .attr('x2', function (d) { return d.target.x; })
-        .attr('y2', function (d) {
-            return getCoords(d.target, { nodeHeight }).y;
-        })
+            .selectAll('line.link')
+            .attr('x1', function (d) { return d.source.x; })
+            .attr('y1', function (d) { return getCoords(d.source, { nodeHeight }).y; })
+            .attr('x2', function (d) { return d.target.x; })
+            .attr('y2', function (d) {
+                return getCoords(d.target, { nodeHeight }).y;
+            })
     }
 
     function createLinks() {
-        
-            d3.select(`svg #${props.linksGId}`)
+
+        d3.select(`svg #${props.linksGId}`)
             .selectAll('line.link')
             .data(rootRef.current.links())
             .join('line')
@@ -141,7 +154,7 @@ function D3Tree(props) {
                 return `${d.target.data.id}`
             })
 
-            updateLinePositions()
+        updateLinePositions()
 
 
 
@@ -149,67 +162,67 @@ function D3Tree(props) {
 
     function setupBushDrag(nodesSelection) {
         nodesSelection
-        .call(d3.drag().on('drag end', (event) => {
-            d3.select(`#${event.subject.data.id}`)
-                .attr('transform', function (d) {
+            .call(d3.drag().on('drag end', (event) => {
+                d3.select(`#${event.subject.data.id}`)
+                    .attr('transform', function (d) {
 
-                    const bushDisplacement = getBushDragDisplacement(
-                        d.x, d.y, 
-                        event.dx, event.dy,
-                        props.nodeWidth, props.nodeHeight)
-                    d.x += bushDisplacement.dx
-                    d.y += bushDisplacement.dy
+                        const bushDisplacement = getBushDragDisplacement(
+                            d.x, d.y,
+                            event.dx, event.dy,
+                            props.nodeWidth, props.nodeHeight)
+                        d.x += bushDisplacement.dx
+                        d.y += bushDisplacement.dy
 
-                    updateLinePositions()
-                    const bushResourceIds = getResourceIdsList(d.data.resources)
-                    updateResourceIconPositions(bushResourceIds)
-                    if (event.type === 'end') {
-                        const [treeDims, offSets] = getZoomParams()
-                        setupZoom(
-                            'treeContainerSvg', 
-                            'treeContainerG',
-                            treeDims,
-                            offSets,
-                        )
-                    }
+                        updateLinePositions()
+                        const bushResourceIds = getResourceIdsList(d.data.resources)
+                        updateResourceIconPositions(bushResourceIds)
+                        if (event.type === 'end') {
+                            const [treeDims, offSets] = getZoomParams()
+                            setupZoom(
+                                'treeContainerSvg',
+                                'treeContainerG',
+                                treeDims,
+                                offSets,
+                            )
+                        }
 
-                    const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
-                    return `translate(${coords.x}, ${coords.y})`
+                        const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
+                        return `translate(${coords.x}, ${coords.y})`
 
-                })
+                    })
 
-        }))
+            }))
     }
 
-    function updateNodePositions(){
+    function updateNodePositions() {
         d3.select(`svg #${props.nodesGId}`)
-        .selectAll(`g.${styles.node}`)
-        .attr('transform', function (d) {
-            //smaller g for origin node
-            const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
-            // console.log(d.data.name, d.x, d.y)
-            // console.log(d.data.name, coords.x, coords.y)
-            // console.log(d.data.name, d)
-            return `translate(${coords.x}, ${coords.y})`
-        })
+            .selectAll(`g.${styles.node}`)
+            .attr('transform', function (d) {
+                //smaller g for origin node
+                const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
+                // console.log(d.data.name, d.x, d.y)
+                // console.log(d.data.name, coords.x, coords.y)
+                // console.log(d.data.name, d)
+                return `translate(${coords.x}, ${coords.y})`
+            })
     }
 
     function createBushNodes() {
-        const nodesSelection = 
-        d3.select(`svg #${props.nodesGId}`)
-            .selectAll(`g.${styles.node}`)
-            .data(rootRef.current.descendants(), (d) => d.data.id)
-            .join('g')
-            .classed(`${styles.node} drop-shadowed-bush`, true)
-            .attr('id', (d) => {
-                return d.data.id
-            })
+        const nodesSelection =
+            d3.select(`svg #${props.nodesGId}`)
+                .selectAll(`g.${styles.node}`)
+                .data(rootRef.current.descendants(), (d) => d.data.id)
+                .join('g')
+                .classed(`${styles.node} drop-shadowed-bush`, true)
+                .attr('id', (d) => {
+                    return d.data.id
+                })
 
         updateNodePositions()
-        if (props.editable){
+        if (props.editable) {
             setupBushDrag(nodesSelection)
         }
-            
+
     }
 
     const updateTreePosition = () => {
@@ -224,18 +237,18 @@ function D3Tree(props) {
         createLinks()
     }
 
-    
+
     const dispatch = useDispatch()
-    
+
 
     let afterResizeAnimationTimeout
     const onScreenResize = (event) => {
         updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal)
 
-        if (afterResizeAnimationTimeout){
+        if (afterResizeAnimationTimeout) {
             clearTimeout(afterResizeAnimationTimeout)
         }
-        afterResizeAnimationTimeout = repeatSetTimeout(12, 50, ()=> updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal))
+        afterResizeAnimationTimeout = repeatSetTimeout(12, 50, () => updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal))
 
         setupMotherTree(updateTreePosition, dispatch)
     }
@@ -255,7 +268,7 @@ function D3Tree(props) {
         <>
             <svg id={props.containerSvgId} className={`${styles.treeContainerSvg} zoom-in-cursor`} width={window.screen.width} height={window.screen.height}>
                 <g id={props.containerGId} className={props.fadeIn && 'delayedInvisability'}>
-                    <g style={{ scale:0.7, transform: `scale(${props.treeScale})`, transformOrigin: '0 0' }}>
+                    <g style={{ scale: 0.7, transform: `scale(${props.treeScale})`, transformOrigin: '0 0' }}>
                         <svg id={props.positionReferenceContainerId}></svg>
                         <g id={props.brightnessControlGId}>
                             <g id={props.linksGId} />

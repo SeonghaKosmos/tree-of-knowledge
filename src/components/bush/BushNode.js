@@ -44,7 +44,7 @@ function BushNode(props) {
     // console.log(props.data.resources)
     // console.log(props.data.resources.getResourcesOfLevel(1))
 
-    const data = {
+    const hierarchy = {
         name: 'level 1',
         id: uuid().replace(/-/g, ''),
         resources: props.data.resources.getResourcesOfLevel(1),
@@ -161,7 +161,7 @@ function BushNode(props) {
                             {props.data.name}
                         </span>
                         <D3Tree
-                            data={data}
+                            hierarchy={hierarchy}
                             nodesGId={nodesGId}
                             linksGId={linksGId}
                             containerGId={containerGId}

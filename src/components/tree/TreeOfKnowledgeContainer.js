@@ -46,7 +46,7 @@ function TreeOfKnowledgeContainer() {
     .then(res => {
       console.log(res.data)
       setTreeData(res.data.treeData)
-      setAllCreatedResources({...res.data.allResources})
+      setAllCreatedResources(res.data.allResources)
       // console.log(allCreatedResources)
     })
     .catch(e => {
@@ -64,7 +64,8 @@ function TreeOfKnowledgeContainer() {
     <>
       {treeData &&
         <D3Tree
-          data={treeData}
+          hierarchy={treeData.hierarchy}
+          bushPositions={treeData.bushPositions}
           setupMotherTree={true}
           editable={true}
           fadeIn={true}

@@ -37,7 +37,6 @@ export default async function setupMotherTree(updateTreePositionFunc, dispatch){
     motherTreeRootRef.current.descendants().map((node) => {
         node.x += deltaX / treeScale
         node.y += deltaY / treeScale
-        // node.y -= 100
     })
 
 
