@@ -92,7 +92,7 @@ function D3Tree(props) {
         const root = d3.hierarchy(props.data)
 
         treeLayout(root)
-        console.log(root)
+        // console.log(root)
         // console.log(JSON.stringify(root))
 
         return root
@@ -244,8 +244,8 @@ function D3Tree(props) {
     return (
         <>
             <svg id={props.containerSvgId} className={`${styles.treeContainerSvg} zoom-in-cursor`} width={window.screen.width} height={window.screen.height}>
-                <g id={props.containerGId}>
-                    <g style={{ transform: `scale(${props.treeScale})`, transformOrigin: '0 0' }}>
+                <g id={props.containerGId} className={props.fadeIn && 'delayedInvisability'}>
+                    <g style={{ scale:0.7, transform: `scale(${props.treeScale})`, transformOrigin: '0 0' }}>
                         <svg id={props.positionReferenceContainerId}></svg>
                         <g id={props.brightnessControlGId}>
                             <g id={props.linksGId} />

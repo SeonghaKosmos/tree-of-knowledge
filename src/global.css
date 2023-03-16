@@ -3,8 +3,14 @@ svg {
     height: 100%;
 }
 
-#treeContainerG{
+/* #treeContainerG{
     opacity: 0;
+} */
+
+.delayedInvisability {
+    opacity: 0;
+    transition: 0.1s ease-in-out;
+
 }
 
 .fadeIn{

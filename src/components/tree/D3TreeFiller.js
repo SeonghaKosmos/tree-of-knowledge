@@ -26,7 +26,7 @@ function D3TreeFiller(props) {
                 console.log(msg)
                 const treeContainerGClassList = document.getElementById('treeContainerG').classList
 
-                treeContainerGClassList.add('fadeIn')
+                treeContainerGClassList.remove('delayedInvisability')
             })
         }
     })

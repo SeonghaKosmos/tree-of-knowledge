@@ -20,14 +20,8 @@ export function useResourceIconGraphicsManager(thisResource) {
     let variables = undefined;
     const potentialVariables = useRef({ //does not trigger re-render when updated
         position: {
-            bushScale: {
-                center: { x: 0, y: 0 },
-                topLeft: { x: 0, y: 0 }
-            },
-            subBushScale: {
-                center: { x: 0, y: 0 },
-                topLeft: { x: 0, y: 0 }
-            }
+            x: 0,
+            y: 0
         },
         isResourcePositionReevaluationPossible: true
     })
@@ -67,7 +61,7 @@ export function useResourceIconGraphicsManager(thisResource) {
         },
         getConnectedResourceGraphicsDataIds() {
 
-            const connectedIds = thisResource.connections
+            const connectedIds = [...thisResource.connections]
             const connectedResourceGraphicsData = [thisResource.id, ...connectedIds]
 
             //set potention connected icons to just evaluated icons
@@ -118,8 +112,8 @@ export function useResourceIconGraphicsManager(thisResource) {
         },
         storeAbsolutePosition(position, centerPosition) {
 
-            variables.current.position[visionScale].topLeft = position
-            variables.current.position[visionScale].center = centerPosition
+            variables.current.position.topLeft = position
+            variables.current.position.center = centerPosition
         }
     }
 

@@ -47,7 +47,7 @@ function TreeOfKnowledgeContainer() {
       console.log(res.data)
       setTreeData(res.data.treeData)
       setAllCreatedResources({...res.data.allResources})
-      console.log(allCreatedResources)
+      // console.log(allCreatedResources)
     })
     .catch(e => {
       console.log(e)
@@ -67,6 +67,7 @@ function TreeOfKnowledgeContainer() {
           data={treeData}
           setupMotherTree={true}
           editable={true}
+          fadeIn={true}
           nodesGId={nodesGId}
           linksGId={linksGId}
           containerGId={containerGId}

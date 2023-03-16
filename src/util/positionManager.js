@@ -39,9 +39,9 @@ export function getZoomParams(isCentered) {
     const treeDims = getRenderedDimensions(treeContainerG, 1)
     const treeSvgDims = getRenderedDimensions(treeContainerSvg, 1)
 
-    console.log(treeDims)
-    console.log(treeSvgDims)
-    console.log(isCentered)
+    // console.log(treeDims)
+    // console.log(treeSvgDims)
+    // console.log(isCentered)
 
     const offSets = {}
 

@@ -5,13 +5,16 @@ import React, { useEffect, useRef } from "react";
 import * as d3 from 'd3'
 import { useresourceGraphicsDatumSelector } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 
-const ResourceConnectionLineRoot = styled.line`
+const ResourceConnectionLineRoot = styled.line.attrs(props => ({
+    style: {
+        strokeWidth: props.strokeWidth,
+    },
+  }))`
 
     fill-rule: evenodd;
     fill: red;
     stroke: rgb(115, 213, 240);
     filter: brightness(120%);
-    stroke-width: ${props => `${props.strokeWidth}px`};
     
 `
 
@@ -30,10 +33,10 @@ function ResourceConnectionLine(props) {
     const strokeWidth = 3 / scale
 
 
-    const x1 = resourceGraphicsDatum1.variables.current.position[visionScale].center.x
-    const y1 = resourceGraphicsDatum1.variables.current.position[visionScale].center.y
-    const x2 = resourceGraphicsDatum2.variables.current.position[visionScale].center.x
-    const y2 = resourceGraphicsDatum2.variables.current.position[visionScale].center.y
+    const x1 = resourceGraphicsDatum1.variables.current.position.center.x
+    const y1 = resourceGraphicsDatum1.variables.current.position.center.y
+    const x2 = resourceGraphicsDatum2.variables.current.position.center.x
+    const y2 = resourceGraphicsDatum2.variables.current.position.center.y
     
     const id= 'resourceConnectionLine-'+resourceGraphicsDatum1.thisResource.id+'-'+resourceGraphicsDatum2.thisResource.id
 

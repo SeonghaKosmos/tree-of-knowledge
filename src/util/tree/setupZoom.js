@@ -34,7 +34,7 @@ const setupZoom = (eventSourceId, applyZoomTargetId,
   //set zoom behavior
   const handleZoom = (e) => {
     //update scale
-    // console.log(e)
+    // console.log('handling zoom')
     theDispatch(zoomSliceActions.setScale(e.transform.k))
     setTreeContainerSvgClass(e.transform.k === maxScale.val)
     broadCastScale(e)
