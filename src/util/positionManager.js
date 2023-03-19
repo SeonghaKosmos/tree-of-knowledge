@@ -44,6 +44,8 @@ export function getZoomParams(isCentered) {
     // console.log(isCentered)
 
     const offSets = {}
+    console.log('treeSvgDims: ', treeSvgDims)
+    console.log('treeDims: ', treeDims)
 
     if (isCentered) {
         offSets.x = (treeSvgDims.width - treeDims.width) / 2
@@ -54,8 +56,59 @@ export function getZoomParams(isCentered) {
         offSets.y = treeRelativePos.y
     }
 
+    const prevXLine = document.getElementById('testLineX')
+    const prevYLine = document.getElementById('testLineY')
+
+    if (prevXLine){
+        treeContainerSvg.removeChild(prevXLine)
+    }
+    if (prevYLine){
+        treeContainerSvg.removeChild(prevYLine)
+    }
+    // const lineX = document.createElementNS("http://www.w3.org/2000/svg", "line")
+    // lineX.setAttribute("x1", "0");
+    // lineX.setAttribute("y1", "100");
+    // lineX.setAttribute("x2", offSets.x);
+    // lineX.setAttribute("y2", "100");
+    // lineX.style.stroke = '#8f6b4d'
+    // lineX.style.strokeWidth = '7px'
+    // lineX.id = 'testLineX'
+
+    // const lineY = document.createElementNS("http://www.w3.org/2000/svg", "line")
+    // lineY.setAttribute("x1", "700");
+    // lineY.setAttribute("y1", "0");
+    // lineY.setAttribute("x2", 700);
+    // lineY.setAttribute("y2", offSets.y);
+    // lineY.style.stroke = '#8f6b4d'
+    // lineY.style.strokeWidth = '7px'
+    // lineY.id = 'testLineY'
+
+
+    // treeContainerSvg.appendChild(lineX)
+    // treeContainerSvg.appendChild(lineY)
 
     return [treeDims, offSets]
+}
+
+
+export function getBushPositionsFromRoot(root, offSets) {
+
+    if (!offSets) {
+        offSets = {
+            x: 0,
+            y: 0,
+        }
+    }
+    const descendants = root.descendants()
+    const bushPositions = {}
+    descendants.forEach(node => {
+        bushPositions[node.data.id] = {
+            x: node.x - offSets.x,
+            y: node.y - offSets.y
+        }
+    });
+
+    return bushPositions
 }
 
 export function getBushDragDisplacement(x, y, dx, dy, bushWidth, bushHeight) {
@@ -74,22 +127,22 @@ export function getBushDragDisplacement(x, y, dx, dy, bushWidth, bushHeight) {
 
 
     const potentialNewX = x + dx
-    const potentialLeftEdgeX = (potentialNewX - bushWidth/2 / treeScale) * treeScale
-    const potentialRightEdgeX = (potentialNewX + bushWidth/2 / treeScale) * treeScale
+    const potentialLeftEdgeX = (potentialNewX - bushWidth / 2 / treeScale) * treeScale
+    const potentialRightEdgeX = (potentialNewX + bushWidth / 2 / treeScale) * treeScale
 
-    const theDx = 
+    const theDx =
         potentialLeftEdgeX < 0 ? dx - potentialLeftEdgeX :
-        potentialRightEdgeX > treeSvgDims.width ? dx + (treeSvgDims.width - potentialRightEdgeX) :
-        dx
+            potentialRightEdgeX > treeSvgDims.width ? dx + (treeSvgDims.width - potentialRightEdgeX) :
+                dx
 
     const potentialNewY = y + dy
     const potentialTopY = (potentialNewY) * treeScale
-    const potentialBottomY = (potentialNewY + bushHeight/treeScale) * treeScale
+    const potentialBottomY = (potentialNewY + bushHeight / treeScale) * treeScale
 
-    const theDy = 
+    const theDy =
         potentialTopY < 0 ? dy - potentialTopY :
-        potentialBottomY > treeSvgDims.height ? dy + (treeSvgDims.height - potentialBottomY) :
-        dy
+            potentialBottomY > treeSvgDims.height ? dy + (treeSvgDims.height - potentialBottomY) :
+                dy
 
     // console.log('potentialBottomY', potentialBottomY)
     // console.log('potentialNewX', potentialNewX + bushWidth/2 )

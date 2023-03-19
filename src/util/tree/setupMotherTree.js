@@ -3,14 +3,8 @@
 import {store} from '../../store/store';
 import setupZoom from "./setupZoom"
 import { getZoomParams } from "../positionManager";
-import { motherTreeRootRef } from "../../components/tree/D3Tree";
-import { getRenderedDimensions } from '../DimensionsLogic';
+import { motherTreeBushPositions, motherTreeRootRef } from "../../components/tree/D3Tree";
 
-
-let prevOffsets = {
-    x: 0,
-    y: 0
-}
 
 
 export default async function setupMotherTree(updateTreePositionFunc, dispatch){
@@ -26,17 +20,15 @@ export default async function setupMotherTree(updateTreePositionFunc, dispatch){
     // console.log(originalmotherTreeRootRef.descendants())
     // console.log(motherTreeRootRef.descendants())
 
-    const deltaX = offSets.x - prevOffsets.x
-    const deltaY = offSets.y - prevOffsets.y
 
 
 
-   
 
 
     motherTreeRootRef.current.descendants().map((node) => {
-        node.x += deltaX / treeScale
-        node.y += deltaY / treeScale
+        node.x = motherTreeBushPositions.current[node.data.id].x + offSets.x / treeScale + 78
+        node.y = motherTreeBushPositions.current[node.data.id].y + offSets.y / treeScale
+
     })
 
 
@@ -51,7 +43,6 @@ export default async function setupMotherTree(updateTreePositionFunc, dispatch){
         dispatch
     )
 
-    prevOffsets = {...offSets}
 
 
     return 'setup done'

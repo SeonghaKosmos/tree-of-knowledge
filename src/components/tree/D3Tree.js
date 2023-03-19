@@ -4,16 +4,18 @@ import { connectedResourceGraphicsDataIdsGlobal, updateResourceIconPositions } f
 import styles from '../tree.module.css'
 import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
-import { getResourceIdsList, Resource } from '../../util/Resource';
+import { getResourceIdsList } from '../../util/Resource';
 import D3TreeFiller from './D3TreeFiller';
-import { getBushDragDisplacement, getZoomParams } from '../../util/positionManager';
+import { getBushDragDisplacement, getBushPositionsFromRoot, getZoomParams } from '../../util/positionManager';
 import setupZoom from '../../util/tree/setupZoom';
 import setupMotherTree from '../../util/tree/setupMotherTree';
 import { repeatSetTimeout } from '../../util/Global';
+import axios from 'axios';
 
 
 
 export let motherTreeRootRef
+export let motherTreeBushPositions
 
 function D3Tree(props) {
 
@@ -24,6 +26,7 @@ function D3Tree(props) {
     console.log('rendering D3Tree')
     const nodeHeight = props.nodeHeight + 2 * props.nodePadding
     const nodeWidth = props.nodeWidth + 2 * props.nodePadding
+
 
     const standardNodeDimensions = {
         nodeWidth,
@@ -96,10 +99,11 @@ function D3Tree(props) {
         treeLayout(root)
 
         //use loaded bush positions
-        if (props.bushPositions){
+        if (props.bushPositions) {
             root.descendants().map((node) => {
-                node.x = props.bushPositions[node.data.name].x
-                node.y = props.bushPositions[node.data.name].y
+                const bushPosition = props.bushPositions[node.data.id]
+                node.x = bushPosition.x
+                node.y = bushPosition.y
             })
         }
 
@@ -116,7 +120,7 @@ function D3Tree(props) {
     }
 
     const root = generateTreeData()
-    if (!props.bushPositions){
+    if (!props.bushPositions) {
         invertTreeData(root)
     }
 
@@ -124,6 +128,9 @@ function D3Tree(props) {
     if (props.setupMotherTree) {
         motherTreeRootRef = { ...rootRef }
     }
+
+    motherTreeBushPositions = useRef(getBushPositionsFromRoot(root))
+
 
 
 
@@ -160,6 +167,8 @@ function D3Tree(props) {
 
     }
 
+
+
     function setupBushDrag(nodesSelection) {
         nodesSelection
             .call(d3.drag().on('drag end', (event) => {
@@ -173,6 +182,13 @@ function D3Tree(props) {
                         d.x += bushDisplacement.dx
                         d.y += bushDisplacement.dy
 
+                        motherTreeBushPositions.current[d.data.id].x += bushDisplacement.dx
+                        motherTreeBushPositions.current[d.data.id].y += bushDisplacement.dy
+
+                        // bushPositions[d.data.id].x += bushDisplacement.dx
+                        // bushPositions[d.data.id].y += bushDisplacement.dy
+                    
+
                         updateLinePositions()
                         const bushResourceIds = getResourceIdsList(d.data.resources)
                         updateResourceIconPositions(bushResourceIds)
@@ -184,7 +200,24 @@ function D3Tree(props) {
                                 treeDims,
                                 offSets,
                             )
+
+                            const bushPositions = getBushPositionsFromRoot(rootRef.current, offSets)
+                            console.log(bushPositions)
+                            fetch('http://localhost:3001/bush-position/', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(bushPositions)
+                            })
+                            .then(res => console.log(res))
+                            .catch(err => console.log(err))
+
+
+
                         }
+
+
 
                         const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
                         return `translate(${coords.x}, ${coords.y})`

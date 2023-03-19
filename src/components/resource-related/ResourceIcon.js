@@ -30,6 +30,7 @@ const ResourceIconRoot = styled.div`
 function ResourceIcon(props) {
 
     console.log('rendering ResourceIcon')
+    // console.log(props.resource)
 
     //<graphics datum>
     const [resourceGraphicsDatum, graphicsDatumActions, visionScale] = useResourceIconGraphicsManager(props.resource)

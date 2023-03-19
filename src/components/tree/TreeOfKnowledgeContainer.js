@@ -1,10 +1,10 @@
 import D3Tree from "./D3Tree";
 import BushNode from "../bush/BushNode";
-import { shallowEqual, useDispatch, useSelector } from "react-redux";
+import { shallowEqual, useSelector } from "react-redux";
 import styles from '../tree.module.css'
 import React, { useState } from "react";
 import axios from 'axios';
-import { allCreatedResources, setAllCreatedResources } from "../../util/Resource";
+import {setAllCreatedResources } from "../../util/Resource";
 import LoadingMessage from "./LoadingMessage";
 
 
@@ -41,8 +41,10 @@ function TreeOfKnowledgeContainer() {
 
   const [treeData, setTreeData] = useState()
 
+
   if (!treeData){
-    axios.get('http://localhost:3001')
+    console.log('treedata not set')
+    axios.get('http://localhost:3001/')
     .then(res => {
       console.log(res.data)
       setTreeData(res.data.treeData)
