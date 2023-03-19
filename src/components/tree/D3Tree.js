@@ -140,7 +140,9 @@ function D3Tree(props) {
         d3.select(`svg #${props.linksGId}`)
             .selectAll('line.link')
             .attr('x1', function (d) { return d.source.x; })
-            .attr('y1', function (d) { return getCoords(d.source, { nodeHeight }).y; })
+            .attr('y1', function (d) { 
+                return getCoords(d.source, { nodeHeight }).y; 
+            })
             .attr('x2', function (d) { return d.target.x; })
             .attr('y2', function (d) {
                 return getCoords(d.target, { nodeHeight }).y;
@@ -283,7 +285,7 @@ function D3Tree(props) {
         }
         afterResizeAnimationTimeout = repeatSetTimeout(12, 50, () => updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal))
 
-        setupMotherTree(updateTreePosition, dispatch)
+        setupMotherTree(updateTreePosition, dispatch, props.nodeWidth + 2 * props.nodePadding)
     }
 
     useEffect(() => {
@@ -322,6 +324,7 @@ function D3Tree(props) {
                 dataRoot={rootRef}
                 nodeWidth={props.nodeWidth}
                 nodeHeight={props.nodeHeight}
+                nodePadding={props.nodePadding}
                 updateTreePositionFunc={updateTreePosition}
                 nodeComponentFunc={props.nodeComponentFunc} />
         </>

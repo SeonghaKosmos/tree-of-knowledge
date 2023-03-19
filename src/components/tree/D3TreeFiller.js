@@ -21,7 +21,7 @@ function D3TreeFiller(props) {
     useEffect(() => {
         setIsTreeLoaded(true)
         if (isTreeLoaded && props.setupMotherTree){
-            setupMotherTree(props.updateTreePositionFunc, dispatch)
+            setupMotherTree(props.updateTreePositionFunc, dispatch, props.nodeWidth + props.nodePadding * 2)
             .then((msg)=>{
                 console.log(msg)
                 const treeContainerGClassList = document.getElementById('treeContainerG').classList

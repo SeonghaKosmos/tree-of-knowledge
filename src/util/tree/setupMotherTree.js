@@ -7,7 +7,7 @@ import { motherTreeBushPositions, motherTreeRootRef } from "../../components/tre
 
 
 
-export default async function setupMotherTree(updateTreePositionFunc, dispatch){
+export default async function setupMotherTree(updateTreePositionFunc, dispatch, bushWidth){
 
     // let [renderedWidth, setRenderedWidth] = useState(initWidth)
     // let [renderedHeight, setRenderedHeight] = useState(initHeight)
@@ -26,7 +26,7 @@ export default async function setupMotherTree(updateTreePositionFunc, dispatch){
 
 
     motherTreeRootRef.current.descendants().map((node) => {
-        node.x = motherTreeBushPositions.current[node.data.id].x + offSets.x / treeScale + 78
+        node.x = motherTreeBushPositions.current[node.data.id].x + offSets.x / treeScale + bushWidth / 2
         node.y = motherTreeBushPositions.current[node.data.id].y + offSets.y / treeScale
 
     })
