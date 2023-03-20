@@ -111,10 +111,10 @@ export function getBushPositionsFromRoot(root, offSets) {
     return bushPositions
 }
 
-export function getBushDragDisplacement(x, y, dx, dy, bushWidth, bushHeight) {
+export function getBushDragDisplacement(x, y, dx, dy, bushWidth, bushHeight, treeScale) {
     const treeContainerSvg = document.getElementById('treeContainerSvg')
     const treeSvgDims = getRenderedDimensions(treeContainerSvg, 1)
-    const treeScale = store.getState().scale.treeScale
+    // const treeScale = store.getState().scale.treeScale
 
     // console.log('x', x)
     // console.log('y', y * treeScale)

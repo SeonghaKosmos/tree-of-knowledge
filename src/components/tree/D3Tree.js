@@ -6,11 +6,12 @@ import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getResourceIdsList } from '../../util/Resource';
 import D3TreeFiller from './D3TreeFiller';
-import { getBushDragDisplacement, getBushPositionsFromRoot, getZoomParams } from '../../util/positionManager';
+import { getBushDragDisplacement, getBushPositionsFromRoot, getRelativePositionOfElementInContainer, getZoomParams } from '../../util/positionManager';
 import setupZoom from '../../util/tree/setupZoom';
 import setupMotherTree from '../../util/tree/setupMotherTree';
 import { repeatSetTimeout } from '../../util/Global';
 import axios from 'axios';
+import { getRenderedDimensions } from '../../util/DimensionsLogic';
 
 
 
@@ -124,12 +125,14 @@ function D3Tree(props) {
         invertTreeData(root)
     }
 
+    const motherTreeBushPositionsRef = useRef(getBushPositionsFromRoot(root))
     const rootRef = useRef(root)
     if (props.setupMotherTree) {
         motherTreeRootRef = { ...rootRef }
+        motherTreeBushPositions = {...motherTreeBushPositionsRef}
     }
 
-    motherTreeBushPositions = useRef(getBushPositionsFromRoot(root))
+
 
 
 
@@ -171,54 +174,99 @@ function D3Tree(props) {
 
 
 
+
+
+    function onBushDragEnd(){
+        const [treeDims, offSets] = getZoomParams()
+        setupZoom(
+            'treeContainerSvg',
+            'treeContainerG',
+            treeDims,
+            offSets,
+        )
+
+        const bushPositions = getBushPositionsFromRoot(rootRef.current, offSets)
+        console.log(bushPositions)
+        fetch('http://localhost:3001/bush-position/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(bushPositions)
+        })
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+    }
+
+
+
+
+    function updateBushPosition(displacement, d, bushId){
+        d.x += displacement.dx
+        d.y += displacement.dy
+
+        console.log(motherTreeBushPositions.current)
+        motherTreeBushPositions.current[bushId].x += displacement.dx
+        motherTreeBushPositions.current[bushId].y += displacement.dy
+    }
+
+
+    function updateBushPositions(d, event){
+
+
+
+        
+        if (d.data.id === 'daIdOfRoot'){
+
+            const treeContainerG = document.getElementById('treeContainerG')
+            const treeContainerSvg = document.getElementById('treeContainerSvg')
+
+            const treeDims = getRenderedDimensions(treeContainerG, 1)
+            const treeContainerGPos = getRelativePositionOfElementInContainer(treeContainerSvg, treeContainerG)
+
+
+            const bushDisplacement = getBushDragDisplacement(
+                treeContainerGPos.x + treeDims.width / 2, treeContainerGPos.y,
+                event.dx, event.dy,
+                treeDims.width, treeDims.height,
+                1)
+
+            motherTreeRootRef.current.descendants()
+            .forEach( node => {
+                // console.log(node)
+                updateBushPosition(bushDisplacement, node, node.data.id)
+                updateTreePosition()
+            })
+        } else {
+            const bushDisplacement = getBushDragDisplacement(
+                d.x, d.y,
+                event.dx, event.dy,
+                props.nodeWidth, props.nodeHeight,
+                props.treeScale)
+
+            updateBushPosition(bushDisplacement, d, d.data.id)
+        }
+
+
+    }
+
+
     function setupBushDrag(nodesSelection) {
         nodesSelection
             .call(d3.drag().on('drag end', (event) => {
                 d3.select(`#${event.subject.data.id}`)
                     .attr('transform', function (d) {
-
-                        const bushDisplacement = getBushDragDisplacement(
-                            d.x, d.y,
-                            event.dx, event.dy,
-                            props.nodeWidth, props.nodeHeight)
-                        d.x += bushDisplacement.dx
-                        d.y += bushDisplacement.dy
-
-                        motherTreeBushPositions.current[d.data.id].x += bushDisplacement.dx
-                        motherTreeBushPositions.current[d.data.id].y += bushDisplacement.dy
-
-                        // bushPositions[d.data.id].x += bushDisplacement.dx
-                        // bushPositions[d.data.id].y += bushDisplacement.dy
                     
-
+                        updateBushPositions(d, event)
                         updateLinePositions()
                         const bushResourceIds = getResourceIdsList(d.data.resources)
                         updateResourceIconPositions(bushResourceIds)
+
+
+
                         if (event.type === 'end') {
-                            const [treeDims, offSets] = getZoomParams()
-                            setupZoom(
-                                'treeContainerSvg',
-                                'treeContainerG',
-                                treeDims,
-                                offSets,
-                            )
-
-                            const bushPositions = getBushPositionsFromRoot(rootRef.current, offSets)
-                            console.log(bushPositions)
-                            fetch('http://localhost:3001/bush-position/', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json'
-                                },
-                                body: JSON.stringify(bushPositions)
-                            })
-                            .then(res => console.log(res))
-                            .catch(err => console.log(err))
-
-
-
+                            onBushDragEnd()
                         }
-
 
 
                         const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
@@ -228,6 +276,7 @@ function D3Tree(props) {
 
             }))
     }
+
 
     function updateNodePositions() {
         d3.select(`svg #${props.nodesGId}`)

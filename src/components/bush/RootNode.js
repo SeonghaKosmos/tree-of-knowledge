@@ -21,7 +21,7 @@ function RootNode(){
         try{
             const bushContainerG = document.getElementById('rootNode').parentElement.parentElement
             // console.log(bushContainerG.classList)
-            bushContainerG.classList.add('pointerEventLess')
+            // bushContainerG.classList.add('pointerEventLess')
             bushContainerG.classList.add('rootNodeContainerG')
         } catch{
             

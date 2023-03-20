@@ -25,7 +25,8 @@ export default async function setupMotherTree(updateTreePositionFunc, dispatch, 
 
 
 
-    motherTreeRootRef.current.descendants().map((node) => {
+    motherTreeRootRef.current.descendants()
+    .map((node) => {
         node.x = motherTreeBushPositions.current[node.data.id].x + offSets.x / treeScale + bushWidth / 2
         node.y = motherTreeBushPositions.current[node.data.id].y + offSets.y / treeScale
 

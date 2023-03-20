@@ -16,16 +16,32 @@ export function useResourceIconStyle(resourceGraphicsDatum){
 
     useEffect(()=>{ //update styles when scale changes
 
-        if (isMinusculeScale && scaleDependentClass != 'minusculeScale'){
+        console.log('%cupdating style', 'color:green')
+        console.log(isMinusculeScale)
+        console.log(scaleDependentClass)
+
+        if (isMinusculeScale){
             
-            setScaleDependentClass('minusculeScale')
+            setScaleDependentClass(prevState => {
+
+                if (prevState != 'minusculeScale'){
+                    return 'minusculeScale'
+                }
+                return prevState
+
+            })
             
-        } else if ( !isMinusculeScale && scaleDependentClass != 'notMinusculeScale'){
+        } else {
    
-            setScaleDependentClass('notMinusculeScale')
-        } else{
-            // console.log('doing nothing')
-        }
+            setScaleDependentClass(prevState => {
+
+                if (prevState != 'notMinusculeScale'){
+                    return 'notMinusculeScale'
+                }
+                return prevState
+
+            })
+        } 
         
 
     }, [isMinusculeScale])
