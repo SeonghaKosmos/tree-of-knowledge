@@ -12,6 +12,7 @@ import setupMotherTree from '../../util/tree/setupMotherTree';
 import { repeatSetTimeout } from '../../util/Global';
 import axios from 'axios';
 import { getRenderedDimensions } from '../../util/DimensionsLogic';
+import { sendSaveBushPositionsPostReq } from '../../network/requests';
 
 
 
@@ -59,7 +60,6 @@ function D3Tree(props) {
     }
 
 
-
     function getCoords(d, nodeData) {
 
         // console.log(`init: ${nodeData.nodeWidth}, ${nodeData.nodeHeight}`)
@@ -81,12 +81,6 @@ function D3Tree(props) {
 
 
     }
-
-
-
-
-
-
 
 
     function generateTreeData() {
@@ -120,6 +114,7 @@ function D3Tree(props) {
         })
     }
 
+
     const root = generateTreeData()
     if (!props.bushPositions) {
         invertTreeData(root)
@@ -152,6 +147,7 @@ function D3Tree(props) {
             })
     }
 
+
     function createLinks() {
 
         d3.select(`svg #${props.linksGId}`)
@@ -173,9 +169,6 @@ function D3Tree(props) {
     }
 
 
-
-
-
     function onBushDragEnd(){
         const [treeDims, offSets] = getZoomParams()
         setupZoom(
@@ -186,19 +179,8 @@ function D3Tree(props) {
         )
 
         const bushPositions = getBushPositionsFromRoot(rootRef.current, offSets)
-        console.log(bushPositions)
-        fetch('http://localhost:3001/bush-position/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(bushPositions)
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+        sendSaveBushPositionsPostReq(bushPositions)
     }
-
-
 
 
     function updateBushPosition(displacement, d, bushId){
@@ -291,6 +273,7 @@ function D3Tree(props) {
             })
     }
 
+
     function createBushNodes() {
         const nodesSelection =
             d3.select(`svg #${props.nodesGId}`)
@@ -309,11 +292,15 @@ function D3Tree(props) {
 
     }
 
+
+
     const updateTreePosition = () => {
         updateLinePositions()
         updateNodePositions()
 
     }
+
+    
 
 
     function createTree() {
@@ -336,6 +323,8 @@ function D3Tree(props) {
 
         setupMotherTree(updateTreePosition, dispatch, props.nodeWidth + 2 * props.nodePadding)
     }
+
+
 
     useEffect(() => {
         createTree()

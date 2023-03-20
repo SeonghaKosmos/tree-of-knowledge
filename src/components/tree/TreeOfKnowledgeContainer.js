@@ -3,9 +3,9 @@ import BushNode from "../bush/BushNode";
 import { shallowEqual, useSelector } from "react-redux";
 import styles from '../tree.module.css'
 import React, { useState } from "react";
-import axios from 'axios';
 import {setAllCreatedResources } from "../../util/Resource";
 import LoadingMessage from "./LoadingMessage";
+import { sendGetTreeDataGetReq } from "../../network/requests";
 
 
 
@@ -42,18 +42,17 @@ function TreeOfKnowledgeContainer() {
   const [treeData, setTreeData] = useState()
 
 
+  async function receiveTreeData() {
+    const [treeData, allResources] = await sendGetTreeDataGetReq()
+
+    setTreeData(treeData)
+    setAllCreatedResources(allResources)
+  }
+
   if (!treeData){
     console.log('treedata not set')
-    axios.get('http://localhost:3001/')
-    .then(res => {
-      console.log(res.data)
-      setTreeData(res.data.treeData)
-      setAllCreatedResources(res.data.allResources)
-      // console.log(allCreatedResources)
-    })
-    .catch(e => {
-      console.log(e)
-    })
+    receiveTreeData()
+
   }
 
   // console.log(`renderedTreeWidth ${renderedTreeWidth} renderedTreeHeight ${renderedTreeHeight}`)
