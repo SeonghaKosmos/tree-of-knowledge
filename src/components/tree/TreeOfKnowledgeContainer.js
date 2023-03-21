@@ -4,7 +4,7 @@ import { shallowEqual, useSelector } from "react-redux";
 import styles from '../tree.module.css'
 import React, { useState } from "react";
 import {setAllCreatedResources } from "../../util/Resource";
-import LoadingMessage from "./LoadingMessage";
+import TreeLoadingStatusMessage from "./TreeLoadingStatusMessage";
 import { sendGetTreeDataGetReq } from "../../network/requests";
 
 
@@ -40,13 +40,18 @@ function TreeOfKnowledgeContainer() {
 
 
   const [treeData, setTreeData] = useState()
-
+  const [loadingStatusText, setLoadingStatusText] = useState('loading...')
 
   async function receiveTreeData() {
-    const [treeData, allResources] = await sendGetTreeDataGetReq()
+    try {
+      const [treeData, allResources] = await sendGetTreeDataGetReq()
 
-    setTreeData(treeData)
-    setAllCreatedResources(allResources)
+      setTreeData(treeData)
+      setAllCreatedResources(allResources)
+    } catch (err) {
+      setLoadingStatusText('something went wrong :(')
+    }
+
   }
 
   if (!treeData){
@@ -88,7 +93,7 @@ function TreeOfKnowledgeContainer() {
           linkClass={styles.mainLink}
           nodeComponentFunc={BushNode} />
       }
-      {!treeData && <LoadingMessage/>}
+      {!treeData && <TreeLoadingStatusMessage msg={loadingStatusText}/>}
     </>
 
 

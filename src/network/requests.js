@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const ROOT_URL = 'http://localhost:3001'
+const ROOT_URL = 'https://us-central1-tok-server-a2b5b.cloudfunctions.net/app'
+// const ROOT_URL = 'http://localhost:3001'
 
 export function sendSaveBushPositionsPostReq(bushPositions){
     fetch( ROOT_URL+'/bush-position/', {

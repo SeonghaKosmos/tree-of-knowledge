@@ -187,7 +187,7 @@ function D3Tree(props) {
         d.x += displacement.dx
         d.y += displacement.dy
 
-        console.log(motherTreeBushPositions.current)
+        // console.log(motherTreeBushPositions.current)
         motherTreeBushPositions.current[bushId].x += displacement.dx
         motherTreeBushPositions.current[bushId].y += displacement.dy
     }

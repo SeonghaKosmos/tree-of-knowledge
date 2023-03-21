@@ -16,9 +16,9 @@ export function useResourceIconStyle(resourceGraphicsDatum){
 
     useEffect(()=>{ //update styles when scale changes
 
-        console.log('%cupdating style', 'color:green')
-        console.log(isMinusculeScale)
-        console.log(scaleDependentClass)
+        // console.log('%cupdating style', 'color:green')
+        // console.log(isMinusculeScale)
+        // console.log(scaleDependentClass)
 
         if (isMinusculeScale){
             
