@@ -44,8 +44,8 @@ export function getZoomParams(isCentered) {
     // console.log(isCentered)
 
     const offSets = {}
-    console.log('treeSvgDims: ', treeSvgDims)
-    console.log('treeDims: ', treeDims)
+    // console.log('treeSvgDims: ', treeSvgDims)
+    // console.log('treeDims: ', treeDims)
 
     if (isCentered) {
         offSets.x = (treeSvgDims.width - treeDims.width) / 2

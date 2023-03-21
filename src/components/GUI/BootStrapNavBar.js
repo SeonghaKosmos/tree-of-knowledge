@@ -50,7 +50,7 @@ const BootStrapNavBar = React.forwardRef((props, ref) => {
     return (
 
         <>
-            <a onClick={onCloseTogglerClicked} class="close-navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+            <a onClick={onCloseTogglerClicked} className="close-navbar-toggler collapsed" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             </a>
             <header className="navBarHeader">
 
@@ -58,7 +58,7 @@ const BootStrapNavBar = React.forwardRef((props, ref) => {
                 <nav className={`navbar brandNavBar`}>
                     <div className="container-fluid ">
                         <a className="navbar-brand" href="/tree">
-                            <img src={process.env.PUBLIC_URL + '/favicon.ico'} width="40" height="40" class="d-inline-block align-top" alt="" />
+                            <img src={process.env.PUBLIC_URL + '/favicon.ico'} width="40" height="40" className="d-inline-block align-top" alt="" />
                             ToK
                         </a>
                     </div>
@@ -67,9 +67,9 @@ const BootStrapNavBar = React.forwardRef((props, ref) => {
                 <nav className={`navbar dropdownMenuNavBar ${navbarBgClass}`} ref={ref}>
                     <div className="container-fluid dropdownContainer">
                         <button ref={toggleButton} onClick={onToggleButtonClicked} className="navbar-toggler collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
-                            <span class="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
+                            <span className="icon-bar"></span>
                         </button>
                     </div>
                     <div className="collapse navbar-collapse" id="navbarNavAltMarkup">

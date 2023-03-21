@@ -3,7 +3,8 @@ import { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { useDispatch } from 'react-redux'
 import setupMotherTree from '../../util/tree/setupMotherTree'
-
+import {v4 as uuid} from 'uuid'
+import BushNode from '../bush/BushNode'
 
 
 
@@ -39,6 +40,7 @@ function D3TreeFiller(props) {
 
                 return ReactDOM.createPortal(
                     <NodeComponent
+                        key={descendant.data.id}
                         data={descendant.data}
                         width={props.nodeWidth}
                         height={props.nodeHeight} />

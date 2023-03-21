@@ -7,7 +7,7 @@ import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
 import { useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
-import { scale } from "../../store/visuals/zoomSlice";
+import {v4 as uuid} from 'uuid'
 import './ResourceIcon.css'
 import { allCreatedResources, Resource } from "../../util/Resource";
 
@@ -184,6 +184,7 @@ function ResourceIcon(props) {
             {/* show connection lines if connected and is the source (showconnected = true)*/}
             {(isConnected && isConnectionLinesVisible) && props.resource.connections.map((connectedResourceId) => {
                 return <ResourceConnectionLine
+                    key={props.resource.id}
                     resource1={props.resource}
                     resource2={allCreatedResources[connectedResourceId]} /> //draw line between this resource and connected resource
             })}
