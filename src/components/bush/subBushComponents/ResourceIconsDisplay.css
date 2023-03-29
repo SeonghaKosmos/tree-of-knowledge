@@ -1,0 +1,15 @@
+
+.resourceIconDisplay{
+    display: flex;
+    align-items:center;
+    justify-content: space-evenly;
+    width:100%;
+    flex-grow:1;
+    flex-wrap: wrap-reverse;
+}
+
+
+.resourceIconDisplay div:last-of-type{
+    margin-left: 40%;
+    margin-right: 40%;
+}

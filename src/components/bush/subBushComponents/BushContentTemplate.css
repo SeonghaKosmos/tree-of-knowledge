@@ -1,0 +1,21 @@
+
+.bushContent{
+    width: 100%;
+    height: 100%;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    display: flex;
+    flex-direction:column-reverse;
+    align-items: center;
+    justify-content: center;
+    overflow: visible;
+}
+
+
+.subBushScaleLabelSpan{
+    font-size: 10px;
+}
+

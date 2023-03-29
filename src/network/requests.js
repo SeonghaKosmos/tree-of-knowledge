@@ -27,7 +27,7 @@ export async function sendGetTreeDataGetReq(){
 
     try{
         const res = await axios.get(ROOT_URL+'/')
-        console.log(res.data)
+        console.log("tree data: ", res.data)
         return [res.data.treeData, res.data.allResources]
     } catch(err) {
       console.log(err)

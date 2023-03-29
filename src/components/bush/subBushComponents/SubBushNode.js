@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React from "react";
-import ResourceIcon from "../resource-related/ResourceIcon";
+import ResourceIcon from "../../resource-related/ResourceIcon";
 import { shallowEqual, useSelector } from "react-redux";
 const SubBushNodeRoot = styled.div`
 

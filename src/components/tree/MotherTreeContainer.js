@@ -11,7 +11,7 @@ import { sendGetTreeDataGetReq } from "../../network/requests";
 
 
 
-function TreeOfKnowledgeContainer() {
+function MotherTreeContainer() {
 
   console.log('rendering tree container')
   const treeOverlayElementsContainerId = useSelector((state) =>
@@ -29,14 +29,6 @@ function TreeOfKnowledgeContainer() {
     state.dimensions.bushWidth,
     state.dimensions.bushHeight,
     state.dimensions.bushPadding], shallowEqual)
-
-
-
-  const nodesGId = "mainNodes"
-  const linksGId = "mainLinks"
-  const containerGId = useSelector((state) =>
-    state.importantElementIds.treeContainerGId, shallowEqual)
-
 
 
   const [treeData, setTreeData] = useState()
@@ -75,9 +67,9 @@ function TreeOfKnowledgeContainer() {
           setupMotherTree={true}
           editable={true}
           fadeIn={true}
-          nodesGId={nodesGId}
-          linksGId={linksGId}
-          containerGId={containerGId}
+          nodesGId={'mainNodes'}
+          linksGId={'mainLinks'}
+          containerGId={'treeContainerG'}
           treeOverlayElementsContainerId={treeOverlayElementsContainerId}
           containerSvgId='treeContainerSvg'
           positionReferenceContainerId={'positionReferenceContainer'}
@@ -99,4 +91,4 @@ function TreeOfKnowledgeContainer() {
 
   )
 }
-export default React.memo(TreeOfKnowledgeContainer)
+export default React.memo(MotherTreeContainer)

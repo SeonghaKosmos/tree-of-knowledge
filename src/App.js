@@ -1,5 +1,5 @@
 import './App.css';
-import TreeOfKnowledgeContainer from './components/tree/TreeOfKnowledgeContainer';
+import MotherTreeContainer from './components/tree/MotherTreeContainer';
 import { useEffect, useRef, useState } from 'react';
 import BootStrapNavBar from './components/GUI/BootStrapNavBar';
 import './global.css'
@@ -42,7 +42,7 @@ function App() {
     <div id="App" ref={appDiv} onClick={onAppClicked}>
 
       <div className='centeringContainer'>
-        <TreeOfKnowledgeContainer />
+        <MotherTreeContainer />
       </div>
 
       {/* <span className="nav-icon"></span> */}

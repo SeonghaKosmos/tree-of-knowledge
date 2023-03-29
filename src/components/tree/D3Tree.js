@@ -84,7 +84,7 @@ function D3Tree(props) {
 
 
     function generateTreeData() {
-        console.log(props.hierarchy)
+        // console.log(props.hierarchy)
         const treeLayout = d3.tree()
             .size([props.treeWidth, props.treeHeight])
             .separation(() => 2)
