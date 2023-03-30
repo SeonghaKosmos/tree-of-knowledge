@@ -61,15 +61,18 @@ const setupZoom = (eventSourceId, applyZoomTargetId,
 
   zoomEventSourceContainer.call(zoom)
 
-
-  console.log(treeDisplacementOnReCenter)
+  //conserve tree position
   zoomEventSourceContainer
     .transition()
     .duration(0)
     .call(zoom.translateBy, treeDisplacementOnReCenter.x, treeDisplacementOnReCenter.y);
 
-  // configureEdgeHoverPanLogic('App', 20)
-  // setupEdgeHoverPan(eventSourceId, zoom)
+    
+  if (process.env.REACT_APP_IS_LOCAL === 'false'){
+    configureEdgeHoverPanLogic('App', 20)
+    setupEdgeHoverPan(eventSourceId, zoom)
+  }
+
 
 
 
