@@ -36,7 +36,8 @@ export function getZoomParams(isCentered) {
     const treeContainerSvg = document.getElementById('treeContainerSvg')
 
 
-    const treeDims = getRenderedDimensions(treeContainerG, 1)
+    const scale = store.getState().zoom.scale
+    const treeDims = getRenderedDimensions(treeContainerG, scale)
     const treeSvgDims = getRenderedDimensions(treeContainerSvg, 1)
 
     // console.log(treeDims)

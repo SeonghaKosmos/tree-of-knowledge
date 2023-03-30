@@ -1,5 +1,5 @@
-import D3Tree from "../../tree/D3Tree";
-import SubBushNode from "./SubBushNode";
+import D3Tree from "../../../tree/D3Tree";
+import LevelBushNode from "./LevelBushNode";
 import { v4 as uuid } from "uuid";
 import { shallowEqual, useSelector } from "react-redux";
 
@@ -38,7 +38,7 @@ function LevelsTree(props) {
 
     const subBushHeight = useSelector((state) => state.dimensions.subBushHeight, shallowEqual)
 
-    const bushId = uuid().replace(/-/g, '')
+    const bushId = props.data.id
     const nodesGId = `Nodes${bushId}`
     const linksGId = `Links${bushId}`
     const containerGId = `treeContainerG${bushId}`
@@ -46,7 +46,7 @@ function LevelsTree(props) {
     return (
 
 
-        
+
         <D3Tree
             hierarchy={hierarchy}
             nodesGId={nodesGId}
@@ -63,7 +63,7 @@ function LevelsTree(props) {
             nodeHeight={subBushHeight}
             nodePadding={0}
             linkClass={props.linkClass}
-            nodeComponentFunc={SubBushNode} />
+            nodeComponentFunc={LevelBushNode} />
 
 
     )

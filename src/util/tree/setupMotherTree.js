@@ -5,7 +5,7 @@ import setupZoom from "./setupZoom"
 import { getZoomParams } from "../positionManager";
 import { motherTreeBushPositions, motherTreeRootRef } from "../../components/tree/D3Tree";
 
-
+let prevOffsets
 
 export default async function setupMotherTree(updateTreePositionFunc, dispatch, bushWidth){
 
@@ -34,6 +34,18 @@ export default async function setupMotherTree(updateTreePositionFunc, dispatch, 
 
 
 
+    const treeDisplacementOnReCenter = prevOffsets ? 
+    {
+        x: prevOffsets.x - offSets.x,
+        y: prevOffsets.y - offSets.y
+    }
+    :
+    {
+        x: 0,
+        y: 0
+    }
+
+    prevOffsets = {...offSets}
 
     updateTreePositionFunc()
     setupZoom(
@@ -41,6 +53,7 @@ export default async function setupMotherTree(updateTreePositionFunc, dispatch, 
         'treeContainerG',
         treeDims,
         offSets,
+        treeDisplacementOnReCenter,
         dispatch
     )
 

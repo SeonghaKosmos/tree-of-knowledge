@@ -8,7 +8,7 @@ import './BushNode.css'
 import { CSSTransition } from "react-transition-group";
 import { connectedResourceGraphicsDataIdsGlobal, updateResourceIconPositions } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 import BushContentTemplate from "./subBushComponents/BushContentTemplate";
-import LevelsTree from "./subBushComponents/LevelsTree";
+import LevelsTree from "./subBushComponents/levelTree/LevelsTree";
 import ResourceIconsDisplay from "./subBushComponents/ResourceIconsDisplay";
 
 

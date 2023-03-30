@@ -11,13 +11,14 @@ let theDispatch
 const setupZoom = (eventSourceId, applyZoomTargetId,
   renderedDims,
   offSets,
+  treeDisplacementOnReCenter,
   dispatch) => {
 
   // console.log('renderedDims',renderedDims)
   // console.log('offSets', offSets)
-  theDispatch = dispatch ? dispatch : theDispatch
 
-  // useEdgeMouseTreeNavigation(eventSourceId, applyZoomTargetId, zoom)   
+
+  theDispatch = dispatch ? dispatch : theDispatch
 
   function broadCastScale(e) {
 
@@ -33,14 +34,15 @@ const setupZoom = (eventSourceId, applyZoomTargetId,
   const zoomActionTargetContainer = d3.select(`#${applyZoomTargetId}`)
   //set zoom behavior
   const handleZoom = (e) => {
-    //update scale
+
     // console.log('handling zoom')
+    // console.log(e)
     theDispatch(zoomSliceActions.setScale(e.transform.k))
     setTreeContainerSvgClass(e.transform.k === maxScale.val)
     broadCastScale(e)
-    // document.getElementById(eventSourceId).style.transform = 
-    // `translate(${e.transform.x}px, ${e.transform.x}px) scale(${e.transform.k})`
+
     zoomActionTargetContainer.attr('transform', e.transform)
+
   }
 
 
@@ -59,12 +61,14 @@ const setupZoom = (eventSourceId, applyZoomTargetId,
 
   zoomEventSourceContainer.call(zoom)
 
-  // zoomEventSourceContainer
-  // .transition()
-  // .duration(0)
-  // .call(zoom.scaleBy, 0.7)
-  //pan
-  configureEdgeHoverPanLogic('App', 20)
+
+  console.log(treeDisplacementOnReCenter)
+  zoomEventSourceContainer
+    .transition()
+    .duration(0)
+    .call(zoom.translateBy, treeDisplacementOnReCenter.x, treeDisplacementOnReCenter.y);
+
+  // configureEdgeHoverPanLogic('App', 20)
   // setupEdgeHoverPan(eventSourceId, zoom)
 
 
