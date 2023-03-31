@@ -1,9 +1,9 @@
 import * as d3 from 'd3'
-import { configureEdgeHoverPanLogic } from "../pan/EdgeHoverPanLogic";
-import { setTreeContainerSvgClass } from "../d3Related";
-import setupEdgeHoverPan from "../pan/EdgeHoverPan";
-import { maxScale } from "../../store/visuals/zoomSlice";
-import { zoomSliceActions } from "../../store/store";
+import { configureEdgeHoverPanLogic } from "./pan/EdgeHoverPanLogic";
+import { setTreeContainerSvgClass } from "./d3Related";
+import setupEdgeHoverPan from "./pan/EdgeHoverPan";
+import { maxScale } from "../store/visuals/zoomSlice";
+import { zoomSliceActions } from "../store/store";
 
 let broadCaster = setTimeout(() => { }, 1);
 let theDispatch

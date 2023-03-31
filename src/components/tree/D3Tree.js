@@ -7,7 +7,7 @@ import { shallowEqual, useDispatch, useSelector } from 'react-redux';
 import { getResourceIdsList } from '../../util/Resource';
 import D3TreeFiller from './D3TreeFiller';
 import { getBushDragDisplacement, getBushPositionsFromRoot, getRelativePositionOfElementInContainer, getZoomParams } from '../../util/positionManager';
-import setupZoom from '../../util/tree/setupZoom';
+import setupZoom from '../../util/setupZoom';
 import setupTree from '../../util/tree/setupTree';
 import { repeatSetTimeout } from '../../util/Global';
 import { getRenderedDimensions } from '../../util/DimensionsLogic';

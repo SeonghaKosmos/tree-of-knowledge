@@ -1,7 +1,7 @@
 
 
 import {store} from '../../store/store';
-import setupZoom from "./setupZoom"
+import setupZoom from "../setupZoom"
 import { getZoomParams } from "../positionManager";
 import { motherTreeBushPositions, motherTreeRootRef } from "../../components/tree/D3Tree";
 

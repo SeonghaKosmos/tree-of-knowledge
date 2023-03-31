@@ -13,13 +13,47 @@ export function setTreePosition(x, y) {
     treeContainerGPosition.y = y
 }
 
-export function getRelativePositionOfElementInContainer(container, element) {
+export function getRelativePositionOfElementInContainer(container, element, unScaleElement = false) {
+
+
 
     const containerRect = container.getBoundingClientRect()
     const elementRect = element.getBoundingClientRect()
 
-    const y = elementRect.top - containerRect.top;
-    const x = elementRect.left - containerRect.left;
+
+    let elemTop = elementRect.top
+    let elemLeft = elementRect.left
+
+    if (unScaleElement) {
+
+        let elemTranslateX = 0
+        let elemTranslateY = 0
+        let elemScale = 1
+
+        try {
+            const elemTransformMatrix = element.transform.baseVal.consolidate().matrix
+            elemTranslateX = elemTransformMatrix.e
+            elemTranslateY = elemTransformMatrix.f
+            elemScale = elemTransformMatrix.a
+        } catch (err) {
+            console.log(err)
+            console.log('getRelativePositionOfElementInContainer: no transform for element')
+        }
+
+
+
+        elemLeft -= elemTranslateX
+        elemLeft /= elemScale
+
+
+        elemTop -= elemTranslateY
+        elemTop /= elemScale
+
+    }
+
+
+    const y = elemTop - containerRect.top;
+    const x = elemLeft - containerRect.left;
 
 
     // console.log(`container: ${containerRect.left}, ${containerRect.top}`)
@@ -35,8 +69,11 @@ export function getZoomParams(
         isCentered = true,
         zoomActionTargetContainerId = 'treeContainerG',
         zoomEventSourceContainerId = 'treeContainerSvg',
-        zoomEventSourceContainerScale = store.getState().zoom.scale
     } = {}) {
+
+
+
+    const zoomEventSourceContainerScale = store.getState().zoom.scale
 
     const zoomActionTargetContainer = document.getElementById(zoomActionTargetContainerId)
     const zoomEventSourceContainer = document.getElementById(zoomEventSourceContainerId)
@@ -44,6 +81,7 @@ export function getZoomParams(
 
     const zoomActionTargetContainerDims = getRenderedDimensions(zoomActionTargetContainer, zoomEventSourceContainerScale)
     const zoomEventSourceContainerDims = getRenderedDimensions(zoomEventSourceContainer, 1)
+
 
     // console.log(treeDims)
     // console.log(treeSvgDims)
@@ -57,13 +95,16 @@ export function getZoomParams(
         offSets.x = (zoomEventSourceContainerDims.width - zoomActionTargetContainerDims.width) / 2
         offSets.y = (zoomEventSourceContainerDims.height - zoomActionTargetContainerDims.height) / 2
     } else {
-        const treeRelativePos = getRelativePositionOfElementInContainer(zoomEventSourceContainer, zoomActionTargetContainer)
+        const treeRelativePos = getRelativePositionOfElementInContainer(zoomEventSourceContainer, zoomActionTargetContainer, true)
         offSets.x = treeRelativePos.x
         offSets.y = treeRelativePos.y
     }
 
 
     return [zoomActionTargetContainerDims, offSets]
+
+
+
 
     // const prevXLine = document.getElementById('testLineX')
     // const prevYLine = document.getElementById('testLineY')
