@@ -8,9 +8,8 @@ import { getResourceIdsList } from '../../util/Resource';
 import D3TreeFiller from './D3TreeFiller';
 import { getBushDragDisplacement, getBushPositionsFromRoot, getRelativePositionOfElementInContainer, getZoomParams } from '../../util/positionManager';
 import setupZoom from '../../util/tree/setupZoom';
-import setupMotherTree from '../../util/tree/setupMotherTree';
+import setupTree from '../../util/tree/setupTree';
 import { repeatSetTimeout } from '../../util/Global';
-import axios from 'axios';
 import { getRenderedDimensions } from '../../util/DimensionsLogic';
 import { sendSaveBushPositionsPostReq } from '../../network/requests';
 
@@ -21,20 +20,26 @@ export let motherTreeBushPositions
 
 function D3Tree(props) {
 
-    //clear resource Icon state
-    // const resourceIconsActions = useResourceIconGraphicsManager()
-    //cancel tree shading
+
 
     console.log('rendering D3Tree')
-    const nodeHeight = props.nodeHeight + 2 * props.nodePadding
-    const nodeWidth = props.nodeWidth + 2 * props.nodePadding
+
+
+
+    //tree dimensions
+    const treeDimParams = props.treeDimParams
+    console.log('treeScale: ',props.treeScale)
+
+
+
+    const nodeHeight = treeDimParams.nodeHeight + 2 * treeDimParams.nodePadding
+    const nodeWidth = treeDimParams.nodeWidth + 2 * treeDimParams.nodePadding
 
 
     const standardNodeDimensions = {
         nodeWidth,
         nodeHeight
     }
-
 
 
     const [originNodeWidth, originNodeHeight,
@@ -86,7 +91,7 @@ function D3Tree(props) {
     function generateTreeData() {
         // console.log(props.hierarchy)
         const treeLayout = d3.tree()
-            .size([props.treeWidth, props.treeHeight])
+            .size([treeDimParams.treeWidth, treeDimParams.treeHeight])
             .separation(() => 2)
 
         const root = d3.hierarchy(props.hierarchy)
@@ -110,7 +115,7 @@ function D3Tree(props) {
 
     function invertTreeData(root) {
         root.descendants().map((node) => {
-            node.y = props.treeHeight - node.y
+            node.y = treeDimParams.treeHeight - node.y
         })
     }
 
@@ -122,7 +127,7 @@ function D3Tree(props) {
 
     const motherTreeBushPositionsRef = useRef(getBushPositionsFromRoot(root))
     const rootRef = useRef(root)
-    if (props.setupMotherTree) {
+    if (props.setupTree) {
         motherTreeRootRef = { ...rootRef }
         motherTreeBushPositions = {...motherTreeBushPositionsRef}
     }
@@ -170,13 +175,18 @@ function D3Tree(props) {
 
 
     function onBushDragEnd(){
-        const [treeDims, offSets] = getZoomParams()
+        const [treeDims, offSets] = getZoomParams({isCentered:false})
         setupZoom(
-            'treeContainerSvg',
-            'treeContainerG',
-            treeDims,
-            offSets,
+            {
+                eventSourceId: 'treeContainerSvg',
+                applyZoomTargetId: 'treeContainerG',
+                zoomEventTargetRenderedDims: treeDims,
+                offSets
+            }
+
         )
+
+
 
         const bushPositions = getBushPositionsFromRoot(rootRef.current, offSets)
         sendSaveBushPositionsPostReq(bushPositions)
@@ -223,7 +233,7 @@ function D3Tree(props) {
             const bushDisplacement = getBushDragDisplacement(
                 d.x, d.y,
                 event.dx, event.dy,
-                props.nodeWidth, props.nodeHeight,
+                treeDimParams.nodeWidth, treeDimParams.nodeHeight,
                 props.treeScale)
 
             updateBushPosition(bushDisplacement, d, d.data.id)
@@ -321,7 +331,12 @@ function D3Tree(props) {
         }
         afterResizeAnimationTimeout = repeatSetTimeout(12, 50, () => updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal))
 
-        setupMotherTree(updateTreePosition, dispatch, props.nodeWidth + 2 * props.nodePadding)
+        setupTree({
+            updateTreePositionFunc: updateTreePosition,
+            dispatch, 
+            bushWidth: treeDimParams.nodeWidth + 2 * treeDimParams.nodePadding
+        })
+
     }
 
 
@@ -358,14 +373,26 @@ function D3Tree(props) {
             </svg>
 
             <D3TreeFiller
-                setupMotherTree={props.setupMotherTree}
+                setupTree={props.setupTree}
                 dataRoot={rootRef}
-                nodeWidth={props.nodeWidth}
-                nodeHeight={props.nodeHeight}
-                nodePadding={props.nodePadding}
+                nodeWidth={treeDimParams.nodeWidth}
+                nodeHeight={treeDimParams.nodeHeight}
+                nodePadding={treeDimParams.nodePadding}
                 updateTreePositionFunc={updateTreePosition}
                 nodeComponentFunc={props.nodeComponentFunc} />
         </>
     )
 }
+
+
+
+D3Tree.defaultProps = {
+    setupTree: false,
+    editable: false,
+    fadeIn: false,
+    treeScale: 1,
+}
+
+
+
 export default React.memo(D3Tree)

@@ -43,6 +43,15 @@ function LevelsTree(props) {
     const linksGId = `Links${bushId}`
     const containerGId = `treeContainerG${bushId}`
 
+
+    const treeDimParams = {
+        treeWidth: props.treeWidth,
+        treeHeight: props.treeHeight - 50,
+        nodeWidth: props.treeWidth,
+        nodeHeight: subBushHeight,
+        nodePadding: 0
+    }
+
     return (
 
 
@@ -57,11 +66,7 @@ function LevelsTree(props) {
             brightnessControlGId={`brightnessControlG${bushId}`}
             resourceConnectionLinesContainerId={`resourceConnectionLinesContainer${bushId}`}
             resourceIconsContainerId={`resourceIconsContainer${bushId}`}
-            treeWidth={props.bushWidth}
-            treeHeight={props.bushHeight - 50}
-            nodeWidth={props.bushWidth}
-            nodeHeight={subBushHeight}
-            nodePadding={0}
+            treeDimParams = {treeDimParams}
             linkClass={props.linkClass}
             nodeComponentFunc={LevelBushNode} />
 

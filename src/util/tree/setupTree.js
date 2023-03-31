@@ -7,14 +7,14 @@ import { motherTreeBushPositions, motherTreeRootRef } from "../../components/tre
 
 let prevOffsets
 
-export default async function setupMotherTree(updateTreePositionFunc, dispatch, bushWidth){
+export default async function setupTree({updateTreePositionFunc, dispatch, bushWidth, treeDepth = 0} = {}){
 
     // let [renderedWidth, setRenderedWidth] = useState(initWidth)
     // let [renderedHeight, setRenderedHeight] = useState(initHeight)
     console.log('setting up tree')
 
-    const treeScale = store.getState().scale.treeScale
-    const [treeDims, offSets] = getZoomParams(true)
+    const treeScale = store.getState().scale.treeScale * Math.pow(0.1, treeDepth)
+    const [treeDims, offSets] = getZoomParams()
 
     // console.log(offSets)
     // console.log(originalmotherTreeRootRef.descendants())
@@ -49,15 +49,15 @@ export default async function setupMotherTree(updateTreePositionFunc, dispatch, 
 
     updateTreePositionFunc()
     setupZoom(
-        'treeContainerSvg', 
-        'treeContainerG',
-        treeDims,
-        offSets,
-        treeDisplacementOnReCenter,
-        dispatch
+        {
+            eventSourceId: 'treeContainerSvg', 
+            applyZoomTargetId: 'treeContainerG',
+            zoomEventTargetRenderedDims: treeDims,
+            offSets,
+            treeDisplacementOnReCenter,
+            dispatch
+        }
     )
-
-
 
     return 'setup done'
 

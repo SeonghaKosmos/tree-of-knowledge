@@ -132,8 +132,8 @@ function BushNode(props) {
                     <BushContentTemplate data={props.data}>
                         <LevelsTree
                             data={props.data}
-                            bushWidth={width}
-                            bushHeight={height}
+                            treeWidth={width}
+                            treeHeight={height}
                             linkClass={styles.subBushLink} />
                     </BushContentTemplate>
 

@@ -8,13 +8,21 @@ import { zoomSliceActions } from "../../store/store";
 let broadCaster = setTimeout(() => { }, 1);
 let theDispatch
 
-const setupZoom = (eventSourceId, applyZoomTargetId,
-  renderedDims,
-  offSets,
-  treeDisplacementOnReCenter,
-  dispatch) => {
+const setupZoom = (
+  {
+    eventSourceId, 
+    applyZoomTargetId,
+    zoomEventTargetRenderedDims,
+    offSets,
+    treeDisplacementOnReCenter = {
+      x: 0,
+      y: 0
+    },
+    dispatch
+  } = {}
+) => {
 
-  // console.log('renderedDims',renderedDims)
+  // console.log('zoomEventTargetRenderedDims',zoomEventTargetRenderedDims)
   // console.log('offSets', offSets)
 
 
@@ -49,7 +57,7 @@ const setupZoom = (eventSourceId, applyZoomTargetId,
   // console.log(treeContainerSvgDimensions)
 
   const zoomExtent = [[offSets.x, offSets.y],
-  [renderedDims.width + offSets.x, renderedDims.height + offSets.y]]
+  [zoomEventTargetRenderedDims.width + offSets.x, zoomEventTargetRenderedDims.height + offSets.y]]
 
   const zoom = d3.zoom()
     .scaleExtent([1, maxScale.val])
@@ -67,7 +75,7 @@ const setupZoom = (eventSourceId, applyZoomTargetId,
     .duration(0)
     .call(zoom.translateBy, treeDisplacementOnReCenter.x, treeDisplacementOnReCenter.y);
 
-    
+
   if (process.env.REACT_APP_IS_LOCAL === 'false'){
     configureEdgeHoverPanLogic('App', 20)
     setupEdgeHoverPan(eventSourceId, zoom)

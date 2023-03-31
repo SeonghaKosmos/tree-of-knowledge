@@ -30,15 +30,20 @@ export function getRelativePositionOfElementInContainer(container, element) {
     }
 }
 
-export function getZoomParams(isCentered) {
+export function getZoomParams(
+    {
+        isCentered = true,
+        zoomActionTargetContainerId = 'treeContainerG',
+        zoomEventSourceContainerId = 'treeContainerSvg',
+        zoomEventSourceContainerScale = store.getState().zoom.scale
+    } = {}) {
 
-    const treeContainerG = document.getElementById('treeContainerG')
-    const treeContainerSvg = document.getElementById('treeContainerSvg')
+    const zoomActionTargetContainer = document.getElementById(zoomActionTargetContainerId)
+    const zoomEventSourceContainer = document.getElementById(zoomEventSourceContainerId)
 
 
-    const scale = store.getState().zoom.scale
-    const treeDims = getRenderedDimensions(treeContainerG, scale)
-    const treeSvgDims = getRenderedDimensions(treeContainerSvg, 1)
+    const zoomActionTargetContainerDims = getRenderedDimensions(zoomActionTargetContainer, zoomEventSourceContainerScale)
+    const zoomEventSourceContainerDims = getRenderedDimensions(zoomEventSourceContainer, 1)
 
     // console.log(treeDims)
     // console.log(treeSvgDims)
@@ -49,23 +54,26 @@ export function getZoomParams(isCentered) {
     // console.log('treeDims: ', treeDims)
 
     if (isCentered) {
-        offSets.x = (treeSvgDims.width - treeDims.width) / 2
-        offSets.y = (treeSvgDims.height - treeDims.height) / 2
+        offSets.x = (zoomEventSourceContainerDims.width - zoomActionTargetContainerDims.width) / 2
+        offSets.y = (zoomEventSourceContainerDims.height - zoomActionTargetContainerDims.height) / 2
     } else {
-        const treeRelativePos = getRelativePositionOfElementInContainer(treeContainerSvg, treeContainerG)
+        const treeRelativePos = getRelativePositionOfElementInContainer(zoomEventSourceContainer, zoomActionTargetContainer)
         offSets.x = treeRelativePos.x
         offSets.y = treeRelativePos.y
     }
 
-    const prevXLine = document.getElementById('testLineX')
-    const prevYLine = document.getElementById('testLineY')
 
-    if (prevXLine){
-        treeContainerSvg.removeChild(prevXLine)
-    }
-    if (prevYLine){
-        treeContainerSvg.removeChild(prevYLine)
-    }
+    return [zoomActionTargetContainerDims, offSets]
+
+    // const prevXLine = document.getElementById('testLineX')
+    // const prevYLine = document.getElementById('testLineY')
+
+    // if (prevXLine){
+    //     zoomEventSourceContainer.removeChild(prevXLine)
+    // }
+    // if (prevYLine){
+    //     zoomEventSourceContainer.removeChild(prevYLine)
+    // }
     // const lineX = document.createElementNS("http://www.w3.org/2000/svg", "line")
     // lineX.setAttribute("x1", "0");
     // lineX.setAttribute("y1", "100");
@@ -87,8 +95,6 @@ export function getZoomParams(isCentered) {
 
     // treeContainerSvg.appendChild(lineX)
     // treeContainerSvg.appendChild(lineY)
-
-    return [treeDims, offSets]
 }
 
 

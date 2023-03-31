@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { useDispatch } from 'react-redux'
-import setupMotherTree from '../../util/tree/setupMotherTree'
+import setupTree from '../../util/tree/setupTree'
 import {v4 as uuid} from 'uuid'
 import BushNode from '../bush/BushNode'
 
@@ -21,8 +21,13 @@ function D3TreeFiller(props) {
 
     useEffect(() => {
         setIsTreeLoaded(true)
-        if (isTreeLoaded && props.setupMotherTree){
-            setupMotherTree(props.updateTreePositionFunc, dispatch, props.nodeWidth + props.nodePadding * 2)
+        if (isTreeLoaded && props.setupTree){
+            setupTree(
+            {
+                updateTreePositionFunc: props.updateTreePositionFunc, 
+                dispatch, 
+                bushWidth: props.nodeWidth + props.nodePadding * 2
+            })
             .then((msg)=>{
                 console.log(msg)
                 const treeContainerGClassList = document.getElementById('treeContainerG').classList

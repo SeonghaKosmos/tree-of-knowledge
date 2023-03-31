@@ -6,6 +6,7 @@ import React, { useState } from "react";
 import {setAllCreatedResources } from "../../util/Resource";
 import TreeLoadingStatusMessage from "./TreeLoadingStatusMessage";
 import { sendGetTreeDataGetReq } from "../../network/requests";
+import useDefaultTreeDimParams from "../../hooks/use-tree-dim-params";
 
 
 
@@ -20,15 +21,7 @@ function MotherTreeContainer() {
   const treeScale = useSelector((state) => state.scale.treeScale, shallowEqual)
 
   //tree dimensions
-  const [treeWidth, treeHeight] = useSelector((state) => [
-    state.dimensions.treeWidth,
-    state.dimensions.treeHeight], shallowEqual)
-
-
-  const [bushWidth, bushHeight, bushPadding] = useSelector((state) => [
-    state.dimensions.bushWidth,
-    state.dimensions.bushHeight,
-    state.dimensions.bushPadding], shallowEqual)
+  const defaultTreeDimParams = useDefaultTreeDimParams()
 
 
   const [treeData, setTreeData] = useState()
@@ -64,7 +57,7 @@ function MotherTreeContainer() {
         <D3Tree
           hierarchy={treeData.hierarchy}
           bushPositions={treeData.bushPositions}
-          setupMotherTree={true}
+          setupTree={true}
           editable={true}
           fadeIn={true}
           nodesGId={'mainNodes'}
@@ -76,12 +69,8 @@ function MotherTreeContainer() {
           brightnessControlGId={'brightnessControlG'}
           resourceConnectionLinesContainerId={'resourceConnectionLinesContainer'}
           resourceIconsContainerId={'resourceIconsContainer'}
-          treeWidth={treeWidth}
-          treeHeight={treeHeight}
           treeScale={treeScale}
-          nodeWidth={bushWidth}
-          nodeHeight={bushHeight}
-          nodePadding={bushPadding}
+          treeDimParams = {defaultTreeDimParams}
           linkClass={styles.mainLink}
           nodeComponentFunc={BushNode} />
       }
