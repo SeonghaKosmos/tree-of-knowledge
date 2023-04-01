@@ -13,16 +13,26 @@ const ResourceConnectionLineRoot = styled.line.attrs(props => ({
 
     fill-rule: evenodd;
     fill: red;
-    stroke: rgb(115, 213, 240);
+    /* stroke: rgb(115, 213, 240); */
+    stroke: rgb(115, 255, 0);
     filter: brightness(120%);
     
 `
 
 function ResourceConnectionLine(props) {
     console.log('rendering ResourceConnectionLine')
+
+
     const resourceGraphicsDatum1 = useresourceGraphicsDatumSelector(props.resource1.id)
     const resourceGraphicsDatum2 = useresourceGraphicsDatumSelector(props.resource2.id)
 
+
+    const x1 = resourceGraphicsDatum1.variables.current.position.center.x
+    const y1 = resourceGraphicsDatum1.variables.current.position.center.y
+    const x2 = resourceGraphicsDatum2.variables.current.position.center.x
+    const y2 = resourceGraphicsDatum2.variables.current.position.center.y
+    
+    const id= 'resourceConnectionLine-'+resourceGraphicsDatum1.thisResource.id+'-'+resourceGraphicsDatum2.thisResource.id
 
     const [visionScale, scale] = useSelector(
         state => [state.zoom.visionScale,
@@ -33,12 +43,7 @@ function ResourceConnectionLine(props) {
     const strokeWidth = 3 / scale
 
 
-    const x1 = resourceGraphicsDatum1.variables.current.position.center.x
-    const y1 = resourceGraphicsDatum1.variables.current.position.center.y
-    const x2 = resourceGraphicsDatum2.variables.current.position.center.x
-    const y2 = resourceGraphicsDatum2.variables.current.position.center.y
-    
-    const id= 'resourceConnectionLine-'+resourceGraphicsDatum1.thisResource.id+'-'+resourceGraphicsDatum2.thisResource.id
+
 
 
     const isRunAnimation = useRef(true)

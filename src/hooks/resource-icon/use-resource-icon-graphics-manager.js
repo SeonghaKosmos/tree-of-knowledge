@@ -1,9 +1,11 @@
 import { useRef, useState } from "react";
 import { useSelector, shallowEqual } from "react-redux";
 import { isResourcePositionReevaluationPossibleGlobal, setIsResourcePositionReevaluationPossibleGlobal } from "../../util/positionManager";
+import { getResourceIdsList } from "../../util/Resource";
 
 
 export const resourceGraphicsData = {}
+export let resourceConnectionLineGeneratorId
 export let connectedResourceGraphicsDataIdsGlobal = []
 export let potentialconnectedResourceGraphicsDataIdsGlobal = []
 
@@ -28,15 +30,15 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 
     let isConnectedTemp = false
-    let isConnectionLinesVisibleTemp = false
+    let isConnectionLineGeneratorTemp = false
     let delayLightUpStyleTemp = false
     //leave variables reference unchanged if there is a reference
     if (prevDatumState) {
         variables = prevDatumState.variables
 
         isConnectedTemp = prevDatumState.state.isConnected
-        isConnectionLinesVisibleTemp = prevDatumState.state.isConnectionLinesVisible
-        delayLightUpStyleTemp = prevDatumState.state.isConnectionLinesVisible.delayLightUpStyle
+        isConnectionLineGeneratorTemp = prevDatumState.state.isConnectionLineGenerator
+        delayLightUpStyleTemp = prevDatumState.state.isConnectionLineGenerator.delayLightUpStyle
     } else {
         //define new reference if there is no previous reference
         variables = potentialVariables
@@ -46,7 +48,7 @@ export function useResourceIconGraphicsManager(thisResource) {
 
     const [state, setState] = useState({ //triggers re-render when updated
         isConnected: isConnectedTemp,
-        isConnectionLinesVisible: isConnectionLinesVisibleTemp,
+        isConnectionLineGenerator: isConnectionLineGeneratorTemp,
         delayLightUpStyle: delayLightUpStyleTemp
     })
 
@@ -73,9 +75,9 @@ export function useResourceIconGraphicsManager(thisResource) {
             updateResourceIconPositions(this.getConnectedResourceGraphicsDataIds())
 
         },
-        setIsConnectionLinesVisible(isConnectionLinesVisible) {
+        setIsConnectionLinesVisible(isConnectionLineGenerator) {
 
-            state.isConnectionLinesVisible = isConnectionLinesVisible
+            state.isConnectionLineGenerator = isConnectionLineGenerator
 
         },
         //master function that handles all connection related events
@@ -101,10 +103,14 @@ export function useResourceIconGraphicsManager(thisResource) {
 
 
                 //update stuff in thisResource
-                state.isConnected = isConnected
-                this.setIsConnectionLinesVisible(isConnected)
-                handleTreeContainer(isConnected)
+                state.isConnected = true
+                this.setIsConnectionLinesVisible(true)
+                handleTreeContainer(true)
+
+                resourceConnectionLineGeneratorId = thisResource.id
                 this.commitState()
+
+
             }
 
 
@@ -182,8 +188,23 @@ export function updateResourceIconPositions(ids) {
 
             resourceGraphicsData[id].actions.setIsResourcePositionReevaluationPossible(true)
             resourceGraphicsData[id].actions.commitState()
-
         });
+    }
+}
+
+export function updateMovingBushResourceIcons(bushResources){
+    
+    const bushResourceIds = getResourceIdsList(bushResources)
+    const connectedBushResourceIds = bushResourceIds.filter(id => 
+        connectedResourceGraphicsDataIdsGlobal.includes(id)
+    )
+
+    if (connectedBushResourceIds.length > 0){
+
+        if (resourceConnectionLineGeneratorId){
+            connectedBushResourceIds.push(resourceConnectionLineGeneratorId)
+        }
+        updateResourceIconPositions(connectedBushResourceIds)
     }
 }
 

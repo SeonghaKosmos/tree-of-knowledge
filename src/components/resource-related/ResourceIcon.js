@@ -6,8 +6,8 @@ import { getRelativePositionOfElementInContainer, isResourcePositionReevaluation
 import ResourceConnectionLine from "./ResourceConnectionLine";
 import React from "react";
 import ReactDOM from "react-dom";
-import { useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
-import {v4 as uuid} from 'uuid'
+import { resourceGraphicsData, useResourceIconGraphicsManager } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
+import { v4 as uuid } from 'uuid'
 import './ResourceIcon.css'
 import { allCreatedResources, Resource } from "../../util/Resource";
 
@@ -35,7 +35,7 @@ function ResourceIcon(props) {
     //<graphics datum>
     const [resourceGraphicsDatum, graphicsDatumActions, visionScale] = useResourceIconGraphicsManager(props.resource)
     const isConnected = resourceGraphicsDatum.state.isConnected
-    const isConnectionLinesVisible = resourceGraphicsDatum.state.isConnectionLinesVisible
+    const isConnectionLineGenerator = resourceGraphicsDatum.state.isConnectionLineGenerator
     //<graphics datum>
 
 
@@ -181,12 +181,21 @@ function ResourceIcon(props) {
     return (
 
         <>
-            {/* show connection lines if connected and is the source (showconnected = true)*/}
-            {(isConnected && isConnectionLinesVisible) && props.resource.connections.map((connectedResourceId) => {
-                return <ResourceConnectionLine
-                    key={props.resource.id}
-                    resource1={props.resource}
-                    resource2={allCreatedResources[connectedResourceId]} /> //draw line between this resource and connected resource
+            {/* show connection lines if connected and is the source (isConnectionLineGenerator = true)*/}
+            {isConnected && isConnectionLineGenerator && props.resource.connections.map((connectedResourceId) => {
+
+                const resourceGraphicsDatum2 = resourceGraphicsData[connectedResourceId]
+                if (
+                        resourceGraphicsDatum2 &&
+                        resourceGraphicsDatum2.state.isConnected
+                    ) {
+                        
+                    return <ResourceConnectionLine
+                        key={props.resource.id}
+                        resource1={props.resource}
+                        resource2={allCreatedResources[connectedResourceId]} /> //draw line between this resource and connected resource
+                }
+
             })}
 
             {/* show resourceIcon in original place if not connected */}

@@ -1,6 +1,6 @@
 import * as d3 from 'd3'
 import { useEffect, useRef } from 'react';
-import { connectedResourceGraphicsDataIdsGlobal, updateResourceIconPositions } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
+import { connectedResourceGraphicsDataIdsGlobal, resourceConnectionLineGeneratorId, updateMovingBushResourceIcons, updateResourceIconPositions } from '../../hooks/resource-icon/use-resource-icon-graphics-manager';
 import styles from '../tree.module.css'
 import React from 'react';
 import { shallowEqual, useDispatch, useSelector } from 'react-redux';
@@ -251,15 +251,12 @@ function D3Tree(props) {
                     
                         updateBushPositions(d, event)
                         updateLinePositions()
-                        const bushResourceIds = getResourceIdsList(d.data.resources)
-                        updateResourceIconPositions(bushResourceIds)
-
+                        updateMovingBushResourceIcons(d.data.resources)
 
 
                         if (event.type === 'end') {
                             onBushDragEnd()
                         }
-
 
                         const coords = getCoords(d, getNodeDimensionsByName(d.data.name))
                         return `translate(${coords.x}, ${coords.y})`
