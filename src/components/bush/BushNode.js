@@ -5,11 +5,11 @@ import RootNode from "./variants/RootNode";
 import OriginNode from "./variants/OriginNode";
 import React from 'react';
 import './BushNode.css'
-import { CSSTransition } from "react-transition-group";
 import { connectedResourceGraphicsDataIdsGlobal, updateResourceIconPositions } from "../../hooks/resource-icon/use-resource-icon-graphics-manager";
 import BushContentTemplate from "./subBushComponents/BushContentTemplate";
 import LevelsTree from "./subBushComponents/levelTree/LevelsTree";
 import ResourceIconsDisplay from "./subBushComponents/ResourceIconsDisplay";
+import FadeInOutTransition from "./FadeInOutTransition";
 
 
 
@@ -63,15 +63,15 @@ function BushNode(props) {
 
 
 
-    const padding = useSelector((state) => state.dimensions.bushPadding, shallowEqual)
-
-    let containerWidth = width + padding * 2 //add space for padding
-    let containerHeight = height + padding * 2 //add space for padding + top margin for subbush
+    const padding = 20//useSelector((state) => state.dimensions.bushPadding, shallowEqual)
+    
+    let containerWidth = width 
+    let containerHeight = height 
 
 
 
     //for root and origin nodes
-    let Root = null
+    let Root
 
 
 
@@ -101,44 +101,34 @@ function BushNode(props) {
 
 
                 {/* render representative resources at bush scale */}
-                <CSSTransition
-                    mountOnEnter
-                    unmountOnExit
+                <FadeInOutTransition
                     in={visionScale === 'bushScale'}
-                    timeout={150}
-                    classNames='fadeInOut'
                     onExited={() => updateResourceIconPositions(connectedResourceGraphicsDataIdsGlobal)}>
 
-
-
-                    <BushContentTemplate data={props.data}>
+                    <BushContentTemplate data={props.data} visionScale={visionScale}>
                         <ResourceIconsDisplay
                             visionScale
                             data={props.data}
                         />
                     </BushContentTemplate>
 
-                </CSSTransition>
+                </FadeInOutTransition>
 
 
                 {/* render subBush tree at subBush scale */}
-                <CSSTransition
-                    mountOnEnter
-                    unmountOnExit
-                    in={visionScale === 'subBushScale'}
-                    timeout={150}
-                    classNames='fadeInOut'>
+                <FadeInOutTransition in={visionScale === 'subBushScale'}>
 
-                    <BushContentTemplate data={props.data}>
+                    <BushContentTemplate data={props.data} visionScale={visionScale}>
                         <LevelsTree
                             data={props.data}
+                            padding = {padding}
                             treeWidth={width}
                             treeHeight={height}
                             linkClass={styles.subBushLink} />
                     </BushContentTemplate>
 
 
-                </CSSTransition>
+                </FadeInOutTransition>
 
 
 

@@ -8,17 +8,15 @@ export default function useDefaultTreeDimParams() {
         state.dimensions.treeHeight], shallowEqual)
 
 
-    const [nodeWidth, nodeHeight, nodePadding] = useSelector((state) => [
+    const [nodeWidth, nodeHeight] = useSelector((state) => [
         state.dimensions.bushWidth,
-        state.dimensions.bushHeight,
-        state.dimensions.bushPadding], shallowEqual)
+        state.dimensions.bushHeight], shallowEqual)
 
 
     return {
         treeWidth,
         treeHeight,
         nodeWidth, 
-        nodeHeight, 
-        nodePadding
+        nodeHeight    
     }
 }

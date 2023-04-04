@@ -43,13 +43,12 @@ function LevelsTree(props) {
     const linksGId = `Links${bushId}`
     const containerGId = `treeContainerG${bushId}`
 
-
+    
     const treeDimParams = {
-        treeWidth: props.treeWidth,
-        treeHeight: props.treeHeight - 50,
-        nodeWidth: props.treeWidth,
+        treeWidth: props.treeWidth - 2 * props.padding,
+        treeHeight: props.treeHeight - 2 * props.padding - 50,
+        nodeWidth: props.treeWidth - 2 * props.padding,
         nodeHeight: subBushHeight,
-        nodePadding: 0
     }
 
     return (

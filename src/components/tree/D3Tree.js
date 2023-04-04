@@ -32,8 +32,8 @@ function D3Tree(props) {
 
 
 
-    const nodeHeight = treeDimParams.nodeHeight + 2 * treeDimParams.nodePadding
-    const nodeWidth = treeDimParams.nodeWidth + 2 * treeDimParams.nodePadding
+    const nodeHeight = treeDimParams.nodeHeight 
+    const nodeWidth = treeDimParams.nodeWidth 
 
 
     const standardNodeDimensions = {
@@ -331,7 +331,7 @@ function D3Tree(props) {
         setupTree({
             updateTreePositionFunc: updateTreePosition,
             dispatch, 
-            bushWidth: treeDimParams.nodeWidth + 2 * treeDimParams.nodePadding
+            bushWidth: treeDimParams.nodeWidth
         })
 
     }
@@ -374,7 +374,6 @@ function D3Tree(props) {
                 dataRoot={rootRef}
                 nodeWidth={treeDimParams.nodeWidth}
                 nodeHeight={treeDimParams.nodeHeight}
-                nodePadding={treeDimParams.nodePadding}
                 updateTreePositionFunc={updateTreePosition}
                 nodeComponentFunc={props.nodeComponentFunc} />
         </>

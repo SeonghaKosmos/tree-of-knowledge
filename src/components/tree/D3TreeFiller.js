@@ -26,7 +26,7 @@ function D3TreeFiller(props) {
             {
                 updateTreePositionFunc: props.updateTreePositionFunc, 
                 dispatch, 
-                bushWidth: props.nodeWidth + props.nodePadding * 2
+                bushWidth: props.nodeWidth
             })
             .then((msg)=>{
                 console.log(msg)

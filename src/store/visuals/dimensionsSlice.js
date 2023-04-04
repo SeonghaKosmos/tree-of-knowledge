@@ -11,8 +11,8 @@ const initialState = {
     originNodeHeight: 35,
     rootNodeWidth: 150,
     rootNodeHeight: 170,
-    bushWidth: 120,
-    bushHeight: 120
+    bushWidth: 160,
+    bushHeight: 160
 }
 
 
