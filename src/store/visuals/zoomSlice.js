@@ -1,15 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { setIsResourcePositionReevaluationPossible } from '../../util/positionManager'
 
-let visionScaleJustChanged = false
 
-export const scale = {val: 1}
-export const visionScale = {val: 'bushScale'}
-export const maxScale = {val: 8}
 
 const initialState = {
     scale: 1,
-    maxScale: 8,
+    maxScale: 12,
+    subTreeScaleBoundary: 8,
     subBushScaleBoundary: 4.5,
     minusculeBushScaleBoundary: 2.5,
     visionScale: 'bushScale',
@@ -22,24 +18,28 @@ export const zoomSlice = createSlice({
     reducers: {
 
         setScale(state, action) {
+
+            function getVisionScaleName(){
+
+                if (state.scale >= state.subTreeScaleBoundary){
+                    return 'subTreeScale'
+                }
+                else if (state.scale >= state.subBushScaleBoundary){
+                    return 'subBushScale'
+                } 
+                return 'bushScale'
+            }
             
             state.scale = action.payload
-            scale.val = action.payload
-            // update vision scale
 
-            if (state.scale < state.subBushScaleBoundary && state.visionScale != 'bushScale'){
-                state.visionScale = 'bushScale'
-                visionScale.val = 'bushScale'
-                console.log('%cscale: bushScale','color:green')
-                // setIsResourcePositionReevaluationPossible(true)
-                // setIsResourcePositionReevaluationPossible(true) //update resource positions
-            } else if (state.scale >= state.subBushScaleBoundary && state.visionScale != 'subBushScale'){
-                state.visionScale = 'subBushScale'
-                visionScale.val = 'subBushScale'
-                console.log('%cscale: subBushScale','color:green')
-                // setIsResourcePositionReevaluationPossible(true)
-                // setIsResourcePositionReevaluationPossible(true) //update resource positions
+            // update vision scale
+            const newVisionScale = getVisionScaleName(state, action)
+            if (newVisionScale !== state.visionScale){
+
+                state.visionScale = newVisionScale
+                console.log(`%cscale: ${newVisionScale}`,'color:green')
             }
+            
 
             state.treeContainerSvgStyleClass = state.scale === state.maxScale ? 'zoom-out-cursor' : 'zoom-in-cursor'
         }, 
@@ -48,6 +48,9 @@ export const zoomSlice = createSlice({
         }
     }
 })
+
+
+
 
 
 

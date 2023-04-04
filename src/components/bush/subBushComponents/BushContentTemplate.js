@@ -5,7 +5,13 @@ function BushContentTemplate(props) {
     return (
         <div className="bushContent">
 
-            <span className={props.visionScale === 'subBushScale' ? "subBushScaleLabelSpan" : ''}>
+            <span className={
+                (props.visionScale === 'subBushScale'
+                || props.visionScale === 'subTreeScale') 
+                ? 
+                "subBushScaleLabelSpan" 
+                : 
+                ''}>
                 {props.data.name}
             </span>
             {props.children}

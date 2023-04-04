@@ -8,6 +8,9 @@ const initialState = {
     'subBushScale': {
         resourceIconScale: 0.5
     },
+    'subTreeScale': {
+        resourceIconScale: 0.1
+    }
 }
 
 const scaleSlice = createSlice({

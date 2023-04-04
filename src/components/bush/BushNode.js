@@ -46,7 +46,7 @@ function BushNode(props) {
 
 
     const visionScale = useSelector((state) => state.zoom.visionScale, shallowEqual)
-
+    console.log('visionScale: ', visionScale)
 
     const [width, height,
         originNodeWidth, originNodeHeight,
@@ -64,9 +64,9 @@ function BushNode(props) {
 
 
     const padding = 20//useSelector((state) => state.dimensions.bushPadding, shallowEqual)
-    
-    let containerWidth = width 
-    let containerHeight = height 
+
+    let containerWidth = width
+    let containerHeight = height
 
 
 
@@ -121,13 +121,19 @@ function BushNode(props) {
                     <BushContentTemplate data={props.data} visionScale={visionScale}>
                         <LevelsTree
                             data={props.data}
-                            padding = {padding}
+                            padding={padding}
                             treeWidth={width}
                             treeHeight={height}
                             linkClass={styles.subBushLink} />
                     </BushContentTemplate>
 
 
+                </FadeInOutTransition>
+
+
+
+                <FadeInOutTransition in={visionScale === 'subTreeScale'}>
+                    <BushContentTemplate data={props.data} visionScale={visionScale} />
                 </FadeInOutTransition>
 
 

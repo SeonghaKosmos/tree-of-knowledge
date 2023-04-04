@@ -2,8 +2,7 @@ import * as d3 from 'd3'
 import { configureEdgeHoverPanLogic } from "./pan/EdgeHoverPanLogic";
 import { setTreeContainerSvgClass } from "./d3Related";
 import setupEdgeHoverPan from "./pan/EdgeHoverPan";
-import { maxScale } from "../store/visuals/zoomSlice";
-import { zoomSliceActions } from "../store/store";
+import { store, zoomSliceActions } from "../store/store";
 
 let broadCaster = setTimeout(() => { }, 1);
 let theDispatch
@@ -25,6 +24,7 @@ const setupZoom = (
   // console.log('zoomEventTargetRenderedDims',zoomEventTargetRenderedDims)
   // console.log('offSets', offSets)
 
+  const maxScale = store.getState().zoom.maxScale
 
   theDispatch = dispatch ? dispatch : theDispatch
 
@@ -46,7 +46,7 @@ const setupZoom = (
     // console.log('handling zoom')
     // console.log(e)
     theDispatch(zoomSliceActions.setScale(e.transform.k))
-    setTreeContainerSvgClass(e.transform.k === maxScale.val)
+    setTreeContainerSvgClass(e.transform.k === maxScale)
     broadCastScale(e)
 
     zoomActionTargetContainer.attr('transform', e.transform)
@@ -60,7 +60,7 @@ const setupZoom = (
   [zoomEventTargetRenderedDims.width + offSets.x, zoomEventTargetRenderedDims.height + offSets.y]]
 
   const zoom = d3.zoom()
-    .scaleExtent([1, maxScale.val])
+    .scaleExtent([1, maxScale])
     .on('zoom', handleZoom)
     .extent(zoomExtent)
     .translateExtent(zoomExtent)
